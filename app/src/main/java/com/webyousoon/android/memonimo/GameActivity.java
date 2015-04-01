@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class GameActivity extends ActionBarActivity {
@@ -57,9 +61,27 @@ public class GameActivity extends ActionBarActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_game, container, false);
+
+            TextView testMemory = (TextView) rootView.findViewById(R.id.testMemoryView);
+            testMemory.setText("Coucou");
+
+
+            GridView gridMemory = (GridView) rootView.findViewById(R.id.gridMemory);
+            gridMemory.setAdapter(new GridMemoryAdapter(getActivity()));
+
+            gridMemory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    Toast.makeText(
+                            getActivity(),
+                            "" + position,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
             return rootView;
         }
     }
