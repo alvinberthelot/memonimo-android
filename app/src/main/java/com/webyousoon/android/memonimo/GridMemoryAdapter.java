@@ -51,17 +51,28 @@ public class GridMemoryAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.carte_alligator,
-            R.drawable.carte_poussin,
-            R.drawable.carte_vache,
-            R.drawable.carte_alligator,
-            R.drawable.carte_poussin,
-            R.drawable.carte_vache,
-            R.drawable.carte_alligator,
-            R.drawable.carte_poussin,
-            R.drawable.carte_vache,
-            R.drawable.carte_alligator,
-            R.drawable.carte_poussin,
-            R.drawable.carte_vache
+            R.drawable.card_alligator,
+            R.drawable.card_beaver,
+            R.drawable.card_birdy,
+            R.drawable.card_buffalo,
+            R.drawable.card_cat,
+            R.drawable.card_cow,
+            R.drawable.card_elephant,
+            R.drawable.card_fish,
+            R.drawable.card_fox,
+            R.drawable.card_giraffe,
+            R.drawable.card_goose,
+            R.drawable.card_horse,
+            R.drawable.card_iguana,
+            R.drawable.card_jellyfish,
+            R.drawable.card_koala,
+            R.drawable.card_lion,
+            R.drawable.card_monkey,
+            R.drawable.card_pheasant,
+            R.drawable.card_pig,
+            R.drawable.card_rabbit,
+            R.drawable.card_sheep,
+            R.drawable.card_turtle,
+            R.drawable.card_whale
     };
 }
