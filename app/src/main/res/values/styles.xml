@@ -6,8 +6,13 @@
         <item name="colorPrimaryDark">@color/mn_brown</item>
     </style>
 
-    <!-- main activity action bar styles -->
-    <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <!-- Main activity theme. -->
+    <style name="MemonimoTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Memonimo.NoTitle</item>
+    </style>
+
+    <!-- Main activity action bar styles -->
+    <style name="ActionBar.Solid.Memonimo.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/icon_logo</item>
     </style>
