@@ -53,6 +53,8 @@ public class CardGame implements Cloneable {
 //    int mId;
     private AnimalGame mAnimalGame;
     private boolean mCardFound = false;
+    private boolean mFoundPlayer1 = false;
+    private boolean mFoundPlayer2 = false;
     private boolean mAttempt = false;
 
     private CardGame(AnimalGame _animalGame) {
@@ -119,5 +121,21 @@ public class CardGame implements Cloneable {
 
     public void setAttempt(boolean _attempt) {
         this.mAttempt = _attempt;
+    }
+
+    public boolean isFoundPlayer1() {
+        return mFoundPlayer1;
+    }
+
+    public void setFoundPlayer1(boolean _foundPlayer1) {
+        this.mFoundPlayer1 = _foundPlayer1;
+    }
+
+    public boolean isFoundPlayer2() {
+        return mFoundPlayer2;
+    }
+
+    public void setFoundPlayer2(boolean _foundPlayer2) {
+        this.mFoundPlayer2 = _foundPlayer2;
     }
 }

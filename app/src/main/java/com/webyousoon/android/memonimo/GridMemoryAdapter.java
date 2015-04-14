@@ -1,6 +1,9 @@
 package com.webyousoon.android.memonimo;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +41,11 @@ public class GridMemoryAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
+
+
+
+
+
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -48,13 +56,32 @@ public class GridMemoryAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(getCardDrawable(mCardGameList.get(position)));
+
+        Resources resources = mContext.getResources();
+        imageView.setImageDrawable(getCardDrawable(mCardGameList.get(position), resources));
+//        imageView.setImageResource(getCardDrawable(mCardGameList.get(position)));
         return imageView;
     }
 
+    public static LayerDrawable getCardDrawable(CardGame _cardGame, Resources _resources ) {
 
+        Drawable[] layers = new Drawable[2];
+        layers[0] = _resources.getDrawable(getInsideDrawable(_cardGame));
+        layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
+        return new LayerDrawable(layers);
+    }
 
-    public static int getCardDrawable(CardGame _cardGame) {
+    public static int getBorderDrawable(CardGame _cardGame) {
+        if (_cardGame.isFoundPlayer1()) {
+            return R.drawable.card_player1;
+        } else if (_cardGame.isFoundPlayer2()) {
+            return R.drawable.card_player2;
+        } else {
+            return R.drawable.card_neutral;
+        }
+    }
+
+    public static int getInsideDrawable(CardGame _cardGame) {
         if (_cardGame.isCardFound() || _cardGame.isAttempt()) {
             return getAnimalDrawable(_cardGame.getAnimalGame());
         } else {

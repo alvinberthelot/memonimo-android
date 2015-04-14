@@ -143,6 +143,8 @@ public class GameActivity extends ActionBarActivity {
                             } else {
                                 mCardGameList.get(mFirstPositionChoosen).setCardFound(true);
                                 mCardGameList.get(mSecondPositionChoosen).setCardFound(true);
+                                mCardGameList.get(mFirstPositionChoosen).setFoundPlayer1(true);
+                                mCardGameList.get(mSecondPositionChoosen).setFoundPlayer1(true);
                                 mPositionFoundList.add(new Integer(mFirstPositionChoosen));
                                 mPositionFoundList.add(new Integer(mSecondPositionChoosen));
                             }
