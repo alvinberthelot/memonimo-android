@@ -1,26 +1,31 @@
 package com.webyousoon.android.memonimo;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
-public class StartActivity extends ActionBarActivity {
+public class GameListActivity extends ActionBarActivity {
+
+    private final String LOG_TAG = GameListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-    }
+        setContentView(R.layout.activity_game_list);
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new GameListFragment())
+                    .commit();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_start, menu);
+        getMenuInflater().inflate(R.menu.menu_game_list, menu);
         return true;
     }
 
@@ -37,21 +42,5 @@ public class StartActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /*
-        Pour arriver sur la vue d'une nouvelle partie
-     */
-    public void startGame(View view) {
-        Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
-    }
-
-    /*
-        Pour arriver sur la vue listant les parties non terminées
-     */
-    public void findGame(View view) {
-        Intent intent = new Intent(this, GameListActivity.class);
-        startActivity(intent);
     }
 }

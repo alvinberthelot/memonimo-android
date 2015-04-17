@@ -1,4 +1,4 @@
-package com.webyousoon.android.memonimo;
+package com.webyousoon.android.memonimo.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.webyousoon.android.memonimo.CardGame;
+import com.webyousoon.android.memonimo.R;
 
 import java.util.List;
 

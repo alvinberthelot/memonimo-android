@@ -2,12 +2,9 @@ package com.webyousoon.android.memonimo;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,13 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.webyousoon.android.memonimo.adapters.GridMemoryAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
 
 import java.util.ArrayList;
