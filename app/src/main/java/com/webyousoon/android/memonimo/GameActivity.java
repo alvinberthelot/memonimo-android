@@ -79,26 +79,9 @@ public class GameActivity extends ActionBarActivity {
 
         private final String LOG_TAG = PlaceholderFragment.class.getSimpleName();
 
-        private SharedPreferences mPreferences;
-
         private Game mGame;
 
-//        private long mIdGame = -1;
-
-
-
-
-
-//        private boolean mFirstChoicePlayer = false;
-//        private CardGame mCardChoosen = null;
-        private int mFirstPositionChoosen = -1;
-        private int mSecondPositionChoosen = -1;
-        private List<Integer> mPositionFoundList = new ArrayList<Integer>();
-
-        public PlaceholderFragment() {
-
-
-        }
+        public PlaceholderFragment() {}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,19 +135,15 @@ public class GameActivity extends ActionBarActivity {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                     // dans le cas d'un précédent tour de jeu
-                    if (mFirstPositionChoosen != -1 && mSecondPositionChoosen != -1) {
+                    if (mGame.isNextTurn()) {
                         // on modifie l'état des cartes pour qu'elles ne soient plus affichées,
                         // si celles-ci n'ont pas été trouvées
-                        mGame.getGameCardList().get(mFirstPositionChoosen).setAttempt(false);
-                        mGame.getGameCardList().get(mSecondPositionChoosen).setAttempt(false);
-                        //
-                        mFirstPositionChoosen = -1;
-                        mSecondPositionChoosen = -1;
+                        mGame.initNewTurn();
                     }
 
-                    // premier coup du tour de jeu
-                    if (mFirstPositionChoosen == -1) {
-                        if (mPositionFoundList.contains(position)) {
+                    // On vérifie si la première carte n'a pas déjà été choisie
+                    if (!mGame.isFirstCardChosen()) {
+                        if (mGame.isAFoundCard(position)) {
                             //
                             Toast.makeText(
                                     getActivity(),
@@ -172,19 +151,18 @@ public class GameActivity extends ActionBarActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             // on affecte la position sélectionnée
-                            mFirstPositionChoosen = position;
-                            mGame.getGameCardList().get(mFirstPositionChoosen).setAttempt(true);
+                            mGame.chooseFirstCard(position);
                         }
                     }
                     // deuxième coup du tour de jeu
                     else {
 
-                        if (mFirstPositionChoosen == position) {
+                        if (mGame.isCardAlreadyChosen(position)) {
                             Toast.makeText(
                                     getActivity(),
                                     "Carte déjà sélectionnée à la position N°" + position,
                                     Toast.LENGTH_SHORT).show();
-                        } else if (mPositionFoundList.contains(position)) {
+                        } else if (mGame.isAFoundCard(position)) {
                             //
                             Toast.makeText(
                                     getActivity(),
@@ -192,18 +170,10 @@ public class GameActivity extends ActionBarActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
 
-                            mSecondPositionChoosen = position;
+                            mGame.chooseSecondCard(position);
 
-                            if (mGame.getGameCardList().get(mFirstPositionChoosen).getAnimalGame() != mGame.getGameCardList().get(mSecondPositionChoosen).getAnimalGame()) {
-                                mGame.getGameCardList().get(mSecondPositionChoosen).setAttempt(true);
-                            } else {
-                                mGame.getGameCardList().get(mFirstPositionChoosen).setCardFound(true);
-                                mGame.getGameCardList().get(mSecondPositionChoosen).setCardFound(true);
-                                mGame.getGameCardList().get(mFirstPositionChoosen).setFoundPlayer1(true);
-                                mGame.getGameCardList().get(mSecondPositionChoosen).setFoundPlayer1(true);
-                                mPositionFoundList.add(new Integer(mFirstPositionChoosen));
-                                mPositionFoundList.add(new Integer(mSecondPositionChoosen));
-                            }
+                            mGame.checkFamilyFound();
+
                         }
                     }
 
@@ -255,7 +225,9 @@ public class GameActivity extends ActionBarActivity {
             Log.d(LOG_TAG, ".saveGame() : id -> " + mGame.getId());
 
             if (mGame.getId() == -1) {
-                ContentValues gameValue = new ContentValues();
+                ContentValues gameValue = ProviderUtilities.convertGameModelToGameValues(mGame);
+
+                        new ContentValues();
                 gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
 
                 // Insertion d'une partie via le Provider
@@ -310,21 +282,28 @@ public class GameActivity extends ActionBarActivity {
 
             Log.d(LOG_TAG, ".restoreGame() : id -> " + _idGame);
 
-            mGame = new Game(_idGame);
-
-            // Récupération des données via le Content Provider
+            // Récupération de la partie
             Cursor cursor = getActivity().getContentResolver().query(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    null, // Colonnes interogées
+                    MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+                    new String[] {"" + _idGame}, // Valeurs pour la condition WHERE
+                    null // Tri
+            );
+            cursor.moveToNext();
+            mGame = ProviderUtilities.convertGameCursorToGameModel(cursor);
+
+            // Récupération des données des cartes via le Content Provider
+            cursor = getActivity().getContentResolver().query(
                     MemonimoContract.GameCardEntry.CONTENT_URI, // URI
                     null, // Colonnes interogées
                     MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
                     new String[] {"" + _idGame}, // Valeurs pour la condition WHERE
                     null // Tri
             );
-            // Récupération du modèle
             while(cursor.moveToNext()) {
                 mGame.addGameCard(ProviderUtilities.convertGameCardCursorToGameCardModel(cursor));
             }
-
 
             Log.e(LOG_TAG, ".restoreGame() test : id -> " + _idGame);
         }

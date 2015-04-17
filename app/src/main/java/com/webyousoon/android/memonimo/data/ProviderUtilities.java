@@ -36,8 +36,22 @@ public class ProviderUtilities {
 
         ContentValues value = new ContentValues();
         value.put(MemonimoContract.GameEntry.COLUMN_FINISHED, _game.isFinished());
+        value.put(MemonimoContract.GameEntry.COLUMN_FIRST_POSITION_CHOOSEN, _game.getFirstPositionChosen());
+        value.put(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN, _game.getSecondPositionChosen());
 
         return value;
+    }
+
+    public static Game convertGameCursorToGameModel(Cursor _cursor) {
+
+        Game game = new Game(
+            _cursor.getLong(_cursor.getColumnIndex(MemonimoContract.GameEntry._ID)),
+            getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FINISHED))),
+            _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FIRST_POSITION_CHOOSEN)),
+            _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN))
+        );
+
+        return game;
     }
 
     public static ContentValues[] convertGameModelToGameCardValues(Game _game) {
@@ -62,14 +76,14 @@ public class ProviderUtilities {
         return values.toArray(new ContentValues[values.size()]);
     }
 
-    public static GameCard convertGameCardCursorToGameCardModel(Cursor cursor) {
+    public static GameCard convertGameCardCursorToGameCardModel(Cursor _cursor) {
 
         GameCard gameCard = new GameCard(
-                cursor.getInt(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD)),
-                getBooleanValue(cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
-                getBooleanValue(cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                getBooleanValue(cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                getBooleanValue(cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT)))
+                _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD)),
+                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
+                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
+                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
+                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT)))
         );
 
 

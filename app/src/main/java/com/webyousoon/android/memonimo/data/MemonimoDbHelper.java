@@ -30,7 +30,9 @@ public class MemonimoDbHelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_GAME_TABLE = "CREATE TABLE " + GameEntry.TABLE_NAME + " (" +
                 GameEntry._ID + " INTEGER PRIMARY KEY," +
-                GameEntry.COLUMN_FINISHED + " INTEGER NOT NULL " +
+                GameEntry.COLUMN_FINISHED + " INTEGER NOT NULL, " +
+                GameEntry.COLUMN_FIRST_POSITION_CHOOSEN + " INTEGER NOT NULL, " +
+                GameEntry.COLUMN_SECOND_POSITION_CHOOSEN + " INTEGER NOT NULL " +
                 " );";
 
         final String SQL_CREATE_CARD_TABLE = "CREATE TABLE " + CardEntry.TABLE_NAME + " (" +

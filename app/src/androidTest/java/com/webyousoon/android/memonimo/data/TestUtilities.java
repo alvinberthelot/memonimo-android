@@ -23,6 +23,8 @@ public class TestUtilities extends AndroidTestCase {
     private static final String BOOLEAN_TRUE = "1";
 
     private static final String TEST_GAME_FINISHED = BOOLEAN_TRUE;
+    private static final String TEST_GAME_FIRST_POSITION_CHOOSEN = "3";
+    private static final String TEST_GAME_SECOND_POSITION_CHOOSEN = "5";
 
     private static final String TEST_CARD_DOG = "Dog";
 
@@ -66,6 +68,8 @@ public class TestUtilities extends AndroidTestCase {
     static ContentValues createGameValues() {
         ContentValues testValues = new ContentValues();
         testValues.put(GameEntry.COLUMN_FINISHED, TEST_GAME_FINISHED);
+        testValues.put(GameEntry.COLUMN_FIRST_POSITION_CHOOSEN, TEST_GAME_FIRST_POSITION_CHOOSEN);
+        testValues.put(GameEntry.COLUMN_SECOND_POSITION_CHOOSEN, TEST_GAME_SECOND_POSITION_CHOOSEN);
 
         return testValues;
     }

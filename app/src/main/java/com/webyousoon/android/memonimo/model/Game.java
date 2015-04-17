@@ -10,17 +10,24 @@ import java.util.List;
 public class Game {
 
 
+    private static final int CARD_NO_CHOSEN = -1;
+
     private long mId;
-    private boolean mFinished;
+    private boolean mFinished = false;
+    private int mFirstPositionChosen = CARD_NO_CHOSEN;
+    private int mSecondPositionChosen = CARD_NO_CHOSEN;
     private List<GameCard> mGameCardList;
 
-    public Game (long _id) {
+    public Game(long _id, boolean _finished, int _firstPositionChosen, int _secondPositionChosen) {
         this.mId = _id;
+        this.mFinished = _finished;
+        this.mFirstPositionChosen = _firstPositionChosen;
+        this.mSecondPositionChosen = _secondPositionChosen;
         this.mGameCardList = new ArrayList<GameCard>();
     }
 
     public Game (int _numFamily) {
-        this.mId = -1;
+        this.mId = CARD_NO_CHOSEN;
         this.mGameCardList = GameCard.getRandomList(_numFamily);
     }
 
@@ -41,6 +48,22 @@ public class Game {
         this.mFinished = _finished;
     }
 
+    public int getFirstPositionChosen() {
+        return mFirstPositionChosen;
+    }
+
+    public void setFirstPositionChosen(int _firstPositionChosen) {
+        this.mFirstPositionChosen = _firstPositionChosen;
+    }
+
+    public int getSecondPositionChosen() {
+        return mSecondPositionChosen;
+    }
+
+    public void setSecondPositionChosen(int _secondPositionChosen) {
+        this.mSecondPositionChosen = _secondPositionChosen;
+    }
+
     public List<GameCard> getGameCardList() {
         return mGameCardList;
     }
@@ -51,6 +74,53 @@ public class Game {
 
     public void addGameCard(GameCard _gamGameCard) {
         this.mGameCardList.add(_gamGameCard);
+    }
+
+    public boolean isAFoundCard(int _position) {
+        return mGameCardList.get(_position).isCardFound();
+    }
+
+    public void setAttemptFirstPositionChosen() {
+        getFirstCardChosen().setAttempt(true);
+    }
+
+    public void setAttemptSecondPositionChosen() {
+        getSecondCardChosen().setAttempt(true);
+    }
+
+    public void chooseFirstCard(int _position) {
+        setFirstPositionChosen(_position);
+        setAttemptFirstPositionChosen();
+    }
+
+    public void chooseSecondCard(int _position) {
+        setSecondPositionChosen(_position);
+        setAttemptSecondPositionChosen();
+    }
+
+    public boolean isFirstCardChosen() {
+        return getFirstPositionChosen() != CARD_NO_CHOSEN;
+    }
+
+    public boolean isSecondCardChosen() {
+        return getSecondPositionChosen() != CARD_NO_CHOSEN;
+    }
+
+    public boolean isFamilyFound() {
+        return getFirstCardChosen().getAnimalGame() == getSecondCardChosen().getAnimalGame();
+    }
+
+    public void checkFamilyFound() {
+        if (isFamilyFound()) {
+            getFirstCardChosen().setCardFound(true);
+            getSecondCardChosen().setCardFound(true);
+            getFirstCardChosen().setFoundPlayer1(true);
+            getSecondCardChosen().setFoundPlayer1(true);
+        }
+    }
+
+    public boolean isCardAlreadyChosen(int _position) {
+        return mFirstPositionChosen == _position;
     }
 
     public boolean isAllCardsFound() {
@@ -65,5 +135,26 @@ public class Game {
         }
 
         return allCardsFound;
+    }
+
+    public boolean isNextTurn() {
+        return isFirstCardChosen() && isSecondCardChosen();
+    }
+
+    private GameCard getFirstCardChosen() {
+        return mGameCardList.get(mFirstPositionChosen);
+    }
+
+    private GameCard getSecondCardChosen() {
+        return mGameCardList.get(mSecondPositionChosen);
+    }
+
+    public void initNewTurn() {
+        //
+        getFirstCardChosen().setAttempt(false);
+        getSecondCardChosen().setAttempt(false);
+        //
+        mFirstPositionChosen = -1;
+        mSecondPositionChosen = -1;
     }
 }
