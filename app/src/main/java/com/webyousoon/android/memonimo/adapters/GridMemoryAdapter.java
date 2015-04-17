@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.webyousoon.android.memonimo.CardGame;
+import com.webyousoon.android.memonimo.model.GameCard;
 import com.webyousoon.android.memonimo.R;
 
 import java.util.List;
@@ -22,9 +20,9 @@ import java.util.List;
 public class GridMemoryAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<CardGame> mCardGameList;
+    private List<GameCard> mCardGameList;
 
-    public GridMemoryAdapter(Context c, List<CardGame> _cardGameList) {
+    public GridMemoryAdapter(Context c, List<GameCard> _cardGameList) {
         mContext = c;
         mCardGameList = _cardGameList;
     }
@@ -66,7 +64,7 @@ public class GridMemoryAdapter extends BaseAdapter {
         return imageView;
     }
 
-    public static LayerDrawable getCardDrawable(CardGame _cardGame, Resources _resources ) {
+    public static LayerDrawable getCardDrawable(GameCard _cardGame, Resources _resources ) {
 
         Drawable[] layers = new Drawable[2];
         layers[0] = _resources.getDrawable(getInsideDrawable(_cardGame));
@@ -74,7 +72,7 @@ public class GridMemoryAdapter extends BaseAdapter {
         return new LayerDrawable(layers);
     }
 
-    public static int getBorderDrawable(CardGame _cardGame) {
+    public static int getBorderDrawable(GameCard _cardGame) {
         if (_cardGame.isFoundPlayer1()) {
             return R.drawable.card_player1;
         } else if (_cardGame.isFoundPlayer2()) {
@@ -84,7 +82,7 @@ public class GridMemoryAdapter extends BaseAdapter {
         }
     }
 
-    public static int getInsideDrawable(CardGame _cardGame) {
+    public static int getInsideDrawable(GameCard _cardGame) {
         if (_cardGame.isCardFound() || _cardGame.isAttempt()) {
             return getAnimalDrawable(_cardGame.getAnimalGame());
         } else {
@@ -92,7 +90,7 @@ public class GridMemoryAdapter extends BaseAdapter {
         }
     }
 
-    private static int getAnimalDrawable(CardGame.AnimalGame _animalGame) {
+    private static int getAnimalDrawable(GameCard.AnimalGame _animalGame) {
         switch (_animalGame) {
             case ALLIGATOR: return R.drawable.card_alligator;
             case BEAVER: return R.drawable.card_beaver;

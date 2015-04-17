@@ -2,6 +2,8 @@ package com.webyousoon.android.memonimo;
 
 import android.support.annotation.NonNull;
 
+import com.webyousoon.android.memonimo.model.GameCard;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,24 +14,24 @@ import java.util.ListIterator;
  */
 public class MemoryGame {
 
-    private List<CardGame> mCardGameList = new List<CardGame>() {
+    private List<GameCard> mCardGameList = new List<GameCard>() {
         @Override
-        public void add(int location, CardGame object) {
+        public void add(int location, GameCard object) {
 
         }
 
         @Override
-        public boolean add(CardGame object) {
+        public boolean add(GameCard object) {
             return false;
         }
 
         @Override
-        public boolean addAll(int location, Collection<? extends CardGame> collection) {
+        public boolean addAll(int location, Collection<? extends GameCard> collection) {
             return false;
         }
 
         @Override
-        public boolean addAll(Collection<? extends CardGame> collection) {
+        public boolean addAll(Collection<? extends GameCard> collection) {
             return false;
         }
 
@@ -49,7 +51,7 @@ public class MemoryGame {
         }
 
         @Override
-        public CardGame get(int location) {
+        public GameCard get(int location) {
             return null;
         }
 
@@ -65,7 +67,7 @@ public class MemoryGame {
 
         @NonNull
         @Override
-        public Iterator<CardGame> iterator() {
+        public Iterator<GameCard> iterator() {
             return null;
         }
 
@@ -76,18 +78,18 @@ public class MemoryGame {
 
         @NonNull
         @Override
-        public ListIterator<CardGame> listIterator() {
+        public ListIterator<GameCard> listIterator() {
             return null;
         }
 
         @NonNull
         @Override
-        public ListIterator<CardGame> listIterator(int location) {
+        public ListIterator<GameCard> listIterator(int location) {
             return null;
         }
 
         @Override
-        public CardGame remove(int location) {
+        public GameCard remove(int location) {
             return null;
         }
 
@@ -107,7 +109,7 @@ public class MemoryGame {
         }
 
         @Override
-        public CardGame set(int location, CardGame object) {
+        public GameCard set(int location, GameCard object) {
             return null;
         }
 
@@ -118,7 +120,7 @@ public class MemoryGame {
 
         @NonNull
         @Override
-        public List<CardGame> subList(int start, int end) {
+        public List<GameCard> subList(int start, int end) {
             return null;
         }
 
@@ -138,7 +140,7 @@ public class MemoryGame {
 
     public void MemoryGame(int _numFamily) {
 
-        mCardGameList = CardGame.getRandomList(_numFamily);
+        mCardGameList = GameCard.getRandomList(_numFamily);
 
 
     }

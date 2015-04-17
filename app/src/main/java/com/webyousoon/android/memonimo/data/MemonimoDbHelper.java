@@ -54,6 +54,9 @@ public class MemonimoDbHelper extends SQLiteOpenHelper {
                 GameCardEntry.COLUMN_ID_GAME + " INTEGER NOT NULL, " +
                 GameCardEntry.COLUMN_ID_CARD + " INTEGER NOT NULL, " +
                 GameCardEntry.COLUMN_POSITION + " INTEGER NOT NULL, " +
+                GameCardEntry.COLUMN_FOUND + " INTEGER NOT NULL, " +
+                GameCardEntry.COLUMN_PLAYER + " INTEGER, " +
+                GameCardEntry.COLUMN_ATTEMPT + " INTEGER NOT NULL, " +
                 // Clé étrangère vers la table "game"
                 " FOREIGN KEY (" + GameCardEntry.COLUMN_ID_GAME + ") REFERENCES " +
                 GameEntry.TABLE_NAME + " (" + GameEntry._ID + "), " +

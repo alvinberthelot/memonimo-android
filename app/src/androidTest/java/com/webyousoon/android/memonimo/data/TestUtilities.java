@@ -19,7 +19,10 @@ import java.util.Set;
  */
 public class TestUtilities extends AndroidTestCase {
 
-    private static final String TEST_GAME_FINISHED = "1";
+    private static final String BOOLEAN_FALSE = "0";
+    private static final String BOOLEAN_TRUE = "1";
+
+    private static final String TEST_GAME_FINISHED = BOOLEAN_TRUE;
 
     private static final String TEST_CARD_DOG = "Dog";
 
@@ -28,6 +31,9 @@ public class TestUtilities extends AndroidTestCase {
     private static final String TEST_TURN_SECOND_POSITION_CHOOSEN = "5";
 
     private static final String TEST_GAME_CARD_POSITION = "7";
+    private static final String TEST_GAME_CARD_FOUND = BOOLEAN_FALSE;
+    private static final String TEST_GAME_CARD_PLAYER = "3";
+    private static final String TEST_GAME_CARD_ATTEMPT = BOOLEAN_FALSE;
 
     /*
         Vérification des données d'un curseur
@@ -99,6 +105,9 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(GameCardEntry.COLUMN_POSITION, TEST_GAME_CARD_POSITION);
         testValues.put(GameCardEntry.COLUMN_ID_GAME, _idGame);
         testValues.put(GameCardEntry.COLUMN_ID_CARD, _idCard);
+        testValues.put(GameCardEntry.COLUMN_FOUND, TEST_GAME_CARD_FOUND);
+        testValues.put(GameCardEntry.COLUMN_PLAYER, TEST_GAME_CARD_PLAYER);
+        testValues.put(GameCardEntry.COLUMN_ATTEMPT, TEST_GAME_CARD_ATTEMPT);
 
         return testValues;
     }

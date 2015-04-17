@@ -3,6 +3,7 @@ package com.webyousoon.android.memonimo;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -19,8 +20,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.webyousoon.android.memonimo.adapters.GridGameAdapter;
 import com.webyousoon.android.memonimo.adapters.GridMemoryAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
+import com.webyousoon.android.memonimo.data.ProviderUtilities;
+import com.webyousoon.android.memonimo.model.Game;
+import com.webyousoon.android.memonimo.model.GameCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,9 @@ import java.util.List;
 
 public class GameActivity extends ActionBarActivity {
 
-    private final String LOG_TAG = GameActivity.class.getSimpleName();
+    private static final String LOG_TAG = GameActivity.class.getSimpleName();
+
+    private static final String INSTANCE_STATE_ID_GAME = "instance_state_id_game";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +79,12 @@ public class GameActivity extends ActionBarActivity {
 
         private final String LOG_TAG = PlaceholderFragment.class.getSimpleName();
 
-        private List<CardGame> mCardGameList = CardGame.getRandomList(3);
-        private long mIdGame = -1;
-//        private List<CardGame> mCardGameList;
+        private SharedPreferences mPreferences;
+
+        private Game mGame;
+
+//        private long mIdGame = -1;
+
 
 
 
@@ -93,36 +103,60 @@ public class GameActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            // Récupération de l'id de la partie si celle-ci a été passée
+            long idGame = -1;
+
+            // Récupération de l'id de la partie si celui-ci a été sauvé dans l'état
+            if (savedInstanceState != null) {
+                idGame = savedInstanceState.getLong(INSTANCE_STATE_ID_GAME);
+            }
+
+            // Récupération de l'id de la partie si celui-ci a été passé par Intent
             Intent intent  = getActivity().getIntent();
             if (intent != null && intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
-                mIdGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
+                idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
             }
 
             View rootView = inflater.inflate(R.layout.fragment_game, container, false);
 
-            if (mIdGame == -1) {
-//                mIdGame = getUnfinishedGame();
-                
+            if (idGame == -1) {
+                // Initialisation d'une nouvelle partie d'un point de vue du modèle
+                mGame = new Game(3);
+                // Persistance de la partie
+                saveGame();
+            } else {
+                // Restauration de la partie
+                restoreGame(idGame);
             }
 
+
             TextView idGameView = (TextView) rootView.findViewById(R.id.idGame);
-            idGameView.setText("PARTIE #" + mIdGame);
+            idGameView.setText("PARTIE #" + mGame.getId());
 
 
-            GridView gridMemory = (GridView) rootView.findViewById(R.id.gridMemory);
-            final GridMemoryAdapter gridMemoryAdapter = new GridMemoryAdapter(getActivity(), mCardGameList);
-            gridMemory.setAdapter(gridMemoryAdapter);
+            GridView gridGameView = (GridView) rootView.findViewById(R.id.gridMemory);
 
-            gridMemory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            final GridGameAdapter gridGameAdapter = new GridGameAdapter(
+                    getActivity(),
+                    mGame.getGameCardList()
+            );
+//            final GridGameAdapter gridGameAdapter = new GridGameAdapter(
+//                    getActivity(),
+//                    cursor,
+//                    0
+//            );
+
+            gridGameView.setAdapter(gridGameAdapter);
+
+            gridGameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                     // dans le cas d'un précédent tour de jeu
                     if (mFirstPositionChoosen != -1 && mSecondPositionChoosen != -1) {
                         // on modifie l'état des cartes pour qu'elles ne soient plus affichées,
                         // si celles-ci n'ont pas été trouvées
-                        mCardGameList.get(mFirstPositionChoosen).setAttempt(false);
-                        mCardGameList.get(mSecondPositionChoosen).setAttempt(false);
+                        mGame.getGameCardList().get(mFirstPositionChoosen).setAttempt(false);
+                        mGame.getGameCardList().get(mSecondPositionChoosen).setAttempt(false);
                         //
                         mFirstPositionChoosen = -1;
                         mSecondPositionChoosen = -1;
@@ -139,7 +173,7 @@ public class GameActivity extends ActionBarActivity {
                         } else {
                             // on affecte la position sélectionnée
                             mFirstPositionChoosen = position;
-                            mCardGameList.get(mFirstPositionChoosen).setAttempt(true);
+                            mGame.getGameCardList().get(mFirstPositionChoosen).setAttempt(true);
                         }
                     }
                     // deuxième coup du tour de jeu
@@ -160,22 +194,22 @@ public class GameActivity extends ActionBarActivity {
 
                             mSecondPositionChoosen = position;
 
-                            if (mCardGameList.get(mFirstPositionChoosen).getAnimalGame() != mCardGameList.get(mSecondPositionChoosen).getAnimalGame()) {
-                                mCardGameList.get(mSecondPositionChoosen).setAttempt(true);
+                            if (mGame.getGameCardList().get(mFirstPositionChoosen).getAnimalGame() != mGame.getGameCardList().get(mSecondPositionChoosen).getAnimalGame()) {
+                                mGame.getGameCardList().get(mSecondPositionChoosen).setAttempt(true);
                             } else {
-                                mCardGameList.get(mFirstPositionChoosen).setCardFound(true);
-                                mCardGameList.get(mSecondPositionChoosen).setCardFound(true);
-                                mCardGameList.get(mFirstPositionChoosen).setFoundPlayer1(true);
-                                mCardGameList.get(mSecondPositionChoosen).setFoundPlayer1(true);
+                                mGame.getGameCardList().get(mFirstPositionChoosen).setCardFound(true);
+                                mGame.getGameCardList().get(mSecondPositionChoosen).setCardFound(true);
+                                mGame.getGameCardList().get(mFirstPositionChoosen).setFoundPlayer1(true);
+                                mGame.getGameCardList().get(mSecondPositionChoosen).setFoundPlayer1(true);
                                 mPositionFoundList.add(new Integer(mFirstPositionChoosen));
                                 mPositionFoundList.add(new Integer(mSecondPositionChoosen));
                             }
                         }
                     }
 
-                    if (mPositionFoundList.size() == mCardGameList.size()) {
+                    if (mGame.isAllCardsFound()) {
                         //
-                        finishGame();
+                        mGame.setFinished(true);
                         //
                         Toast.makeText(
                                 getActivity(),
@@ -185,8 +219,10 @@ public class GameActivity extends ActionBarActivity {
 
                     }
 
+                    saveGame();
 
-                    gridMemoryAdapter.notifyDataSetChanged();
+
+                    gridGameAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -195,66 +231,122 @@ public class GameActivity extends ActionBarActivity {
         }
 
         @Override
+        public void onSaveInstanceState(Bundle savedInstanceState) {
+            super.onSaveInstanceState(savedInstanceState);
+            // Sauvegarde de l'identifiant de la partie dans l'état
+            savedInstanceState.putLong(INSTANCE_STATE_ID_GAME, mGame.getId());
+        }
+
+        @Override
         public void onPause() {
             super.onPause();
-
-            Log.v(LOG_TAG, "ALVIN onPause B");
-
-            // Récupération des données via le Content Provider
-            Cursor cursor = getActivity().getContentResolver().query(
-                    MemonimoContract.GameEntry.CONTENT_URI, // URI
-                    null, // Colonnes interogées
-                    null, // Colonnes pour la condition WHERE
-                    null, // Valeurs pour la condition WHERE
-                    null // Tri
-            );
-
-            if (cursor.moveToFirst()) {
-                Log.v(LOG_TAG, "Game #" + cursor.getLong(0) + " found into database");
-            } else {
-                Log.d(LOG_TAG, "No game into database");
-
-                ContentValues gameValue = new ContentValues();
-                gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
-
-                // Insertion d'une partie via le Provider
-                Uri uri = getActivity().getContentResolver().insert(
-                        MemonimoContract.GameEntry.CONTENT_URI, gameValue);
-                // Récupération de l'identifiant généré
-                long idGenerated = ContentUris.parseId(uri);
-
-                Log.d(LOG_TAG, "Game #" + idGenerated + " created into database");
-            }
-
-            cursor.close();
-
-            Log.v(LOG_TAG, "ALVIN onPause E");
+            Log.d(LOG_TAG, ".onPause()");
         }
 
         @Override
         public void onResume() {
             super.onResume();
+            Log.d(LOG_TAG, ".onResume()");
+        }
+
+
+        private int saveGame() {
+
+            Log.d(LOG_TAG, ".saveGame() : id -> " + mGame.getId());
+
+            if (mGame.getId() == -1) {
+                ContentValues gameValue = new ContentValues();
+                gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+
+                // Insertion d'une partie via le Provider
+                Uri uri = getActivity().getContentResolver().insert(
+                        MemonimoContract.GameEntry.CONTENT_URI,
+                        gameValue
+                );
+                // Récupération de l'identifiant généré
+                mGame.setId(ContentUris.parseId(uri));
+            } else {
+                ContentValues gameValue = ProviderUtilities.convertGameModelToGameValues(mGame);
+
+                // Insertion d'une partie via le Provider
+                int numRowsUpdated = getActivity().getContentResolver().update(
+                        MemonimoContract.GameEntry.CONTENT_URI,
+                        gameValue,
+                        MemonimoContract.GameEntry._ID + "=?",
+                        new String[] {Long.toString(mGame.getId())}
+                );
+
+                if (numRowsUpdated != 1) {
+                    Log.w(LOG_TAG, "SOUCI une seule ligne aurait du être modifiée");
+                }
+
+                Log.d(LOG_TAG, "Game #" + mGame.getId() + " updated as finish into database");
+            }
+
+
+
+            // Conversion pour le Provider
+            ContentValues[] gameCards = ProviderUtilities.convertGameModelToGameCardValues(mGame);
+
+            // Suppressions massives via le Provider
+            getActivity().getContentResolver().delete(
+                    MemonimoContract.GameCardEntry.CONTENT_URI,
+                    MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?",
+                    new String[] {Long.toString(mGame.getId())}
+            );
+
+            // Insertions massives via le Provider
+            int numRowsConcerned = getActivity().getContentResolver().bulkInsert(
+                    MemonimoContract.GameCardEntry.CONTENT_URI,
+                    gameCards
+            );
+
+            Log.v(LOG_TAG, numRowsConcerned + " rows concerned into database");
+
+            return numRowsConcerned;
+        }
+
+        private void restoreGame(long _idGame) {
+
+            Log.d(LOG_TAG, ".restoreGame() : id -> " + _idGame);
+
+            mGame = new Game(_idGame);
 
             // Récupération des données via le Content Provider
             Cursor cursor = getActivity().getContentResolver().query(
-                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    MemonimoContract.GameCardEntry.CONTENT_URI, // URI
                     null, // Colonnes interogées
-                    null, // Colonnes pour la condition WHERE
-                    null, // Valeurs pour la condition WHERE
+                    MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
+                    new String[] {"" + _idGame}, // Valeurs pour la condition WHERE
                     null // Tri
             );
-
-            if (cursor.moveToFirst()) {
-                Log.v(LOG_TAG, "Game #" + cursor.getLong(0) + " found into database");
-            } else {
-                Log.d(LOG_TAG, "OUPS pas normal");
+            // Récupération du modèle
+            while(cursor.moveToNext()) {
+                mGame.addGameCard(ProviderUtilities.convertGameCardCursorToGameCardModel(cursor));
             }
 
-            cursor.close();
 
-
-            Log.v(LOG_TAG, "ALVIN onResume E");
+            Log.e(LOG_TAG, ".restoreGame() test : id -> " + _idGame);
         }
+
+//        private long createGame(List<GameCard> _cardGameList) {
+//            ContentValues gameValue = new ContentValues();
+//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+//
+//            // Insertion d'une partie via le Provider
+//            Uri uri = getActivity().getContentResolver().insert(
+//                    MemonimoContract.GameEntry.CONTENT_URI,
+//                    gameValue
+//            );
+//            // Récupération de l'identifiant généré
+//            long idGenerated = ContentUris.parseId(uri);
+//
+//
+//            saveGame();
+//
+//
+//            return idGenerated;
+//        }
 
         private long getUnfinishedGame() {
             long idGame;
@@ -329,25 +421,5 @@ public class GameActivity extends ActionBarActivity {
             return idGame;
         }
 
-        private void finishGame() {
-
-
-            ContentValues gameValue = new ContentValues();
-            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "1");
-
-            // Insertion d'une partie via le Provider
-            int numRowsUpdated = getActivity().getContentResolver().update(
-                    MemonimoContract.GameEntry.CONTENT_URI,
-                    gameValue,
-                    MemonimoContract.GameEntry._ID + "=?",
-                    new String[] {Long.toString(mIdGame)}
-            );
-
-            if (numRowsUpdated != 1) {
-                Log.w(LOG_TAG, "SOUCI une seule ligen aurait du être modifiée");
-            }
-
-            Log.d(LOG_TAG, "Game #" + mIdGame + " updated as finish into database");
-        }
     }
 }

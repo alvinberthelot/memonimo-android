@@ -1,4 +1,4 @@
-package com.webyousoon.android.memonimo;
+package com.webyousoon.android.memonimo.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,11 +9,22 @@ import java.util.Random;
 /**
  * Created by hackorder on 13/04/2015.
  */
-public class CardGame implements Cloneable {
+public class GameCard implements Cloneable {
 
     public enum AnimalGame {
-        ALLIGATOR, BEAVER, BIRDY, BUFFALO, CAT, COW, ELEPHANT, FISH, FOX, GIRAFFE, GOOSE, HORSE,
-        IGUANA, JELLYFISH, KOALA, LION, MONKEY, PHEASANT, PIG, RABBIT, SHEEP, TURTLE, WOLF, WHALE;
+        ALLIGATOR(0), BEAVER(1), BIRDY(2), BUFFALO(3), CAT(4), COW(5), ELEPHANT(6), FISH(7), FOX(8),
+        GIRAFFE(9), GOOSE(10), HORSE(11), IGUANA(12), JELLYFISH(13), KOALA(14), LION(15), MONKEY(16),
+        PHEASANT(17), PIG(18), RABBIT(19), SHEEP(20), TURTLE(21), WOLF(22), WHALE(23);
+
+        private AnimalGame(int _code) {
+            this.mCode = _code;
+        }
+
+        private final int mCode;
+
+        public int getCode() {
+            return mCode;
+        }
 
         private static final List<AnimalGame> VALUES =
                 Collections.unmodifiableList(Arrays.asList(values()));
@@ -31,11 +42,20 @@ public class CardGame implements Cloneable {
     private boolean mFoundPlayer2 = false;
     private boolean mAttempt = false;
 
-    private CardGame(AnimalGame _animalGame) {
+    public GameCard(int _codeAnimal, boolean _cardFound,
+                    boolean _foundPlayer1, boolean _foundPlayer2, boolean _attempt) {
+        this.mAnimalGame = AnimalGame.values()[_codeAnimal];
+        this.mCardFound = _cardFound;
+        this.mFoundPlayer1 = _foundPlayer1;
+        this.mFoundPlayer2 = _foundPlayer2;
+        this.mAttempt = _attempt;
+    }
+
+    private GameCard(AnimalGame _animalGame) {
         this.mAnimalGame = _animalGame;
     }
 
-    private static CardGame getRandomCardOnce(List<AnimalGame> _list) {
+    private static GameCard getRandomCardOnce(List<AnimalGame> _list) {
         Random random = new Random();
 //        List<AnimalGame> list = AnimalGame.getModifiableList();
 
@@ -43,21 +63,21 @@ public class CardGame implements Cloneable {
         AnimalGame animalSelected = (AnimalGame) _list.get(selection);
         _list.remove(selection);
 
-        return new CardGame(animalSelected);
+        return new GameCard(animalSelected);
     }
 
-    public static List<CardGame> getRandomList(int _size) {
-        List <CardGame> cardGameList = new ArrayList<CardGame>();
+    public static List<GameCard> getRandomList(int _size) {
+        List <GameCard> cardGameList = new ArrayList<GameCard>();
         List<AnimalGame> animalGameList = AnimalGame.getModifiableList();
 
         // TODO
         // if _size > animalGameList.size();
 
         for (int i = 0; i < _size; i++) {
-            CardGame cardGenerated = getRandomCardOnce(animalGameList);
+            GameCard cardGenerated = getRandomCardOnce(animalGameList);
             cardGameList.add(cardGenerated);
             try {
-                cardGameList.add((CardGame) cardGenerated.clone());
+                cardGameList.add((GameCard) cardGenerated.clone());
             } catch (CloneNotSupportedException e) {
 
             }
