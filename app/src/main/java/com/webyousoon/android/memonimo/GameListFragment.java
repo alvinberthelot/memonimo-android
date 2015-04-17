@@ -1,75 +1,31 @@
 package com.webyousoon.android.memonimo;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.webyousoon.android.memonimo.adapters.ListSummaryGameAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class GameListFragment extends Fragment {
 
     private final String LOG_TAG = GameListFragment.class.getSimpleName();
 
-
-//    // TODO: Rename parameter arguments, choose names that match
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
-
-//    private OnFragmentInteractionListener mListener;
-
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment GameListFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static GameListFragment newInstance(String param1, String param2) {
-//        GameListFragment fragment = new GameListFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     public GameListFragment() {
-        // Required empty public constructor
-    }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_game_list, container, false);
-
         ListView summaryGameListView = (ListView) rootView.findViewById(R.id.lv_summary_game);
 
         // Récupération des données via le Content Provider
@@ -81,68 +37,28 @@ public class GameListFragment extends Fragment {
                 null // Tri
         );
 
-        ListSummaryGameAdapter listSummaryGameAdapter = new ListSummaryGameAdapter(
+        // Initialisation de l'Adapter avec le curseur
+        final ListSummaryGameAdapter listSummaryGameAdapter = new ListSummaryGameAdapter(
                 getActivity(),
                 cursor,
                 0
         );
-
+        // Affectation de l'Adapter à la ListView
         summaryGameListView.setAdapter(listSummaryGameAdapter);
 
-//        String [] testArray = {
-//                "youpi 1",
-//                "toto 2",
-//                "oups 3"
-//        };
-//        ArrayAdapter<String> testAdapter = new ArrayAdapter<String>(
-//                getActivity(),
-//                R.layout.list_item_summary_game,
-//                R.id.li_summary_game_title,
-//                new ArrayList<String>(Arrays.asList(testArray))
-//        );
-//
-//        summaryGameListView.setAdapter(testAdapter);
+
+        summaryGameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                // Récupération de l'identifiant de la partie
+                long idGame = listSummaryGameAdapter.getIdItem(position);
+                // Envoi de l'id via l'Intent
+                Intent intent = new Intent(getActivity(), GameActivity.class)
+                        .putExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, idGame);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
-
 }

@@ -62,6 +62,11 @@ public class ListSummaryGameAdapter extends CursorAdapter {
         return view;
     }
 
+    public long getIdItem(int _position) {
+        Cursor cursor = (Cursor) getItem(_position);
+        return cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
+    }
+
     //    @Override
 //    public int getCount() {
 //        return 0;

@@ -2,6 +2,7 @@ package com.webyousoon.android.memonimo;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -92,9 +93,19 @@ public class GameActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+            // Récupération de l'id de la partie si celle-ci a été passée
+            Intent intent  = getActivity().getIntent();
+            if (intent != null && intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
+                mIdGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
+            }
+
             View rootView = inflater.inflate(R.layout.fragment_game, container, false);
 
-            mIdGame = getUnfinishedGame();
+            if (mIdGame == -1) {
+//                mIdGame = getUnfinishedGame();
+                
+            }
+
             TextView idGameView = (TextView) rootView.findViewById(R.id.idGame);
             idGameView.setText("PARTIE #" + mIdGame);
 
