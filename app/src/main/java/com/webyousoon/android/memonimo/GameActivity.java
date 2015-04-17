@@ -1,5 +1,10 @@
 package com.webyousoon.android.memonimo;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -17,6 +22,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.webyousoon.android.memonimo.data.MemonimoContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +75,12 @@ public class GameActivity extends ActionBarActivity {
 
         private final String LOG_TAG = PlaceholderFragment.class.getSimpleName();
 
-        private List<CardGame> mCardGameList = CardGame.getRandomList(8);
+        private List<CardGame> mCardGameList = CardGame.getRandomList(3);
+        private long mIdGame = -1;
+//        private List<CardGame> mCardGameList;
+
+
+
 
 //        private boolean mFirstChoicePlayer = false;
 //        private CardGame mCardChoosen = null;
@@ -77,6 +89,8 @@ public class GameActivity extends ActionBarActivity {
         private List<Integer> mPositionFoundList = new ArrayList<Integer>();
 
         public PlaceholderFragment() {
+
+
         }
 
         @Override
@@ -84,8 +98,9 @@ public class GameActivity extends ActionBarActivity {
 
             View rootView = inflater.inflate(R.layout.fragment_game, container, false);
 
-//            TextView testMemory = (TextView) rootView.findViewById(R.id.testMemoryView);
-//            testMemory.setText("Coucou");
+            mIdGame = getUnfinishedGame();
+            TextView idGameView = (TextView) rootView.findViewById(R.id.idGame);
+            idGameView.setText("PARTIE #" + mIdGame);
 
 
             GridView gridMemory = (GridView) rootView.findViewById(R.id.gridMemory);
@@ -124,10 +139,10 @@ public class GameActivity extends ActionBarActivity {
                     else {
 
                         if (mFirstPositionChoosen == position) {
-                        Toast.makeText(
-                                getActivity(),
-                                "Carte déjà sélectionnée à la position N°" + position,
-                                Toast.LENGTH_SHORT).show();
+                            Toast.makeText(
+                                    getActivity(),
+                                    "Carte déjà sélectionnée à la position N°" + position,
+                                    Toast.LENGTH_SHORT).show();
                         } else if (mPositionFoundList.contains(position)) {
                             //
                             Toast.makeText(
@@ -151,12 +166,181 @@ public class GameActivity extends ActionBarActivity {
                         }
                     }
 
+                    if (mPositionFoundList.size() == mCardGameList.size()) {
+                        //
+                        finishGame();
+                        //
+                        Toast.makeText(
+                                getActivity(),
+                                "PARTIE TERMINÉE !!",
+                                Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+
                     gridMemoryAdapter.notifyDataSetChanged();
                 }
             });
 
 
             return rootView;
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+
+            Log.v(LOG_TAG, "ALVIN onPause B");
+
+            // Récupération des données via le Content Provider
+            Cursor cursor = getActivity().getContentResolver().query(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    null, // Colonnes interogées
+                    null, // Colonnes pour la condition WHERE
+                    null, // Valeurs pour la condition WHERE
+                    null // Tri
+            );
+
+            if (cursor.moveToFirst()) {
+                Log.v(LOG_TAG, "Game #" + cursor.getLong(0) + " found into database");
+            } else {
+                Log.d(LOG_TAG, "No game into database");
+
+                ContentValues gameValue = new ContentValues();
+                gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+
+                // Insertion d'une partie via le Provider
+                Uri uri = getActivity().getContentResolver().insert(
+                        MemonimoContract.GameEntry.CONTENT_URI, gameValue);
+                // Récupération de l'identifiant généré
+                long idGenerated = ContentUris.parseId(uri);
+
+                Log.d(LOG_TAG, "Game #" + idGenerated + " created into database");
+            }
+
+            cursor.close();
+
+            Log.v(LOG_TAG, "ALVIN onPause E");
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            // Récupération des données via le Content Provider
+            Cursor cursor = getActivity().getContentResolver().query(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    null, // Colonnes interogées
+                    null, // Colonnes pour la condition WHERE
+                    null, // Valeurs pour la condition WHERE
+                    null // Tri
+            );
+
+            if (cursor.moveToFirst()) {
+                Log.v(LOG_TAG, "Game #" + cursor.getLong(0) + " found into database");
+            } else {
+                Log.d(LOG_TAG, "OUPS pas normal");
+            }
+
+            cursor.close();
+
+
+            Log.v(LOG_TAG, "ALVIN onResume E");
+        }
+
+        private long getUnfinishedGame() {
+            long idGame;
+
+            // Récupération des données via le Content Provider
+            Cursor cursor = getActivity().getContentResolver().query(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    null, // Colonnes interogées
+                    MemonimoContract.GameEntry.COLUMN_FINISHED + "=?", // Colonnes pour la condition WHERE
+                    new String[] {"0"}, // Valeurs pour la condition WHERE
+                    null // Tri
+            );
+
+            if (cursor.moveToFirst()) {
+                idGame = cursor.getLong(0);
+                Log.v(LOG_TAG, "Game #" + idGame + " found into database");
+            } else {
+                Log.d(LOG_TAG, "No game into database");
+
+                ContentValues gameValue = new ContentValues();
+                gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+
+                // Insertion d'une partie via le Provider
+                Uri uri = getActivity().getContentResolver().insert(
+                        MemonimoContract.GameEntry.CONTENT_URI,
+                        gameValue);
+                // Récupération de l'identifiant généré
+                idGame = ContentUris.parseId(uri);
+
+                Log.d(LOG_TAG, "Game #" + idGame + " created into database");
+            }
+
+            cursor.close();
+
+            return idGame;
+        }
+
+        private long getGame() {
+
+            long idGame;
+
+            // Récupération des données via le Content Provider
+            Cursor cursor = getActivity().getContentResolver().query(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    null, // Colonnes interogées
+                    null, // Colonnes pour la condition WHERE
+                    null, // Valeurs pour la condition WHERE
+                    null // Tri
+            );
+
+            if (cursor.moveToFirst()) {
+                idGame = cursor.getLong(0);
+                Log.v(LOG_TAG, "Game #" + idGame + " found into database");
+            } else {
+                Log.d(LOG_TAG, "No game into database");
+
+                ContentValues gameValue = new ContentValues();
+                gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+
+                // Insertion d'une partie via le Provider
+                Uri uri = getActivity().getContentResolver().insert(
+                        MemonimoContract.GameEntry.CONTENT_URI,
+                        gameValue);
+                // Récupération de l'identifiant généré
+                idGame = ContentUris.parseId(uri);
+
+                Log.d(LOG_TAG, "Game #" + idGame + " created into database");
+            }
+
+            cursor.close();
+
+            return idGame;
+        }
+
+        private void finishGame() {
+
+
+            ContentValues gameValue = new ContentValues();
+            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "1");
+
+            // Insertion d'une partie via le Provider
+            int numRowsUpdated = getActivity().getContentResolver().update(
+                    MemonimoContract.GameEntry.CONTENT_URI,
+                    gameValue,
+                    MemonimoContract.GameEntry._ID + "=?",
+                    new String[] {Long.toString(mIdGame)}
+            );
+
+            if (numRowsUpdated != 1) {
+                Log.w(LOG_TAG, "SOUCI une seule ligen aurait du être modifiée");
+            }
+
+            Log.d(LOG_TAG, "Game #" + mIdGame + " updated as finish into database");
         }
     }
 }

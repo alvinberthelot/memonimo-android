@@ -20,6 +20,11 @@
             android:name=".GameActivity"
             android:label="@string/title_activity_game" >
         </activity>
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".data.MemonimoProvider"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

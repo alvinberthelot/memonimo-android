@@ -1,7 +1,9 @@
 package com.webyousoon.android.memonimo.data;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
@@ -27,6 +29,9 @@ public class TestUtilities extends AndroidTestCase {
 
     private static final String TEST_GAME_CARD_POSITION = "7";
 
+    /*
+        Vérification des données d'un curseur
+    */
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
         for (Map.Entry<String, Object> entry : valueSet) {
@@ -38,6 +43,15 @@ public class TestUtilities extends AndroidTestCase {
                     "' did not match the expected value '" +
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
         }
+    }
+
+    /*
+        Vérification d'un curseur et des données qu'il contient
+    */
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+        assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+        validateCurrentRecord(error, valueCursor, expectedValues);
+        valueCursor.close();
     }
 
     /*
@@ -88,4 +102,68 @@ public class TestUtilities extends AndroidTestCase {
 
         return testValues;
     }
+
+    /*
+        Insertion d'un jeu de données pour tester la table "game"
+     */
+    static long insertGameValuesToDb(Context _context, ContentValues _testValues) {
+
+        // Récupération de la base SQLite
+        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
+
+        // Vérification de l'insertion
+        long idGenerated;
+        idGenerated = db.insert(GameEntry.TABLE_NAME, null, _testValues);
+        assertTrue("Error: Failure to insert game values", idGenerated != -1);
+
+        return idGenerated;
+    }
+
+    /*
+        Insertion d'un jeu de données pour tester la table "card"
+     */
+    static long insertCardValuesToDb(Context _context, ContentValues _testValues) {
+
+        // Récupération de la base SQLite
+        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
+
+        // Vérification de l'insertion
+        long idGenerated;
+        idGenerated = db.insert(CardEntry.TABLE_NAME, null, _testValues);
+        assertTrue("Error: Failure to insert card values", idGenerated != -1);
+
+        return idGenerated;
+    }
+
+//    /*
+//        Insertion d'un jeu de données pour tester la table "turn"
+//     */
+//    static long insertTurnValuesToDb(Context _context, ContentValues _testValues) {
+//
+//        // Récupération de la base SQLite
+//        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
+//
+//        // Vérification de l'insertion
+//        long idGenerated;
+//        idGenerated = db.insert(TurnEntry.TABLE_NAME, null, _testValues);
+//        assertTrue("Error: Failure to insert turn values", idGenerated != -1);
+//
+//        return idGenerated;
+//    }
+//
+//    /*
+//        Insertion d'un jeu de données pour tester la table "turn"
+//     */
+//    static long insertGameCardValuesToDb(Context _context, ContentValues _testValues) {
+//
+//        // Récupération de la base SQLite
+//        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
+//
+//        // Vérification de l'insertion
+//        long idGenerated;
+//        idGenerated = db.insert(GameCardEntry.TABLE_NAME, null, _testValues);
+//        assertTrue("Error: Failure to insert game card values", idGenerated != -1);
+//
+//        return idGenerated;
+//    }
 }

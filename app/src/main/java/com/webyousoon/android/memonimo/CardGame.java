@@ -24,32 +24,6 @@ public class CardGame implements Cloneable {
         }
     }
 
-
-//    private static final int CARD_ALLIGATOR_ID = 1;
-//    private static final int CARD_BEAVER_ID = 2;
-//    private static final int CARD_BIRDY_ID = 3;
-//    private static final int CARD_BUFFALO_ID = 4;
-//    private static final int CARD_CAT_ID = 5;
-//    private static final int CARD_COW_ID = 6;
-//    private static final int CARD_ELEPHANT_ID = 7;
-//    private static final int CARD_FISH_ID = 8;
-//    private static final int CARD_FOX_ID = 9;
-//    private static final int CARD_GIRAFFE_ID = 10;
-//    private static final int CARD_GOOSE_ID = 11;
-//    private static final int CARD_HORSE_ID = 12;
-//    private static final int CARD_IGUANA_ID = 13;
-//    private static final int CARD_JELLYFISH_ID = 14;
-//    private static final int CARD_KOALA_ID = 15;
-//    private static final int CARD_LION_ID = 16;
-//    private static final int CARD_MONKEY_ID = 17;
-//    private static final int CARD_PHEASANT_ID = 18;
-//    private static final int CARD_PIG_ID = 19;
-//    private static final int CARD_RABBIT_ID = 20;
-//    private static final int CARD_SHEEP_ID = 21;
-//    private static final int CARD_TURTLE_ID = 22;
-//    private static final int CARD_WOLF_ID = 23;
-//    private static final int CARD_WHALE_ID = 24;
-
 //    int mId;
     private AnimalGame mAnimalGame;
     private boolean mCardFound = false;

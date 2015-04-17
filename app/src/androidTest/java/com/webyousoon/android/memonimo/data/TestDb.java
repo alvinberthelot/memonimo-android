@@ -143,6 +143,7 @@ public class TestDb extends AndroidTestCase {
     }
 
     public long insertIntoGameTable() {
+
         // Récupération de la base SQLite
         SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
         // Récupération d'un jeu de données pour le test
