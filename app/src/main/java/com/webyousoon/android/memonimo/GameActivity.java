@@ -123,11 +123,6 @@ public class GameActivity extends ActionBarActivity {
                     getActivity(),
                     mGame.getGameCardList()
             );
-//            final GridGameAdapter gridGameAdapter = new GridGameAdapter(
-//                    getActivity(),
-//                    cursor,
-//                    0
-//            );
 
             gridGameView.setAdapter(gridGameAdapter);
 
@@ -186,10 +181,13 @@ public class GameActivity extends ActionBarActivity {
                                 "PARTIE TERMINÉE !!",
                                 Toast.LENGTH_SHORT).show();
 
+                        removeGame();
+
+                    } else {
+                        saveGame();
 
                     }
 
-                    saveGame();
 
 
                     gridGameAdapter.notifyDataSetChanged();
@@ -305,27 +303,30 @@ public class GameActivity extends ActionBarActivity {
                 mGame.addGameCard(ProviderUtilities.convertGameCardCursorToGameCardModel(cursor));
             }
 
-            Log.e(LOG_TAG, ".restoreGame() test : id -> " + _idGame);
         }
 
-//        private long createGame(List<GameCard> _cardGameList) {
-//            ContentValues gameValue = new ContentValues();
-//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
-//
-//            // Insertion d'une partie via le Provider
-//            Uri uri = getActivity().getContentResolver().insert(
-//                    MemonimoContract.GameEntry.CONTENT_URI,
-//                    gameValue
-//            );
-//            // Récupération de l'identifiant généré
-//            long idGenerated = ContentUris.parseId(uri);
-//
-//
-//            saveGame();
-//
-//
-//            return idGenerated;
-//        }
+        private void removeGame() {
+
+            Log.d(LOG_TAG, ".removeGame() : id -> " + mGame.getId());
+
+            // Suppression des cartes
+            int numCardsDeleted = getActivity().getContentResolver().delete(
+                    MemonimoContract.GameCardEntry.CONTENT_URI, // URI
+                    MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
+                    new String[] {"" + mGame.getId()} // Valeurs pour la condition WHERE
+            );
+            Log.d(LOG_TAG, numCardsDeleted + " rows deleted from game_card with id_card " + mGame.getId());
+
+            // Suppression de la partie
+            int numGamesDeleted = getActivity().getContentResolver().delete(
+                    MemonimoContract.GameEntry.CONTENT_URI, // URI
+                    MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+                    new String[] {"" + mGame.getId()} // Valeurs pour la condition WHERE
+            );
+            Log.d(LOG_TAG, numGamesDeleted + " rows deleted from game with id " + mGame.getId());
+
+
+        }
 
         private long getUnfinishedGame() {
             long idGame;
