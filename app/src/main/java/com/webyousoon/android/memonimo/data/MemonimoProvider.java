@@ -1,22 +1,28 @@
 package com.webyousoon.android.memonimo.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
+import com.webyousoon.android.memonimo.model.Game;
 
 
 /**
  * Created by hackorder on 14/04/2015.
  */
 public class MemonimoProvider extends ContentProvider {
+
+    private static final String LOG_TAG = MemonimoProvider.class.getSimpleName();
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MemonimoDbHelper mMemonimoDbHelper;
@@ -33,6 +39,190 @@ public class MemonimoProvider extends ContentProvider {
     public boolean onCreate() {
         mMemonimoDbHelper = new MemonimoDbHelper(getContext());
         return true;
+    }
+
+
+//    private long getGame() {
+//
+//        long idGame;
+//
+//        // Récupération des données via le Content Provider
+//        Cursor cursor = getActivity().getContentResolver().query(
+//                MemonimoContract.GameEntry.CONTENT_URI, // URI
+//                null, // Colonnes interogées
+//                null, // Colonnes pour la condition WHERE
+//                null, // Valeurs pour la condition WHERE
+//                null // Tri
+//        );
+//
+//        if (cursor.moveToFirst()) {
+//            idGame = cursor.getLong(0);
+//            Log.v(LOG_TAG, "Game #" + idGame + " found into database");
+//        } else {
+//            Log.d(LOG_TAG, "No game into database");
+//
+//            ContentValues gameValue = new ContentValues();
+//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+//
+//            // Insertion d'une partie via le Provider
+//            Uri uri = getActivity().getContentResolver().insert(
+//                    MemonimoContract.GameEntry.CONTENT_URI,
+//                    gameValue);
+//            // Récupération de l'identifiant généré
+//            idGame = ContentUris.parseId(uri);
+//
+//            Log.d(LOG_TAG, "Game #" + idGame + " created into database");
+//        }
+//
+//        cursor.close();
+//
+//        return idGame;
+//    }
+
+//    private long getUnfinishedGame() {
+//        long idGame;
+//
+//        // Récupération des données via le Content Provider
+//        Cursor cursor = getActivity().getContentResolver().query(
+//                MemonimoContract.GameEntry.CONTENT_URI, // URI
+//                null, // Colonnes interogées
+//                MemonimoContract.GameEntry.COLUMN_FINISHED + "=?", // Colonnes pour la condition WHERE
+//                new String[] {"0"}, // Valeurs pour la condition WHERE
+//                null // Tri
+//        );
+//
+//        if (cursor.moveToFirst()) {
+//            idGame = cursor.getLong(0);
+//            Log.v(LOG_TAG, "Game #" + idGame + " found into database");
+//        } else {
+//            Log.d(LOG_TAG, "No game into database");
+//
+//            ContentValues gameValue = new ContentValues();
+//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
+//
+//            // Insertion d'une partie via le Provider
+//            Uri uri = getActivity().getContentResolver().insert(
+//                    MemonimoContract.GameEntry.CONTENT_URI,
+//                    gameValue);
+//            // Récupération de l'identifiant généré
+//            idGame = ContentUris.parseId(uri);
+//
+//            Log.d(LOG_TAG, "Game #" + idGame + " created into database");
+//        }
+//
+//        cursor.close();
+//
+//        return idGame;
+//    }
+
+    public static Game restoreGame(ContentResolver _contentResolver, long _idGame) {
+
+        Log.d(LOG_TAG, ".restoreGame() : id -> " + _idGame);
+
+        Game game;
+
+        // Récupération de la partie
+        Cursor cursor = _contentResolver.query(
+                MemonimoContract.GameEntry.CONTENT_URI, // URI
+                null, // Colonnes interogées
+                MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + _idGame}, // Valeurs pour la condition WHERE
+                null // Tri
+        );
+        cursor.moveToNext();
+        game = ProviderUtilities.convertGameCursorToGameModel(cursor);
+
+        // Récupération des données des cartes via le Content Provider
+        cursor = _contentResolver.query(
+                MemonimoContract.GameCardEntry.CONTENT_URI, // URI
+                null, // Colonnes interogées
+                MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + _idGame}, // Valeurs pour la condition WHERE
+                null // Tri
+        );
+        while(cursor.moveToNext()) {
+            game.addGameCard(ProviderUtilities.convertGameCardCursorToGameCardModel(cursor));
+        }
+
+        return game;
+    }
+
+    public static long saveGame(ContentResolver _contentResolver, Game _game) {
+
+        Game game = null;
+
+        try {
+            game = (Game) _game.clone();
+
+        } catch (CloneNotSupportedException e) {
+            // TODO
+        }
+
+        ContentValues gameValue = ProviderUtilities.convertGameModelToGameValues(game);
+
+        if (game.getId() == -1) {
+            // Insertion d'une partie via le Provider
+            Uri uri = _contentResolver.insert(
+                    MemonimoContract.GameEntry.CONTENT_URI,
+                    gameValue
+            );
+            // Récupération de l'identifiant généré
+            game.setId(ContentUris.parseId(uri));
+            Log.d(LOG_TAG, ".saveGame() : id (generated) -> " + game.getId());
+
+        } else {
+
+            // Insertion d'une partie via le Provider
+            int numRowsUpdated = _contentResolver.update(
+                    MemonimoContract.GameEntry.CONTENT_URI,
+                    gameValue,
+                    MemonimoContract.GameEntry._ID + "=?",
+                    new String[] {Long.toString(game.getId())}
+            );
+
+            Log.d(LOG_TAG, ".saveGame() : id -> " + game.getId() + " updated");
+        }
+
+        // Conversion pour le Provider
+        ContentValues[] gameCards = ProviderUtilities.convertGameModelToGameCardValues(game);
+
+        // Suppressions massives via le Provider
+        int numRowsDeleted = _contentResolver.delete(
+                MemonimoContract.GameCardEntry.CONTENT_URI,
+                MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?",
+                new String[] {Long.toString(game.getId())}
+        );
+        Log.d(LOG_TAG, numRowsDeleted + " game_card rows deleted into database");
+
+        // Insertions massives via le Provider
+        int numRowsInserted = _contentResolver.bulkInsert(
+                MemonimoContract.GameCardEntry.CONTENT_URI,
+                gameCards
+        );
+        Log.d(LOG_TAG, numRowsInserted + " game_cards rows inserted into database");
+
+        return game.getId();
+    }
+
+    public static void removeGame(ContentResolver _contentResolver, long _idGame) {
+
+        Log.d(LOG_TAG, ".removeGame() : id -> " + _idGame);
+
+        // Suppression des cartes
+        int numCardsDeleted = _contentResolver.delete(
+                MemonimoContract.GameCardEntry.CONTENT_URI, // URI
+                MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + _idGame} // Valeurs pour la condition WHERE
+        );
+        Log.d(LOG_TAG, numCardsDeleted + " rows deleted from game_card with id_card " + _idGame);
+
+        // Suppression de la partie
+        int numGamesDeleted = _contentResolver.delete(
+                MemonimoContract.GameEntry.CONTENT_URI, // URI
+                MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + _idGame} // Valeurs pour la condition WHERE
+        );
+        Log.d(LOG_TAG, numGamesDeleted + " rows deleted from game with id " + _idGame);
     }
 
     /*

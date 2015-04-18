@@ -5,6 +5,9 @@
 
     <string name="action_start">Nouvelle partie</string>
     <string name="action_find_game">Finir une partie</string>
+    <string name="question_new_game">Une autre partie ?</string>
+    <string name="action_go_back_home">Non</string>
+    <string name="action_new_game">Oui</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="hello_world">Hello world!</string>

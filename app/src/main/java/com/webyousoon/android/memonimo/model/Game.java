@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by hackorder on 17/04/2015.
  */
-public class Game {
+public class Game implements Cloneable {
 
 
     private static final int CARD_NO_CHOSEN = -1;
@@ -31,6 +31,10 @@ public class Game {
         this.mGameCardList = GameCard.getRandomList(_numFamily);
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public long getId() {
         return mId;
