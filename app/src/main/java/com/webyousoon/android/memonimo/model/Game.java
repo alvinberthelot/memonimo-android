@@ -1,6 +1,10 @@
 package com.webyousoon.android.memonimo.model;
 
+import com.webyousoon.android.memonimo.MemonimoUtilities;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +21,29 @@ public class Game implements Cloneable {
     private int mFirstPositionChosen = CARD_NO_CHOSEN;
     private int mSecondPositionChosen = CARD_NO_CHOSEN;
     private List<GameCard> mGameCardList;
+    private Mode mMode;
+
+    public enum Mode {
+        EASY(0, MemonimoUtilities.NUM_FAMILY_EASY_MODE),
+        NORMAL(1, MemonimoUtilities.NUM_FAMILY_NORMAL_MODE),
+        HARD(2, MemonimoUtilities.NUM_FAMILY_HARD_MODE);
+
+        private final int mCode;
+        private final int mNumFamily;
+
+        private Mode(int _code, int _numFamily) {
+            this.mCode = _code;
+            this.mNumFamily = _numFamily;
+        }
+
+        public int getCode() {
+            return mCode;
+        }
+        public int getNumFamily() {
+            return mNumFamily;
+        }
+
+    }
 
     public Game(long _id, boolean _finished, int _firstPositionChosen, int _secondPositionChosen) {
         this.mId = _id;
@@ -160,5 +187,9 @@ public class Game implements Cloneable {
         //
         mFirstPositionChosen = -1;
         mSecondPositionChosen = -1;
+    }
+
+    public int getNumFamily() {
+        return mGameCardList.size() / 2;
     }
 }

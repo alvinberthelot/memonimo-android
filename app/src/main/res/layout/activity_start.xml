@@ -6,11 +6,38 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/action_start"
-        android:id="@+id/btn_new_game"
+        android:text="@string/action_start_test_game"
+        android:id="@+id/btn_new_test_game"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:onClick="startGame"/>
+        android:onClick="startTestGame"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_start_easy_game"
+        android:id="@+id/btn_new_easy_game"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="startEasyGame"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_start_normal_game"
+        android:id="@+id/btn_new_normal_game"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="startNormalGame"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_start_hard_game"
+        android:id="@+id/btn_new_hard_game"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="startHardGame"/>
 
     <Button
         android:layout_width="wrap_content"

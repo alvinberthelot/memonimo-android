@@ -17,14 +17,17 @@ public class RestartDialogFragment extends DialogFragment {
     private static final String LOG_TAG = RestartDialogFragment.class.getSimpleName();
 
     private static final String ARGUMENT_ID_GAME = "argument_id_game";
+    private static final String ARGUMENT_NUM_FAMILY = "argument_num_family";
 
     long mIdgame;
+    int mNumFamily;
 
-    static RestartDialogFragment newInstance(long _idGame) {
+    static RestartDialogFragment newInstance(long _idGame, int _numFamily) {
         RestartDialogFragment f = new RestartDialogFragment();
 
         Bundle args = new Bundle();
         args.putLong(ARGUMENT_ID_GAME, _idGame);
+        args.putInt(ARGUMENT_NUM_FAMILY, _numFamily);
         f.setArguments(args);
 
         return f;
@@ -34,6 +37,7 @@ public class RestartDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIdgame = getArguments().getLong(ARGUMENT_ID_GAME);
+        mNumFamily = getArguments().getInt(ARGUMENT_NUM_FAMILY);
     }
 
 
@@ -54,7 +58,9 @@ public class RestartDialogFragment extends DialogFragment {
                 })
                 .setPositiveButton(R.string.action_new_game, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(getActivity(), GameActivity.class);
+                        Intent intent = new Intent(getActivity(), GameActivity.class)
+                                // Envoi du nombre de familles via l'Intent
+                                .putExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY, mNumFamily);
                         startActivity(intent);
                     }
                 });

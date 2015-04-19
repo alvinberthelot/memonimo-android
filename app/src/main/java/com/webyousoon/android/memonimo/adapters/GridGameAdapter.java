@@ -30,12 +30,10 @@ public class GridGameAdapter extends BaseAdapter {
 
     private static class CardGameViewHolder {
         public final ImageView animalView;
-        public final TextView positionView;
         public final TextView animalidView;
 
         public CardGameViewHolder(View _view) {
             animalView = (ImageView) _view.findViewById(R.id.gi_game_animal);
-            positionView = (TextView) _view.findViewById(R.id.gi_game_position);
             animalidView = (TextView) _view.findViewById(R.id.gi_game_animalid);
         }
     }
@@ -73,16 +71,8 @@ public class GridGameAdapter extends BaseAdapter {
 
         GameCard gameCard = getItem(_position);
 
-        String idAnimal = "" + gameCard.getAnimalGame().getCode();
-//        String idAnimal = cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD));
-
-//        viewHolder.animalidView.setText("tutu");
-        viewHolder.animalidView.setText(idAnimal);
-
-//        viewHolder.positionView.setText(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_POSITION));
-//
-
-//        GameCard gameCard = ProviderUtilities.convertGameCardCursorToGameCardModel(cursor);
+//        String idAnimal = "" + gameCard.getAnimalGame().getCode();
+//        viewHolder.animalidView.setText(idAnimal);
 
         viewHolder.animalView.setImageDrawable(getCardDrawable(gameCard, mContext.getResources()));
 

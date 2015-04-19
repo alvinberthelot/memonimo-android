@@ -3,7 +3,10 @@
 
     <string name="content_authority">com.webyousoon.android.memonimo.app</string>
 
-    <string name="action_start">Nouvelle partie</string>
+    <string name="action_start_test_game">Partie TEST</string>
+    <string name="action_start_easy_game">Partie facile</string>
+    <string name="action_start_normal_game">Partie normale</string>
+    <string name="action_start_hard_game">Partie difficile</string>
     <string name="action_find_game">Finir une partie</string>
     <string name="question_new_game">Une autre partie ?</string>
     <string name="action_go_back_home">Non</string>

@@ -37,23 +37,36 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         long idGame = -1;
+        // Initialisation à défaut
+        int numFamily = -1;
 
         // Récupération de l'id de la partie si celui-ci a été sauvé dans l'état
         if (savedInstanceState != null) {
             idGame = savedInstanceState.getLong(INSTANCE_STATE_ID_GAME);
         }
 
-        // Récupération de l'id de la partie si celui-ci a été passé par Intent
+        // Récupération des informations liées à l'Intent
         Intent intent  = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
-            idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
+        if (intent != null) {
+            // Récupération de l'id de la partie si celui-ci a été passé par Intent
+            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
+                idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
+            }
+            // Récupération de l'id de la partie si celui-ci a été passé par Intent
+            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY)) {
+                numFamily = intent.getIntExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY, -1);
+            }
         }
+
+
+        Log.v(LOG_TAG, "numFamily --> " + numFamily);
+
 
         View rootView = inflater.inflate(R.layout.fragment_game, container, false);
 
         if (idGame == -1) {
             // Initialisation d'une nouvelle partie d'un point de vue du modèle
-            mGame = new Game(3);
+            mGame = new Game(numFamily);
             // Persistance de la partie
             idGame = MemonimoProvider.saveGame(getActivity().getContentResolver(), mGame);
             mGame.setId(idGame);
@@ -128,7 +141,9 @@ public class GameFragment extends Fragment {
                     mGame.setFinished(true);
 
                     // Affichage d'une fenêtre pour recommencer une partie ou retourner à l'accueil
-                    RestartDialogFragment restartDialogFragment = RestartDialogFragment.newInstance(mGame.getId());
+                    RestartDialogFragment restartDialogFragment = RestartDialogFragment.newInstance(
+                            mGame.getId(),
+                            mGame.getNumFamily());
                     restartDialogFragment.show(getActivity().getSupportFragmentManager(), "restartDialogFragment");
 
                 }
