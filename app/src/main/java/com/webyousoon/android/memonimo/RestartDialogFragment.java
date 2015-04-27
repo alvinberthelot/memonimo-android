@@ -52,7 +52,7 @@ public class RestartDialogFragment extends DialogFragment {
 
                         MemonimoProvider.removeGame (getActivity().getContentResolver(), mIdgame);
 
-                        Intent intent = new Intent(getActivity(), StartActivity.class);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
                     }
                 })

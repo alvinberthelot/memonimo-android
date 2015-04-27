@@ -24,23 +24,19 @@ public class Game implements Cloneable {
     private Mode mMode;
 
     public enum Mode {
-        EASY(0, MemonimoUtilities.NUM_FAMILY_EASY_MODE),
-        NORMAL(1, MemonimoUtilities.NUM_FAMILY_NORMAL_MODE),
-        HARD(2, MemonimoUtilities.NUM_FAMILY_HARD_MODE);
+        EASY(0),
+        NORMAL(1),
+        HARD(2);
 
         private final int mCode;
-        private final int mNumFamily;
+//        private final int mNumFamily;
 
-        private Mode(int _code, int _numFamily) {
+        private Mode(int _code) {
             this.mCode = _code;
-            this.mNumFamily = _numFamily;
         }
 
         public int getCode() {
             return mCode;
-        }
-        public int getNumFamily() {
-            return mNumFamily;
         }
 
     }

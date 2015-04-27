@@ -12,10 +12,28 @@
     <string name="action_go_back_home">Non</string>
     <string name="action_new_game">Oui</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_game">GameActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_game_list">GameListActivity</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="activity_game_title">Partie</string>
+    <string name="activity_game_list_title">Liste des parties</string>
+    <string name="activity_settings_title">Configuration</string>
+
+    <!-- GAME -->
+    <string name="game_list_label">Liste des parties non terminées</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_label_num_player">Nombre de joueurs</string>
+    <string name="settings_annex_num_player">(Par défaut)</string>
+    <string name="settings_label_difficulty_easy">Niveau facile</string>
+    <string name="settings_label_difficulty_normal">Niveau normal</string>
+    <string name="settings_label_difficulty_hard">Niveau difficile</string>
+    <string name="settings_label_num_family">Nombre de familles</string>
+
+    <!-- PREFERENCES -->
+    <string name="pref_num_family_easy_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_easy_default" translatable="false">4</string>
+    <string name="pref_num_family_normal_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_normal_default" translatable="false">10</string>
+    <string name="pref_num_family_hard_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_hard_default" translatable="false">16</string>
+
 </resources>
