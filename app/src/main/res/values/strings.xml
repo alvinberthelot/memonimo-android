@@ -29,11 +29,11 @@
     <string name="settings_label_num_family">Nombre de familles</string>
 
     <!-- PREFERENCES -->
-    <string name="pref_num_family_easy_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_easy_key" translatable="false">pref_num_family_easy_key</string>
     <string name="pref_num_family_easy_default" translatable="false">4</string>
-    <string name="pref_num_family_normal_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_normal_key" translatable="false">pref_num_family_normal_key</string>
     <string name="pref_num_family_normal_default" translatable="false">10</string>
-    <string name="pref_num_family_hard_key" translatable="false">pref_num_family</string>
+    <string name="pref_num_family_hard_key" translatable="false">pref_num_family_hard_key</string>
     <string name="pref_num_family_hard_default" translatable="false">16</string>
 
 </resources>
