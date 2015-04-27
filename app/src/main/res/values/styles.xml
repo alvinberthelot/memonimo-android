@@ -14,7 +14,7 @@
     <!-- Main activity action bar styles -->
     <style name="ActionBar.Solid.Memonimo.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">useLogo|showHome</item>
-        <item name="logo">@drawable/icon_logo</item>
+        <!--<item name="logo">@drawable/icon_logo</item>-->
     </style>
 
 </resources>

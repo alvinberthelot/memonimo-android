@@ -30,11 +30,9 @@ public class GridGameAdapter extends BaseAdapter {
 
     private static class CardGameViewHolder {
         public final ImageView animalView;
-        public final TextView animalidView;
 
         public CardGameViewHolder(View _view) {
             animalView = (ImageView) _view.findViewById(R.id.gi_game_animal);
-            animalidView = (TextView) _view.findViewById(R.id.gi_game_animalid);
         }
     }
 

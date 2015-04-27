@@ -22,19 +22,14 @@
         <GridView
             android:id="@+id/gridMemory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
             android:gravity="center"
-            android:columnWidth="160dp"
+            android:horizontalSpacing="16dp"
+            android:verticalSpacing="24dp"
+            android:columnWidth="80dp"
             android:numColumns="auto_fit">
         </GridView>
     </LinearLayout>
 
 </FrameLayout>
-
-<!--<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:id="@+id/GameLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context="com.webyousoon.android.memonimo.GameActivity$PlaceholderFragment" >-->
-<!--</GridLayout>-->

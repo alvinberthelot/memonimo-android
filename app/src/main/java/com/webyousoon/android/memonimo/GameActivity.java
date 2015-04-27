@@ -15,7 +15,7 @@ public class GameActivity extends ActionBarActivity {
         setContentView(R.layout.activity_game);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new GameFragment())
+                    .add(R.id.container_game, new GameFragment())
                     .commit();
         }
     }
