@@ -1,5 +1,8 @@
 package com.webyousoon.android.memonimo.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.webyousoon.android.memonimo.MemonimoUtilities;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * Created by hackorder on 17/04/2015.
  */
-public class Game implements Cloneable {
+public class Game implements Cloneable, Parcelable {
 
 
     private static final int CARD_NO_CHOSEN = -1;
@@ -22,6 +25,20 @@ public class Game implements Cloneable {
     private int mSecondPositionChosen = CARD_NO_CHOSEN;
     private List<GameCard> mGameCardList;
     private Mode mMode;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel _dest, int _flags) {
+        _dest.writeLong(mId);
+//        _dest.writeB(mId);
+        _dest.writeInt(mFirstPositionChosen);
+        _dest.writeInt(mSecondPositionChosen);
+//        _dest.writeInt(mSecondPositionChosen);
+    }
 
     public enum Mode {
         EASY(0),
@@ -187,5 +204,17 @@ public class Game implements Cloneable {
 
     public int getNumFamily() {
         return mGameCardList.size() / 2;
+    }
+
+    public int getNumFamilyFound() {
+        int cardFound = 0;
+
+        for (GameCard gameCard : mGameCardList) {
+            if (gameCard.isCardFound()) {
+                cardFound++;
+            }
+        }
+
+        return cardFound / 2;
     }
 }

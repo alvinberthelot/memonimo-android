@@ -1,18 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/idGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge">
+        </TextView>
+
+        <TextView
+            android:id="@+id/numFamily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge">
+        </TextView>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Diidicile">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/s_player1_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Joueur 1" />
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:text="Joueur 1">
+    </TextView>
 
     <TextView
         android:id="@+id/s_player2_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Joueur 2" />
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:text="Joueur 2">
+    </TextView>
 
 </LinearLayout>
