@@ -9,6 +9,7 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
+import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
 import java.util.HashSet;
 
@@ -47,6 +48,10 @@ public class TestDb extends AndroidTestCase {
     public void testGameCardTable() throws Throwable {
         insertIntoGameCardTable();
     }
+    // Tests sur l'insertion des données dans la table "pattern"
+    public void testPatternTable() throws Throwable {
+        insertIntoPatternTable();
+    }
 
     public void createDb() throws Throwable {
         // build a HashSet of all of the table names we wish to look for
@@ -57,8 +62,7 @@ public class TestDb extends AndroidTestCase {
         tableNameHashSet.add(CardEntry.TABLE_NAME);
         tableNameHashSet.add(TurnEntry.TABLE_NAME);
         tableNameHashSet.add(GameCardEntry.TABLE_NAME);
-
-//        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
+        tableNameHashSet.add(PatternEntry.TABLE_NAME);
 
         // Récupération de la base SQLite
         SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
@@ -157,6 +161,45 @@ public class TestDb extends AndroidTestCase {
         // Requête de récupération de données via la table
         Cursor cursor = db.query(
                 GameEntry.TABLE_NAME, // Table
+                null, // Colonnes interogées
+                null, // Colonnes pour la condition WHERE
+                null, // Valeurs pour la condition WHERE
+                null, // Colonnes pour le GROUP BY
+                null, // Colonnes pour le filtre
+                null // Tri
+        );
+        // Vérification de la présence de données
+        assertTrue("Error: No records returned", cursor.moveToFirst());
+        // Vérification de l'exactitude des données
+        TestUtilities.validateCurrentRecord("Error: Values from record not expected",
+                cursor,
+                testValues
+        );
+        // Vérification de la présence d'une seule ligne dans la table
+        assertFalse("Error: More than one record returned", cursor.moveToNext());
+
+        // Fermeture du curseur et de la base
+        cursor.close();
+        db.close();
+
+        return idGenerated;
+    }
+
+    public long insertIntoPatternTable() {
+
+        // Récupération de la base SQLite
+        SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
+        // Récupération d'un jeu de données pour le test
+        ContentValues testValues = TestUtilities.createPatternValues();
+
+        // Vérification de l'insertion
+        long idGenerated;
+        idGenerated = db.insert(PatternEntry.TABLE_NAME, null, testValues);
+        assertTrue(idGenerated != -1);
+
+        // Requête de récupération de données via la table
+        Cursor cursor = db.query(
+                PatternEntry.TABLE_NAME, // Table
                 null, // Colonnes interogées
                 null, // Colonnes pour la condition WHERE
                 null, // Valeurs pour la condition WHERE

@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.webyousoon.android.memonimo.model.BackgroundPattern;
 import com.webyousoon.android.memonimo.model.Game;
 import com.webyousoon.android.memonimo.model.GameCard;
+import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,33 @@ public class ProviderUtilities {
         }
 
         return values.toArray(new ContentValues[values.size()]);
+    }
+
+    public static ContentValues[] convertBackgroundPatternModelListToBackgroundPatternValues(List<BackgroundPattern> _backgroundPatternList) {
+
+        List<ContentValues> values = new ArrayList<ContentValues>();
+
+        int index = 0;
+
+        for (BackgroundPattern backgroundPattern : _backgroundPatternList) {
+            ContentValues value = new ContentValues();
+//            value.put(MemonimoContract.GameCardEntry.COLUMN_POSITION, index);
+            value.put(PatternEntry.COLUMN_IMG_ENCODED, backgroundPattern.getImgEncoded());
+
+            values.add(value);
+        }
+
+        return values.toArray(new ContentValues[values.size()]);
+    }
+
+    public static BackgroundPattern convertBackgroundPatternCursorToBackgroundPatternModel(Cursor _cursor) {
+
+        BackgroundPattern backgroundPattern = new BackgroundPattern(
+                _cursor.getInt(_cursor.getColumnIndex(PatternEntry._ID)),
+                _cursor.getString(_cursor.getColumnIndex(PatternEntry.COLUMN_IMG_ENCODED))
+        );
+
+        return backgroundPattern;
     }
 
     public static GameCard convertGameCardCursorToGameCardModel(Cursor _cursor) {

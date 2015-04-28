@@ -19,6 +19,7 @@ public class MemonimoContract {
 
     // Chemin d'accès aux données
     public static final String PATH_GAME = "game";
+    public static final String PATH_PATTERN = "pattern";
     public static final String PATH_TURN = "turn";
     public static final String PATH_GAME_CARD = "game_card";
     public static final String PATH_CARD = "card";
@@ -48,6 +49,25 @@ public class MemonimoContract {
         public static final String COLUMN_SECOND_POSITION_CHOOSEN = "second_position_choosen";
 
         public static Uri buildGameUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    public static final class PatternEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PATTERN).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PATTERN;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PATTERN;
+
+        // Nom de la table
+        public static final String TABLE_NAME = "pattern";
+        // Colonnes de la table
+        public static final String COLUMN_IMG_ENCODED = "img_encoded";
+
+        public static Uri buildPatternUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

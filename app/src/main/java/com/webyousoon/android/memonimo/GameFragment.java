@@ -2,10 +2,8 @@ package com.webyousoon.android.memonimo;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -18,12 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.webyousoon.android.memonimo.adapters.GridGameAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoProvider;
+import com.webyousoon.android.memonimo.model.BackgroundPattern;
 import com.webyousoon.android.memonimo.model.Game;
 
 import org.json.JSONArray;
@@ -38,6 +36,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -54,7 +54,8 @@ public class GameFragment extends Fragment {
 
     private Game mGame;
 
-    private String[] mEncodedImageList;
+    private List<BackgroundPattern> mBackgroundPatternList;
+//    private String[] mEncodedImageList;
 
 
     // Views
@@ -75,31 +76,23 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        mRootView = inflater.inflate(R.layout.fragment_game, container, false);
 
 
-        if (mEncodedImageList != null && mEncodedImageList.length > 0) {
-            applyBackground();
-        } else {
+        // Récupération des patterns stockés en base
+        mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+
+        if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
             RandomPatternTask randomPatternTask = new RandomPatternTask();
             randomPatternTask.execute();
+        } else {
+            applyBackground();
         }
-
-
-
-
-
 
         // Récupération de l'identifiant de la partie envoyée par l'activitée
         long idGame = getArguments().getLong(GameActivity.BUNDLE_GAME_ID);
         // Récupération de la partie via le Provider
         mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
-
-
-        mRootView = inflater.inflate(R.layout.fragment_game, container, false);
-
-
-
-
 
         mLabelGameView = (TextView) mRootView.findViewById(R.id.idGame);
         mLabelGameView.setText("PARTIE #" + mGame.getId() + " " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
@@ -225,16 +218,22 @@ public class GameFragment extends Fragment {
     }
 
     private void applyBackground() {
-        // Vérification qu'une image encodée en Base64 est bien présente
-        if (mEncodedImageList != null && mEncodedImageList.length > 0) {
+        // Vérification qu'une image peut être récupérée
+        if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
             // Récupération d'une image encodée au hasard
-            String imageEncoded = mEncodedImageList[new Random().nextInt(mEncodedImageList.length)];
-            // Création du background avec l'image
-            Bitmap bitmap = MemonimoUtilities.decodeBase64(imageEncoded);
-            BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
-            backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+
+            Log.d(LOG_TAG, ".applyBackground() --> size : " + mBackgroundPatternList.size());
+
+            int random = new Random().nextInt(mBackgroundPatternList.size());
+
+            Log.d(LOG_TAG, ".applyBackground() --> random : " + random);
+
+            BackgroundPattern backgroundPattern = mBackgroundPatternList.get(random);
+
+            Log.d(LOG_TAG, ".applyBackground() --> backgroundPattern : " + backgroundPattern.getImgEncoded());
+
             // Affectation du background
-            mRootView.setBackgroundDrawable(backgroundDrawable);
+            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
         }
     }
 
@@ -254,8 +253,8 @@ public class GameFragment extends Fragment {
             BufferedReader reader = null;
             String randomPatternJsonStr = null;
 
-//            String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json";
-            String urlColorLovers = "http://www.colourlovers.com/api/patterns/random?format=json";
+            String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json";
+//            String urlColorLovers = "http://www.colourlovers.com/api/patterns/random?format=json";
 
             try {
                 URL url = new URL(urlColorLovers);
@@ -325,7 +324,7 @@ public class GameFragment extends Fragment {
 
             if (patternArray != null && patternArray.length() > 0) {
                 // Initialisation du tableau d'images encodées
-                mEncodedImageList = new String[patternArray.length()];
+                mBackgroundPatternList = new ArrayList<BackgroundPattern>();
                 // Alimentation du tableau
                 for (int i = 0; i < patternArray.length() ; i++) {
                     JSONObject patternObject = patternArray.getJSONObject(i);
@@ -333,9 +332,9 @@ public class GameFragment extends Fragment {
                     try {
                         Bitmap bm = BitmapFactory.decodeStream(new URL(imageUrl).openStream());
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-                        byte[] byteArrayImage = baos.toByteArray();
-                        mEncodedImageList[i] = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        BackgroundPattern backgroundPattern = new BackgroundPattern(baos.toByteArray());
+                        mBackgroundPatternList.add(backgroundPattern);
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -343,7 +342,10 @@ public class GameFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+
+                MemonimoProvider.savePatternList(getActivity().getContentResolver(), mBackgroundPatternList);
             }
+
 
 
             return null;

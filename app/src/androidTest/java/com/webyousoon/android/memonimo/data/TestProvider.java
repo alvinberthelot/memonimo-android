@@ -15,6 +15,7 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
+import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
 /**
  * Created by hackorder on 14/04/2015.
@@ -80,6 +81,23 @@ public class TestProvider extends AndroidTestCase {
         );
         assertEquals("Error: Records not deleted from card table", 0, cursor.getCount());
         cursor.close();
+
+        // Suppression et vérification de la suppression dans la table "pattern"
+        mContext.getContentResolver().delete(
+                PatternEntry.CONTENT_URI,
+                null,
+                null
+        );
+        cursor = mContext.getContentResolver().query(
+                PatternEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertEquals("Error: Records not deleted from pattern table", 0, cursor.getCount());
+        cursor.close();
+
 
         // Suppression et vérification de la suppression dans la table "game"
         mContext.getContentResolver().delete(
@@ -150,27 +168,10 @@ public class TestProvider extends AndroidTestCase {
         assertEquals("Error: the TurnEntry CONTENT_URI should return GameCardEntry.CONTENT_TYPE",
                 GameCardEntry.CONTENT_TYPE, type);
 
-//        String testLocation = "94074";
-//        // content://com.example.android.sunshine.app/weather/94074
-//        type = mContext.getContentResolver().getType(
-//                WeatherEntry.buildWeatherLocation(testLocation));
-//        // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
-//        assertEquals("Error: the WeatherEntry CONTENT_URI with location should return WeatherEntry.CONTENT_TYPE",
-//                WeatherEntry.CONTENT_TYPE, type);
-
-//        long testDate = 1419120000L; // December 21st, 2014
-//        // content://com.example.android.sunshine.app/weather/94074/20140612
-//        type = mContext.getContentResolver().getType(
-//                WeatherEntry.buildWeatherLocationWithDate(testLocation, testDate));
-//        // vnd.android.cursor.item/com.example.android.sunshine.app/weather/1419120000
-//        assertEquals("Error: the WeatherEntry CONTENT_URI with location and date should return WeatherEntry.CONTENT_ITEM_TYPE",
-//                WeatherEntry.CONTENT_ITEM_TYPE, type);
-
-//        // content://com.example.android.sunshine.app/location/
-//        type = mContext.getContentResolver().getType(LocationEntry.CONTENT_URI);
-//        // vnd.android.cursor.dir/com.example.android.sunshine.app/location
-//        assertEquals("Error: the LocationEntry CONTENT_URI should return LocationEntry.CONTENT_TYPE",
-//                LocationEntry.CONTENT_TYPE, type);
+        //
+        type = mContext.getContentResolver().getType(PatternEntry.CONTENT_URI);
+        assertEquals("Error: the TurnEntry CONTENT_URI should return PatternEntry.CONTENT_TYPE",
+                PatternEntry.CONTENT_TYPE, type);
     }
 
     /*
@@ -213,6 +214,27 @@ public class TestProvider extends AndroidTestCase {
         // Vérification en comparant les données
         TestUtilities.validateCursor("Error: the cursor from GameEntry should return the same values", cursor, testValues);
     }
+
+    /*
+        Vérification du Provider pour une insertion sur la table "pattern"
+     */
+    public void testInsertPattern() {
+
+        // Récupération d'un jeu de données pour le test
+        ContentValues testValues = TestUtilities.createPatternValues();
+
+        // Insertion via le Provider
+        Uri uri = mContext.getContentResolver().insert(PatternEntry.CONTENT_URI, testValues);
+        // Récupération de l'identifiant généré
+        long idGenerated = ContentUris.parseId(uri);
+
+        // Vérification de l'insertion
+        assertTrue("Error: Failure to insert pattern values with Provider", idGenerated != -1);
+    }
+
+
+
+
 
     /*
         Vérification du Provider pour une modification sur la table "game"

@@ -10,6 +10,7 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
+import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class TestUtilities extends AndroidTestCase {
     private static final String TEST_GAME_SECOND_POSITION_CHOOSEN = "5";
 
     private static final String TEST_CARD_DOG = "Dog";
+
+    private static final String TEST_PATTERN_IMG_ENCODED = "jygrfjfhgvjdfhgvje";
 
     private static final String TEST_TURN_INDEX_TURN = "4";
     private static final String TEST_TURN_FIRST_POSITION_CHOOSEN = "3";
@@ -70,7 +73,6 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(GameEntry.COLUMN_FINISHED, TEST_GAME_FINISHED);
         testValues.put(GameEntry.COLUMN_FIRST_POSITION_CHOOSEN, TEST_GAME_FIRST_POSITION_CHOOSEN);
         testValues.put(GameEntry.COLUMN_SECOND_POSITION_CHOOSEN, TEST_GAME_SECOND_POSITION_CHOOSEN);
-
         return testValues;
     }
 
@@ -78,13 +80,17 @@ public class TestUtilities extends AndroidTestCase {
         Création d'un jeu de données pour tester la table "card"
      */
     static ContentValues createCardValues() {
-        // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
         testValues.put(CardEntry.COLUMN_LABEL, TEST_CARD_DOG);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
+        return testValues;
+    }
 
+    /*
+        Création d'un jeu de données pour tester la table "pattern"
+     */
+    static ContentValues createPatternValues() {
+        ContentValues testValues = new ContentValues();
+        testValues.put(PatternEntry.COLUMN_IMG_ENCODED, TEST_PATTERN_IMG_ENCODED);
         return testValues;
     }
 
@@ -97,7 +103,6 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(TurnEntry.COLUMN_FIRST_POSITION_CHOOSEN, TEST_TURN_FIRST_POSITION_CHOOSEN);
         testValues.put(TurnEntry.COLUMN_SECOND_POSITION_CHOOSEN, TEST_TURN_SECOND_POSITION_CHOOSEN);
         testValues.put(TurnEntry.COLUMN_ID_GAME, _idGame);
-
         return testValues;
     }
 
@@ -112,7 +117,6 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(GameCardEntry.COLUMN_FOUND, TEST_GAME_CARD_FOUND);
         testValues.put(GameCardEntry.COLUMN_PLAYER, TEST_GAME_CARD_PLAYER);
         testValues.put(GameCardEntry.COLUMN_ATTEMPT, TEST_GAME_CARD_ATTEMPT);
-
         return testValues;
     }
 
@@ -144,6 +148,22 @@ public class TestUtilities extends AndroidTestCase {
         long idGenerated;
         idGenerated = db.insert(CardEntry.TABLE_NAME, null, _testValues);
         assertTrue("Error: Failure to insert card values", idGenerated != -1);
+
+        return idGenerated;
+    }
+
+    /*
+        Insertion d'un jeu de données pour tester la table "pattern"
+     */
+    static long insertPatternValuesToDb(Context _context, ContentValues _testValues) {
+
+        // Récupération de la base SQLite
+        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
+
+        // Vérification de l'insertion
+        long idGenerated;
+        idGenerated = db.insert(PatternEntry.TABLE_NAME, null, _testValues);
+        assertTrue("Error: Failure to insert pattern values", idGenerated != -1);
 
         return idGenerated;
     }

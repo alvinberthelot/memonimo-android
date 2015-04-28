@@ -14,7 +14,12 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
+import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
+import com.webyousoon.android.memonimo.model.BackgroundPattern;
 import com.webyousoon.android.memonimo.model.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,6 +38,7 @@ public class MemonimoProvider extends ContentProvider {
     static final int CODE_CARD = 200;
     static final int CODE_TURN = 300;
     static final int CODE_GAME_CARD = 400;
+    static final int CODE_PATTERN = 500;
 
 
     @Override
@@ -40,80 +46,6 @@ public class MemonimoProvider extends ContentProvider {
         mMemonimoDbHelper = new MemonimoDbHelper(getContext());
         return true;
     }
-
-
-//    private long getGame() {
-//
-//        long idGame;
-//
-//        // Récupération des données via le Content Provider
-//        Cursor cursor = getActivity().getContentResolver().query(
-//                MemonimoContract.GameEntry.CONTENT_URI, // URI
-//                null, // Colonnes interogées
-//                null, // Colonnes pour la condition WHERE
-//                null, // Valeurs pour la condition WHERE
-//                null // Tri
-//        );
-//
-//        if (cursor.moveToFirst()) {
-//            idGame = cursor.getLong(0);
-//            Log.v(LOG_TAG, "Game #" + idGame + " found into database");
-//        } else {
-//            Log.d(LOG_TAG, "No game into database");
-//
-//            ContentValues gameValue = new ContentValues();
-//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
-//
-//            // Insertion d'une partie via le Provider
-//            Uri uri = getActivity().getContentResolver().insert(
-//                    MemonimoContract.GameEntry.CONTENT_URI,
-//                    gameValue);
-//            // Récupération de l'identifiant généré
-//            idGame = ContentUris.parseId(uri);
-//
-//            Log.d(LOG_TAG, "Game #" + idGame + " created into database");
-//        }
-//
-//        cursor.close();
-//
-//        return idGame;
-//    }
-
-//    private long getUnfinishedGame() {
-//        long idGame;
-//
-//        // Récupération des données via le Content Provider
-//        Cursor cursor = getActivity().getContentResolver().query(
-//                MemonimoContract.GameEntry.CONTENT_URI, // URI
-//                null, // Colonnes interogées
-//                MemonimoContract.GameEntry.COLUMN_FINISHED + "=?", // Colonnes pour la condition WHERE
-//                new String[] {"0"}, // Valeurs pour la condition WHERE
-//                null // Tri
-//        );
-//
-//        if (cursor.moveToFirst()) {
-//            idGame = cursor.getLong(0);
-//            Log.v(LOG_TAG, "Game #" + idGame + " found into database");
-//        } else {
-//            Log.d(LOG_TAG, "No game into database");
-//
-//            ContentValues gameValue = new ContentValues();
-//            gameValue.put(MemonimoContract.GameEntry.COLUMN_FINISHED, "0");
-//
-//            // Insertion d'une partie via le Provider
-//            Uri uri = getActivity().getContentResolver().insert(
-//                    MemonimoContract.GameEntry.CONTENT_URI,
-//                    gameValue);
-//            // Récupération de l'identifiant généré
-//            idGame = ContentUris.parseId(uri);
-//
-//            Log.d(LOG_TAG, "Game #" + idGame + " created into database");
-//        }
-//
-//        cursor.close();
-//
-//        return idGame;
-//    }
 
     public static Game restoreGame(ContentResolver _contentResolver, long _idGame) {
 
@@ -204,6 +136,52 @@ public class MemonimoProvider extends ContentProvider {
         return game.getId();
     }
 
+    public static List<BackgroundPattern> restoreAllPatternList(ContentResolver _contentResolver) {
+
+        Log.d(LOG_TAG, ".restorePatternList()");
+
+        List<BackgroundPattern> backgroundPatternList = new ArrayList<BackgroundPattern>();
+
+        // Récupération de la partie
+        Cursor cursor = _contentResolver.query(
+                PatternEntry.CONTENT_URI, // URI
+                null, // Colonnes interogées
+                null, // Colonnes pour la condition WHERE
+                null, // Valeurs pour la condition WHERE
+                null // Tri
+        );
+
+        while (cursor.moveToNext()) {
+            backgroundPatternList.add(ProviderUtilities.convertBackgroundPatternCursorToBackgroundPatternModel(cursor));
+        }
+
+        return backgroundPatternList;
+    }
+
+    public static void savePatternList(ContentResolver _contentResolver, List<BackgroundPattern> _backgroundPatternList) {
+
+
+        // Conversion pour le Provider
+        ContentValues[] patternList = ProviderUtilities
+                .convertBackgroundPatternModelListToBackgroundPatternValues(_backgroundPatternList);
+
+//        // Suppressions massives via le Provider
+//        int numRowsDeleted = _contentResolver.delete(
+//                MemonimoContract.GameCardEntry.CONTENT_URI,
+//                MemonimoContract.GameCardEntry.COLUMN_ID_GAME + "=?",
+//                new String[] {Long.toString(game.getId())}
+//        );
+//        Log.d(LOG_TAG, numRowsDeleted + " game_card rows deleted into database");
+
+        // Insertions massives via le Provider
+        int numRowsInserted = _contentResolver.bulkInsert(
+                MemonimoContract.PatternEntry.CONTENT_URI,
+                patternList
+        );
+        Log.d(LOG_TAG, numRowsInserted + " patterns rows inserted into database");
+
+    }
+
     public static void removeGame(ContentResolver _contentResolver, long _idGame) {
 
         Log.d(LOG_TAG, ".removeGame() : id -> " + _idGame);
@@ -237,11 +215,6 @@ public class MemonimoProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            // Student: Uncomment and fill out these two cases
-//            case WEATHER_WITH_LOCATION_AND_DATE:
-//                return MemonimoContract.WeatherEntry.CONTENT_ITEM_TYPE;
-//            case WEATHER_WITH_LOCATION:
-//                return MemonimoContract.WeatherEntry.CONTENT_TYPE;
             case CODE_GAME:
                 return GameEntry.CONTENT_TYPE;
             case CODE_CARD:
@@ -250,6 +223,8 @@ public class MemonimoProvider extends ContentProvider {
                 return TurnEntry.CONTENT_TYPE;
             case CODE_GAME_CARD:
                 return GameCardEntry.CONTENT_TYPE;
+            case CODE_PATTERN:
+                return PatternEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -340,6 +315,24 @@ public class MemonimoProvider extends ContentProvider {
 
                 return returnCount;
 
+            case CODE_PATTERN:
+                db.beginTransaction();
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(PatternEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return returnCount;
+
             default:
                 return super.bulkInsert(uri, values);
         }
@@ -391,6 +384,14 @@ public class MemonimoProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+            case CODE_PATTERN: {
+                long _id = db.insert(PatternEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = PatternEntry.buildPatternUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -413,19 +414,6 @@ public class MemonimoProvider extends ContentProvider {
         final SQLiteDatabase db = mMemonimoDbHelper.getReadableDatabase();
 
         switch (sUriMatcher.match(uri)) {
-//            // "weather/*/*"
-//            case WEATHER_WITH_LOCATION_AND_DATE:
-//            {
-//                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
-//                break;
-//            }
-//            // "weather/*"
-//            case WEATHER_WITH_LOCATION: {
-//                retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-//                break;
-//            }
-
-
 
             case CODE_GAME: {
                 // Requête de récupération de données via la table
@@ -470,6 +458,19 @@ public class MemonimoProvider extends ContentProvider {
                 // Requête de récupération de données via la table
                 cursor = db.query(
                         GameCardEntry.TABLE_NAME, // Table
+                        projection, // Colonnes interogées
+                        selection, // Colonnes pour la condition WHERE
+                        selectionArgs, // Valeurs pour la condition WHERE
+                        null, // Colonnes pour le GROUP BY
+                        null, // Colonnes pour le filtre
+                        sortOrder // Tri
+                );
+                break;
+            }
+            case CODE_PATTERN: {
+                // Requête de récupération de données via la table
+                cursor = db.query(
+                        PatternEntry.TABLE_NAME, // Table
                         projection, // Colonnes interogées
                         selection, // Colonnes pour la condition WHERE
                         selectionArgs, // Valeurs pour la condition WHERE
@@ -532,6 +533,13 @@ public class MemonimoProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+            case CODE_PATTERN:
+                rowsUpdated = db.update(
+                        PatternEntry.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -566,6 +574,9 @@ public class MemonimoProvider extends ContentProvider {
             case CODE_GAME_CARD:
                 rowsDeleted = db.delete(GameCardEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case CODE_PATTERN:
+                rowsDeleted = db.delete(PatternEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -576,27 +587,17 @@ public class MemonimoProvider extends ContentProvider {
         return rowsDeleted;
     }
 
-    /*
-        Students: Here is where you need to create the UriMatcher. This UriMatcher will
-        match each URI to the WEATHER, WEATHER_WITH_LOCATION, WEATHER_WITH_LOCATION_AND_DATE,
-        and LOCATION integer constants defined above.  You can test this by uncommenting the
-        testUriMatcher test within TestUriMatcher.
-     */
     static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MemonimoContract.CONTENT_AUTHORITY;
 
-        // For each type of URI you want to add, create a corresponding code.
+        // Liaison entre les URI et les codes d'identification
         matcher.addURI(authority, MemonimoContract.PATH_GAME, CODE_GAME);
-//        matcher.addURI(authority, MemonimoContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-//        matcher.addURI(authority, MemonimoContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
-
         matcher.addURI(authority, MemonimoContract.PATH_CARD, CODE_CARD);
-
         matcher.addURI(authority, MemonimoContract.PATH_TURN, CODE_TURN);
-
         matcher.addURI(authority, MemonimoContract.PATH_GAME_CARD, CODE_GAME_CARD);
+        matcher.addURI(authority, MemonimoContract.PATH_PATTERN, CODE_PATTERN);
 
         return matcher;
     }
