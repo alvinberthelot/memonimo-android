@@ -41,13 +41,4 @@
         android:layout_centerHorizontal="true"
         android:onClick="findGame"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_settings"
-        android:id="@+id/btn_overview_sttings"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="goToSettings"/>
-
 </LinearLayout>
