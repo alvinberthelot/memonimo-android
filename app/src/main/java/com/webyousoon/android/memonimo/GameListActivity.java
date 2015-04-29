@@ -17,7 +17,7 @@ public class GameListActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new GameListFragment())
+                    .add(R.id.container_main, new GameListFragment())
                     .commit();
         }
     }

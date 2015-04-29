@@ -58,6 +58,9 @@ public class RestartDialogFragment extends DialogFragment {
                 })
                 .setPositiveButton(R.string.action_new_game, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+                        MemonimoProvider.removeGame (getActivity().getContentResolver(), mIdgame);
+
                         Intent intent = new Intent(getActivity(), GameActivity.class)
                                 // Envoi du nombre de familles via l'Intent
                                 .putExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY, mNumFamily);
