@@ -29,32 +29,32 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Diidicile">
-            </TextView>
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent" />-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Diidicile">-->
+            <!--</TextView>-->
         </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/s_player1_title"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:text="Joueur 1">
-    </TextView>
+    <!--<TextView-->
+        <!--android:id="@+id/s_player1_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="4"-->
+        <!--android:text="Joueur 1">-->
+    <!--</TextView>-->
 
-    <TextView
-        android:id="@+id/s_player2_title"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:text="Joueur 2">
-    </TextView>
+    <!--<TextView-->
+        <!--android:id="@+id/s_player2_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="4"-->
+        <!--android:text="Joueur 2">-->
+    <!--</TextView>-->
 
 </LinearLayout>

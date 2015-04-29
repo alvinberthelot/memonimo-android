@@ -136,6 +136,27 @@ public class MemonimoProvider extends ContentProvider {
         return game.getId();
     }
 
+    public static BackgroundPattern restoreBackgroundPatternByIdGame(ContentResolver _contentResolver, long _idGame) {
+
+        Log.d(LOG_TAG, ".restoreBackgroundPatternByIdGame() : idGame -> " + _idGame);
+
+        BackgroundPattern backgroundPattern = null;
+
+        // Récupération de la partie
+        Cursor cursor = _contentResolver.query(
+                PatternEntry.CONTENT_URI, // URI
+                null, // Colonnes interogées
+                PatternEntry.COLUMN_ID_GAME + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + _idGame}, // Valeurs pour la condition WHERE
+                null // Tri
+        );
+        if (cursor.moveToNext()) {
+            backgroundPattern = ProviderUtilities.convertBackgroundPatternCursorToBackgroundPatternModel(cursor);
+        }
+
+        return backgroundPattern;
+    }
+
     public static List<BackgroundPattern> restoreAllPatternList(ContentResolver _contentResolver) {
 
         Log.d(LOG_TAG, ".restorePatternList()");

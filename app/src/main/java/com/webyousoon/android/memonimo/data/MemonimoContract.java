@@ -66,6 +66,7 @@ public class MemonimoContract {
         public static final String TABLE_NAME = "pattern";
         // Colonnes de la table
         public static final String COLUMN_IMG_ENCODED = "img_encoded";
+        public static final String COLUMN_ID_GAME = "id_game";
 
         public static Uri buildPatternUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

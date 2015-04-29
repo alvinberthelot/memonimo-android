@@ -38,7 +38,11 @@ public class MemonimoDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_PATTERN_TABLE = "CREATE TABLE " + PatternEntry.TABLE_NAME + " (" +
                 PatternEntry._ID + " INTEGER PRIMARY KEY," +
-                PatternEntry.COLUMN_IMG_ENCODED + " TEXT NOT NULL " +
+                PatternEntry.COLUMN_IMG_ENCODED + " TEXT NOT NULL, " +
+                PatternEntry.COLUMN_ID_GAME + " INTEGER, " +
+                // Clé étrangère vers la table "game"
+                " FOREIGN KEY (" + PatternEntry.COLUMN_ID_GAME + ") REFERENCES " +
+                GameEntry.TABLE_NAME + " (" + GameEntry._ID + ") " +
                 " );";
 
         final String SQL_CREATE_CARD_TABLE = "CREATE TABLE " + CardEntry.TABLE_NAME + " (" +

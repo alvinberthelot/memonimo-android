@@ -44,7 +44,7 @@ public class SummaryGameFragment extends Fragment {
         idGameView.setText("PARTIE #" + mGame.getId());
 
         mLabelTestView = (TextView) rootView.findViewById(R.id.numFamily);
-        mLabelTestView.setText("Familles trouvées : " + mGame.getNumFamilyFound());
+        mLabelTestView.setText("Familles trouvées : " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
 
         return rootView;
     }

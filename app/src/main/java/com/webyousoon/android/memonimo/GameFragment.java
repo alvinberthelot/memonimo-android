@@ -55,11 +55,8 @@ public class GameFragment extends Fragment {
     private Game mGame;
 
     private List<BackgroundPattern> mBackgroundPatternList;
-//    private String[] mEncodedImageList;
-
 
     // Views
-    private TextView mLabelGameView;
     private View mRootView;
 
     public GameFragment() {
@@ -79,23 +76,33 @@ public class GameFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_game, container, false);
 
 
-        // Récupération des patterns stockés en base
-        mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
 
-        if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
-            RandomPatternTask randomPatternTask = new RandomPatternTask();
-            randomPatternTask.execute();
-        } else {
-            applyBackground();
-        }
 
         // Récupération de l'identifiant de la partie envoyée par l'activitée
         long idGame = getArguments().getLong(GameActivity.BUNDLE_GAME_ID);
         // Récupération de la partie via le Provider
         mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
 
-        mLabelGameView = (TextView) mRootView.findViewById(R.id.idGame);
-        mLabelGameView.setText("PARTIE #" + mGame.getId() + " " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
+
+
+        BackgroundPattern backgroundPattern = MemonimoProvider.restoreBackgroundPatternByIdGame(
+                getActivity().getContentResolver(), idGame);
+
+        if (backgroundPattern == null) {
+            // Récupération des patterns stockés en base
+            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+
+            if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
+                RandomPatternTask randomPatternTask = new RandomPatternTask();
+                randomPatternTask.execute();
+            } else {
+                chooseBackground();
+            }
+
+        } else {
+            // Affectation du background
+            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+        }
 
 
         GridView gridGameView = (GridView) mRootView.findViewById(R.id.gridMemory);
@@ -169,12 +176,9 @@ public class GameFragment extends Fragment {
                 long idGame = MemonimoProvider.saveGame(getActivity().getContentResolver(), mGame);
                 mGame.setId(idGame);
 
-
-                mLabelGameView.setText("PARTIE #" + mGame.getId() + " " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
-
-
+                // Notification du changement d'état de la partie à l'activité pour les autres fragments
                 mGameCallback.onGameChanged(mGame);
-
+                // Notification du changement d'état pour la vue
                 gridGameAdapter.notifyDataSetChanged();
             }
         });
@@ -217,7 +221,10 @@ public class GameFragment extends Fragment {
 //        Log.d(LOG_TAG, ".onResume()");
     }
 
-    private void applyBackground() {
+    private BackgroundPattern chooseBackground() {
+
+        BackgroundPattern backgroundPattern = null;
+
         // Vérification qu'une image peut être récupérée
         if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
             // Récupération d'une image encodée au hasard
@@ -228,13 +235,17 @@ public class GameFragment extends Fragment {
 
             Log.d(LOG_TAG, ".applyBackground() --> random : " + random);
 
-            BackgroundPattern backgroundPattern = mBackgroundPatternList.get(random);
+            backgroundPattern = mBackgroundPatternList.get(random);
 
             Log.d(LOG_TAG, ".applyBackground() --> backgroundPattern : " + backgroundPattern.getImgEncoded());
 
             // Affectation du background
             mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+
+            mGame.setBackgroundPattern(backgroundPattern);
         }
+
+        return backgroundPattern;
     }
 
 
@@ -311,7 +322,8 @@ public class GameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void _void) {
-            applyBackground();
+            BackgroundPattern backgroundPattern = chooseBackground();
+
         }
 
         private Void storePatternDataFromJson(String _randomPatternJsonStr) throws JSONException {

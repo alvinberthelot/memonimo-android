@@ -25,6 +25,7 @@ public class Game implements Cloneable, Parcelable {
     private int mSecondPositionChosen = CARD_NO_CHOSEN;
     private List<GameCard> mGameCardList;
     private Mode mMode;
+    private BackgroundPattern mBackgroundPattern;
 
     @Override
     public int describeContents() {
@@ -216,5 +217,13 @@ public class Game implements Cloneable, Parcelable {
         }
 
         return cardFound / 2;
+    }
+
+    public BackgroundPattern getBackgroundPattern() {
+        return mBackgroundPattern;
+    }
+
+    public void setBackgroundPattern(BackgroundPattern _backgroundPattern) {
+        this.mBackgroundPattern = _backgroundPattern;
     }
 }
