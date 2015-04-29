@@ -2,8 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/mn_ivory</item>
-        <item name="colorPrimaryDark">@color/mn_brown</item>
+        <!--<item name="colorPrimary">@color/mn_ivory</item>-->
+        <!--<item name="colorPrimaryDark">@color/mn_brown</item>-->
     </style>
 
     <!-- Main activity theme. -->
