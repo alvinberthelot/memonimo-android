@@ -118,8 +118,9 @@ public class GameActivity extends ActionBarActivity implements GameFragment.OnGa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // Correspondance pour l'accès à la configuration
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

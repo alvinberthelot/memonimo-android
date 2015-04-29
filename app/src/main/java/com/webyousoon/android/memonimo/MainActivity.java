@@ -37,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
         int id = item.getItemId();
 
+        // Correspondance pour l'accès à la configuration
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
