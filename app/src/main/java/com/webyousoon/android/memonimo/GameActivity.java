@@ -2,6 +2,7 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,8 @@ import android.view.MenuItem;
 import com.webyousoon.android.memonimo.data.MemonimoProvider;
 import com.webyousoon.android.memonimo.model.Game;
 
-public class GameActivity extends ActionBarActivity implements GameFragment.OnGameListener {
+public class GameActivity extends ActionBarActivity
+        implements GameFragment.OnGameListener, RestartDialogFragment.RestartDialogListener {
 
     private static final String LOG_TAG = GameActivity.class.getSimpleName();
     private static final String INSTANCE_STATE_ID_GAME = "instance_state_id_game";
@@ -30,22 +32,11 @@ public class GameActivity extends ActionBarActivity implements GameFragment.OnGa
         setContentView(R.layout.activity_game);
 
         // Obtention de l'identifiant de la partie
-        // Soit par récupération
-        // Soit par création d'une nouvelle partie
         long idGame = getIdGame();
 
-        Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_GAME_ID, idGame);
+        Bundle bundle = prepareGame(idGame);
 
-
-
-
-        // Déclaration dynamique du fragment affichant la partie
-        GameFragment gameFragment = new GameFragment();
-        gameFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container_main, gameFragment)
-                .commit();
+        launchGameFragment(bundle);
 
 
         // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
@@ -95,11 +86,8 @@ public class GameActivity extends ActionBarActivity implements GameFragment.OnGa
 
 
         if (idGame == -1) {
-            // Initialisation d'une nouvelle partie d'un point de vue du modèle
-            game = new Game(numFamily);
-            // Persistance de la partie
-            idGame = MemonimoProvider.saveGame(this.getContentResolver(), game);
-            game.setId(idGame);
+            // Création de la partie
+            game = createGame(numFamily);
         } else {
             // Restauration de la partie
             game = MemonimoProvider.restoreGame(this.getContentResolver(), idGame);
@@ -160,5 +148,57 @@ public class GameActivity extends ActionBarActivity implements GameFragment.OnGa
 //                            FRAGMENT_TAG_SUMMARY_GAME)
 //                    .commit();
 //        }
+    }
+
+    private void getBackGame() {
+
+    }
+
+    private Game createGame(int _numFamily) {
+        // Initialisation d'une nouvelle partie d'un point de vue du modèle
+        Game game = new Game(_numFamily);
+        // Persistance de la partie
+        long idGame = MemonimoProvider.saveGame(this.getContentResolver(), game);
+        game.setId(idGame);
+
+        return game;
+    }
+
+    private void launchGameFragment(Bundle bundle) {
+        // Déclaration dynamique du fragment affichant la partie
+        GameFragment gameFragment = new GameFragment();
+        gameFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container_main, gameFragment)
+                .commit();
+    }
+
+    /**
+     * Obtention de l'identifiant d'une partie, soit par récupération de celui-ci,
+     * soit par création d'une nouvelle partie. Puis mémorisation de l'identifiant qui sera transmis
+     * aux fragments.
+     */
+    private Bundle prepareGame(long idGame) {
+        // Mémorisation de l'identifiant
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_GAME_ID, idGame);
+
+        return bundle;
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment, int _numFamily) {
+
+        Game game = createGame(_numFamily);
+        //
+        Bundle bundle = prepareGame(game.getId());
+
+        launchGameFragment(bundle);
     }
 }

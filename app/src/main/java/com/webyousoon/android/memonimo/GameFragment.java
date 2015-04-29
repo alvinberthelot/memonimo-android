@@ -77,7 +77,17 @@ public class GameFragment extends Fragment {
 
 
 
+        startGame();
 
+
+        return mRootView;
+    }
+
+    private void createGame() {
+
+    }
+
+    private void startGame() {
         // Récupération de l'identifiant de la partie envoyée par l'activitée
         long idGame = getArguments().getLong(GameActivity.BUNDLE_GAME_ID);
         // Récupération de la partie via le Provider
@@ -183,8 +193,6 @@ public class GameFragment extends Fragment {
             }
         });
 
-
-        return mRootView;
     }
 
     @Override
