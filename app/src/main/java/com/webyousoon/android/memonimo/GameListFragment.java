@@ -2,6 +2,7 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,14 @@ import com.webyousoon.android.memonimo.data.MemonimoContract;
 public class GameListFragment extends Fragment {
 
     private final String LOG_TAG = GameListFragment.class.getSimpleName();
+
+
+    /**
+     * Interface pour indiquer à l'activité parente qu'un nouvel item a été sélectionné
+     */
+    public interface Callback {
+        public void onItemSelected(Uri gameUri);
+    }
 
     public GameListFragment() {
 
@@ -52,10 +61,9 @@ public class GameListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Récupération de l'identifiant de la partie
                 long idGame = listSummaryGameAdapter.getIdItem(position);
-                // Envoi de l'id via l'Intent
-                Intent intent = new Intent(getActivity(), GameActivity.class)
-                        .putExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, idGame);
-                startActivity(intent);
+
+                ((Callback) getActivity())
+                        .onItemSelected(MemonimoContract.GameEntry.buildGameUri(idGame));
             }
         });
 

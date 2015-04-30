@@ -19,20 +19,7 @@ public class ProviderUtilities {
 
     private static final String LOG_TAG = ProviderUtilities.class.getSimpleName();
 
-    private static final String VALUE_FALSE = "0";
-    private static final String VALUE_TRUE = "1";
 
-
-    public static boolean getBooleanValue(String _value) {
-
-        boolean booleanReturned = false;
-
-        if (null != _value && _value.equalsIgnoreCase(VALUE_TRUE)) {
-            booleanReturned = true;
-        }
-
-        return booleanReturned;
-    }
 
     public static ContentValues convertGameModelToGameValues(Game _game) {
 
@@ -48,7 +35,7 @@ public class ProviderUtilities {
 
         Game game = new Game(
             _cursor.getLong(_cursor.getColumnIndex(MemonimoContract.GameEntry._ID)),
-            getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FINISHED))),
+            DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FINISHED))),
             _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FIRST_POSITION_CHOOSEN)),
             _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN))
         );
@@ -109,10 +96,10 @@ public class ProviderUtilities {
 
         GameCard gameCard = new GameCard(
                 _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD)),
-                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
-                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT)))
+                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
+                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
+                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
+                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT)))
         );
 
 

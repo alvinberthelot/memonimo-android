@@ -51,6 +51,10 @@ public class MemonimoContract {
         public static Uri buildGameUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static long getIdGameFromUri(Uri uri) {
+            return Long.valueOf(uri.getPathSegments().get(1)).longValue();
+        }
     }
 
     public static final class PatternEntry implements BaseColumns {

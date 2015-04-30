@@ -11,14 +11,21 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/idGame"
+            android:id="@+id/txt_numGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge">
         </TextView>
 
         <TextView
-            android:id="@+id/numFamily"
+            android:id="@+id/txt_numFamilyFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge">
+        </TextView>
+
+        <TextView
+            android:id="@+id/txt_numAttempt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge">
@@ -29,14 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent" />-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:text="Diidicile">-->
-            <!--</TextView>-->
+            <ImageView
+                android:id="@+id/img_difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/txt_difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Diidicile">
+            </TextView>
         </LinearLayout>
 
     </LinearLayout>

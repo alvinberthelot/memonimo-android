@@ -33,6 +33,7 @@ public class MemonimoProvider extends ContentProvider {
     private MemonimoDbHelper mMemonimoDbHelper;
 
     static final int CODE_GAME = 100;
+    static final int CODE_GAME_ID = 101;
 //    static final int WEATHER_WITH_LOCATION = 101;
 //    static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     static final int CODE_CARD = 200;
@@ -449,6 +450,11 @@ public class MemonimoProvider extends ContentProvider {
                 );
                 break;
             }
+            case CODE_GAME_ID: {
+                // Requête de récupération de données via la table
+                cursor = getGameById(uri);
+                break;
+            }
             case CODE_CARD: {
                 // Requête de récupération de données via la table
                 cursor = db.query(
@@ -510,6 +516,55 @@ public class MemonimoProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
+    }
+
+//    private Cursor getGameById(long _idGame) {
+//        return getGame(
+//                null,
+//                null,
+//                MemonimoContract.GameEntry._ID + "=?",
+//                new String[]{"" + _idGame},
+//                null);
+//
+//
+////        Cursor cursor = _contentResolver.query(
+////                MemonimoContract.GameEntry.CONTENT_URI, // URI
+////                null, // Colonnes interogées
+////                MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+////                new String[]{"" + _idGame}, // Valeurs pour la condition WHERE
+////                null // Tri
+//    }
+
+    private Cursor getGameById(Uri _uri) {
+
+        long idGame = GameEntry.getIdGameFromUri(_uri);
+
+        // Récupération de la base SQLite
+        final SQLiteDatabase db = mMemonimoDbHelper.getReadableDatabase();
+        // Requête de récupération de données via la table
+        Cursor cursor = db.query(
+                GameEntry.TABLE_NAME, // Table
+                null, // Colonnes interogées
+                MemonimoContract.GameEntry._ID + "=?", // Colonnes pour la condition WHERE
+                new String[]{"" + idGame}, // Valeurs pour la condition WHERE
+                null, // Colonnes pour le GROUP BY
+                null, // Colonnes pour le filtre
+                null // Tri
+        );
+
+        return cursor;
+
+//        String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
+//        long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+//
+//        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+//                projection,
+//                sLocationSettingAndDaySelection,
+//                new String[]{locationSetting, Long.toString(date)},
+//                null,
+//                null,
+//                sortOrder
+//        );
     }
 
     @Override
@@ -615,6 +670,7 @@ public class MemonimoProvider extends ContentProvider {
 
         // Liaison entre les URI et les codes d'identification
         matcher.addURI(authority, MemonimoContract.PATH_GAME, CODE_GAME);
+        matcher.addURI(authority, MemonimoContract.PATH_GAME + "/#", CODE_GAME_ID);
         matcher.addURI(authority, MemonimoContract.PATH_CARD, CODE_CARD);
         matcher.addURI(authority, MemonimoContract.PATH_TURN, CODE_TURN);
         matcher.addURI(authority, MemonimoContract.PATH_GAME_CARD, CODE_GAME_CARD);
