@@ -1,5 +1,7 @@
 package com.webyousoon.android.memonimo;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -18,6 +20,15 @@ public class MemonimoUtilities {
     {
         byte[] decodedByte = Base64.decode(_input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    public static Intent createShareIntent(Resources _resources) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        String message = _resources.getString(R.string.share_message);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+        return shareIntent;
     }
 
 }

@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,17 +73,6 @@ public class RestartDialogFragment extends DialogFragment {
 
         View view = layoutInflater.inflate(R.layout.dialog_restart, (ViewGroup) getActivity().findViewById(R.id.ll_dialog_restart));
 
-        Button btnHome = (Button) view.findViewById(R.id.btn_home);
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Suppression de la partie
-                MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
-                // Appel l'événement de l'activité pour retourner à l'accueil
-                mRestartDialogListener.onDialogNegativeClick(RestartDialogFragment.this);
-            }
-        });
-
-
         Button btnNewGame = (Button) view.findViewById(R.id.btn_new_game);
         btnNewGame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -94,7 +85,36 @@ public class RestartDialogFragment extends DialogFragment {
             }
         });
 
+        Button btnHome = (Button) view.findViewById(R.id.btn_home);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Suppression de la partie
+                MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
+                // Appel l'événement de l'activité pour retourner à l'accueil
+                mRestartDialogListener.onDialogNegativeClick(RestartDialogFragment.this);
+            }
+        });
+
+//        Button btnShare = (Button) view.findViewById(R.id.btn_share);
+//        btnShare.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                shareScoreIntent();
+//                // Disparition de la fenêtre de dialogue
+//                dismiss();
+//            }
+//        });
+
         builder.setView(view);
         return builder.create();
     }
+
+//    private void shareScoreIntent() {
+//
+//        Intent sendIntent = new Intent();
+//        sendIntent.setAction(Intent.ACTION_SEND);
+//        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+//        sendIntent.setType("text/plain");
+//        startActivity(sendIntent);
+//
+//    }
 }

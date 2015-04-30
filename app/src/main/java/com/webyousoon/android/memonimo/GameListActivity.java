@@ -2,8 +2,10 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,8 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
 
     private final String LOG_TAG = GameListActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_SUMMARY_GAME = "FRA_TAG_SUM_GAM";
+
+    private ShareActionProvider mShareActionProvider;
 
     private boolean mIsTabletLayout;
 
@@ -47,7 +51,15 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_game_list, menu);
+        getMenuInflater().inflate(R.menu.menu_general, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mShareActionProvider.setShareIntent(MemonimoUtilities.createShareIntent(getResources()));
+
         return true;
     }
 

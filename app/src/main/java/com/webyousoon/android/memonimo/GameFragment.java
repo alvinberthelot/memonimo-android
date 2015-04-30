@@ -2,6 +2,7 @@ package com.webyousoon.android.memonimo;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Shader;
@@ -9,9 +10,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,6 +55,9 @@ public class GameFragment extends Fragment {
     private final String LOG_TAG = GameFragment.class.getSimpleName();
 
     private static final String INSTANCE_STATE_ID_GAME = "instance_state_id_game";
+
+
+    private ShareActionProvider mShareActionProvider;
 
     OnGameListener mGameCallback;
 
@@ -236,17 +245,8 @@ public class GameFragment extends Fragment {
         // Vérification qu'une image peut être récupérée
         if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
             // Récupération d'une image encodée au hasard
-
-            Log.d(LOG_TAG, ".applyBackground() --> size : " + mBackgroundPatternList.size());
-
             int random = new Random().nextInt(mBackgroundPatternList.size());
-
-            Log.d(LOG_TAG, ".applyBackground() --> random : " + random);
-
             backgroundPattern = mBackgroundPatternList.get(random);
-
-            Log.d(LOG_TAG, ".applyBackground() --> backgroundPattern : " + backgroundPattern.getImgEncoded());
-
             // Affectation du background
             mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
 
@@ -371,7 +371,5 @@ public class GameFragment extends Fragment {
             return null;
         }
     }
-
-
 
 }

@@ -5,21 +5,36 @@
     android:layout_height="match_parent">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_go_back_home"
-        android:id="@+id/btn_home"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="goToHome"/>
-
-    <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_new_game"
         android:id="@+id/btn_new_game"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="startNewGame"/>
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_go_back_home"
+            android:id="@+id/btn_home"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+
+        <!--<Button-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/action_share"-->
+            <!--android:id="@+id/btn_share"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_centerHorizontal="true"/>-->
+
+    </LinearLayout>
 
 </LinearLayout>
