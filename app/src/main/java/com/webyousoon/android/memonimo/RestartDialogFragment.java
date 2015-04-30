@@ -7,12 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.webyousoon.android.memonimo.data.MemonimoProvider;
 
-/**
- * Created by hackorder on 18/04/2015.
- */
 public class RestartDialogFragment extends DialogFragment {
 
     private static final String LOG_TAG = RestartDialogFragment.class.getSimpleName();
@@ -22,7 +23,6 @@ public class RestartDialogFragment extends DialogFragment {
 
     long mIdgame;
     String mMode;
-//    int mNumFamily;
     RestartDialogListener mRestartDialogListener;
 
     public interface RestartDialogListener {
@@ -65,26 +65,36 @@ public class RestartDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.question_new_game)
-                .setNegativeButton(R.string.action_go_back_home, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Suppression de la partie
-                        MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
-                        // Appel l'événement de l'activité
-                        mRestartDialogListener.onDialogNegativeClick(RestartDialogFragment.this);
-                    }
-                })
-                .setPositiveButton(R.string.action_new_game, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Suppression de la partie
-                        MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
-                        //
-                        mRestartDialogListener.onDialogPositiveClick(RestartDialogFragment.this, mMode);
-                    }
-                });
-        // Create the AlertDialog object and return it
+
+        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+
+        View view = layoutInflater.inflate(R.layout.dialog_restart, (ViewGroup) getActivity().findViewById(R.id.ll_dialog_restart));
+
+        Button btnHome = (Button) view.findViewById(R.id.btn_home);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Suppression de la partie
+                MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
+                // Appel l'événement de l'activité pour retourner à l'accueil
+                mRestartDialogListener.onDialogNegativeClick(RestartDialogFragment.this);
+            }
+        });
+
+
+        Button btnNewGame = (Button) view.findViewById(R.id.btn_new_game);
+        btnNewGame.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Suppression de la partie
+                MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
+                // Appel l'événement de l'activité pour démarrer une nouvelle partie
+                mRestartDialogListener.onDialogPositiveClick(RestartDialogFragment.this, mMode);
+                // Disparition de la fenêtre de dialogue
+                dismiss();
+            }
+        });
+
+        builder.setView(view);
         return builder.create();
     }
 }

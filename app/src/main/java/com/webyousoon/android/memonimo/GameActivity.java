@@ -206,6 +206,8 @@ public class GameActivity extends ActionBarActivity
         //
         Bundle bundle = prepareGame(game.getId());
 
+//        dismissDialog();
+
         launchGameFragment(bundle);
     }
 }
