@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.webyousoon.android.memonimo.MemonimoUtilities;
+import com.webyousoon.android.memonimo.data.MemonimoContract;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by hackorder on 17/04/2015.
  */
-public class Game implements Cloneable, Parcelable {
+public class Game implements Cloneable {
 
 
     private static final int CARD_NO_CHOSEN = -1;
@@ -23,54 +24,50 @@ public class Game implements Cloneable, Parcelable {
     private boolean mFinished = false;
     private int mFirstPositionChosen = CARD_NO_CHOSEN;
     private int mSecondPositionChosen = CARD_NO_CHOSEN;
-    private List<GameCard> mGameCardList;
+    private List<GameCard> mGameCardList = new ArrayList<GameCard>();
     private Mode mMode;
     private BackgroundPattern mBackgroundPattern;
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel _dest, int _flags) {
-        _dest.writeLong(mId);
-//        _dest.writeB(mId);
-        _dest.writeInt(mFirstPositionChosen);
-        _dest.writeInt(mSecondPositionChosen);
-//        _dest.writeInt(mSecondPositionChosen);
-    }
+    private int mNumAttempt = 0;
 
     public enum Mode {
-        EASY(0),
-        NORMAL(1),
-        HARD(2);
-
-        private final int mCode;
-//        private final int mNumFamily;
-
-        private Mode(int _code) {
-            this.mCode = _code;
-        }
-
-        public int getCode() {
-            return mCode;
-        }
-
+        CUSTOM,
+        EASY,
+        NORMAL,
+        HARD;
     }
 
-    public Game(long _id, boolean _finished, int _firstPositionChosen, int _secondPositionChosen) {
+    public Game(long _id, boolean _finished, int _firstPositionChosen, int _secondPositionChosen,
+                int _numAttempt, String _difficulty) {
         this.mId = _id;
         this.mFinished = _finished;
         this.mFirstPositionChosen = _firstPositionChosen;
         this.mSecondPositionChosen = _secondPositionChosen;
-        this.mGameCardList = new ArrayList<GameCard>();
+        this.mNumAttempt = _numAttempt;
+        this.mMode = Mode.valueOf(_difficulty);
     }
 
-    public Game (int _numFamily) {
+    public Game (Mode _mode) {
         this.mId = CARD_NO_CHOSEN;
-        this.mGameCardList = GameCard.getRandomList(_numFamily);
+        this.mMode = _mode;
+        switch (_mode) {
+            case EASY:
+                this.mGameCardList = GameCard.getRandomList(4);
+                break;
+            case NORMAL:
+                this.mGameCardList = GameCard.getRandomList(9);
+                break;
+            case HARD:
+                this.mGameCardList = GameCard.getRandomList(14);
+                break;
+            default:
+                this.mGameCardList = GameCard.getRandomList(3);
+        }
     }
+
+//    public Game (int _numFamily) {
+//        this.mId = CARD_NO_CHOSEN;
+//        this.mGameCardList = GameCard.getRandomList(_numFamily);
+//    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -141,6 +138,8 @@ public class Game implements Cloneable, Parcelable {
     public void chooseSecondCard(int _position) {
         setSecondPositionChosen(_position);
         setAttemptSecondPositionChosen();
+        // on incrémente le nombre de tentatives sur une partie
+        mNumAttempt++;
     }
 
     public boolean isFirstCardChosen() {
@@ -226,4 +225,20 @@ public class Game implements Cloneable, Parcelable {
     public void setBackgroundPattern(BackgroundPattern _backgroundPattern) {
         this.mBackgroundPattern = _backgroundPattern;
     }
+
+    public int getNumAttempt() {
+        return mNumAttempt;
+    }
+
+    public void setNumAttempt(int _numAttempt) {
+        this.mNumAttempt = _numAttempt;
+    }
+
+    public Mode getMode() {
+        return mMode;
+    }
+
+//    public String getStringMode() {
+//        return mMode.toString();
+//    }
 }

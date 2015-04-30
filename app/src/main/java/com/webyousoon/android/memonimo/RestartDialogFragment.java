@@ -18,23 +18,24 @@ public class RestartDialogFragment extends DialogFragment {
     private static final String LOG_TAG = RestartDialogFragment.class.getSimpleName();
 
     private static final String ARGUMENT_ID_GAME = "argument_id_game";
-    private static final String ARGUMENT_NUM_FAMILY = "argument_num_family";
+    private static final String ARGUMENT_MODE = "argument_mode";
 
     long mIdgame;
-    int mNumFamily;
+    String mMode;
+//    int mNumFamily;
     RestartDialogListener mRestartDialogListener;
 
     public interface RestartDialogListener {
         public void onDialogNegativeClick(DialogFragment dialogFragment);
-        public void onDialogPositiveClick(DialogFragment dialogFragment, int numFamily);
+        public void onDialogPositiveClick(DialogFragment dialogFragment, String mode);
     }
 
-    static RestartDialogFragment newInstance(long _idGame, int _numFamily) {
+    static RestartDialogFragment newInstance(long _idGame, String _mode) {
         RestartDialogFragment f = new RestartDialogFragment();
 
         Bundle args = new Bundle();
         args.putLong(ARGUMENT_ID_GAME, _idGame);
-        args.putInt(ARGUMENT_NUM_FAMILY, _numFamily);
+        args.putString(ARGUMENT_MODE, _mode);
         f.setArguments(args);
 
         return f;
@@ -58,7 +59,7 @@ public class RestartDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIdgame = getArguments().getLong(ARGUMENT_ID_GAME);
-        mNumFamily = getArguments().getInt(ARGUMENT_NUM_FAMILY);
+        mMode = getArguments().getString(ARGUMENT_MODE);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class RestartDialogFragment extends DialogFragment {
                         // Suppression de la partie
                         MemonimoProvider.removeGame(getActivity().getContentResolver(), mIdgame);
                         //
-                        mRestartDialogListener.onDialogPositiveClick(RestartDialogFragment.this, mNumFamily);
+                        mRestartDialogListener.onDialogPositiveClick(RestartDialogFragment.this, mMode);
                     }
                 });
         // Create the AlertDialog object and return it

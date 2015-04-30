@@ -62,9 +62,9 @@ public class GameActivity extends ActionBarActivity
     private long getIdGame() {
         long idGame = -1;
         // Initialisation à défaut
-        int numFamily = -1;
+        String mode = null;
 
-        Game game;
+        Game game = null;
 
 //        // Récupération de l'id de la partie si celui-ci a été sauvé dans l'état
 //        if (savedInstanceState != null) {
@@ -79,15 +79,15 @@ public class GameActivity extends ActionBarActivity
                 idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
             }
             // Récupération de l'id de la partie si celui-ci a été passé par Intent
-            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY)) {
-                numFamily = intent.getIntExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY, -1);
+            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME)) {
+                mode = intent.getStringExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME);
             }
         }
 
 
         if (idGame == -1) {
             // Création de la partie
-            game = createGame(numFamily);
+            game = createGame(mode);
         } else {
             // Restauration de la partie
             game = MemonimoProvider.restoreGame(this.getContentResolver(), idGame);
@@ -154,9 +154,9 @@ public class GameActivity extends ActionBarActivity
 
     }
 
-    private Game createGame(int _numFamily) {
+    private Game createGame(String _mode) {
         // Initialisation d'une nouvelle partie d'un point de vue du modèle
-        Game game = new Game(_numFamily);
+        Game game = new Game(Game.Mode.valueOf(_mode));
         // Persistance de la partie
         long idGame = MemonimoProvider.saveGame(this.getContentResolver(), game);
         game.setId(idGame);
@@ -193,9 +193,9 @@ public class GameActivity extends ActionBarActivity
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment, int _numFamily) {
+    public void onDialogPositiveClick(DialogFragment dialogFragment, String _mode) {
 
-        Game game = createGame(_numFamily);
+        Game game = createGame(_mode);
         //
         Bundle bundle = prepareGame(game.getId());
 

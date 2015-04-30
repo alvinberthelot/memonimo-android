@@ -178,7 +178,7 @@ public class GameFragment extends Fragment {
                     // Affichage d'une fenêtre pour recommencer une partie ou retourner à l'accueil
                     RestartDialogFragment restartDialogFragment = RestartDialogFragment.newInstance(
                             mGame.getId(),
-                            mGame.getNumFamily());
+                            mGame.getMode().toString());
                     restartDialogFragment.show(getActivity().getSupportFragmentManager(), "restartDialogFragment");
 
                 }

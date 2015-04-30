@@ -32,8 +32,9 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
 
     private static final String[] SUMMARY_GAME_COLUMNS = {
             GameEntry.TABLE_NAME + "." + GameEntry._ID,
-            GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_FINISHED
-//            GameEntry.TABLE_NAME + "." + GameEntry._ID,
+            GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_FINISHED,
+            GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_DIFFICULTY,
+            GameEntry.TABLE_NAME + "." + GameEntry.COLUMN_NUM_ATTEMPT
 //            GameEntry.TABLE_NAME + "." + GameEntry._ID,
 //            GameEntry.TABLE_NAME + "." + GameEntry._ID,
 //            GameEntry.TABLE_NAME + "." + GameEntry._ID,
@@ -45,6 +46,8 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
     // Index des valeurs via SUMMARY_GAME_COLUMNS
     public static final int COL_GAME_ID = 0;
     public static final int COL_GAME_FINISHED = 1;
+    public static final int COL_GAME_DIFFICULTY = 2;
+    public static final int COL_GAME_NUM_ATTEMPT = 3;
 //    public static final int COL_WEATHER_DESC = 2;
 //    public static final int COL_WEATHER_MAX_TEMP = 3;
 //    public static final int COL_WEATHER_MIN_TEMP = 4;
@@ -102,7 +105,9 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
     public void updateSummaryView(Game _game) {
         mGame = _game;
 
-        mTextNumGame.setText("Familles trouvées : " + mGame.getNumFamilyFound());
+        mTextDifficulty.setText("Difficulté : " + mGame.getMode().toString());
+        mTextNumGame.setText("Familles trouvées : " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
+        mTextNumAttempt.setText("Tentatives : " + mGame.getNumAttempt());
 
     }
 

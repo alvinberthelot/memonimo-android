@@ -27,6 +27,8 @@ public class ProviderUtilities {
         value.put(MemonimoContract.GameEntry.COLUMN_FINISHED, _game.isFinished());
         value.put(MemonimoContract.GameEntry.COLUMN_FIRST_POSITION_CHOOSEN, _game.getFirstPositionChosen());
         value.put(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN, _game.getSecondPositionChosen());
+        value.put(MemonimoContract.GameEntry.COLUMN_NUM_ATTEMPT, _game.getNumAttempt());
+        value.put(MemonimoContract.GameEntry.COLUMN_DIFFICULTY, _game.getMode().toString());
 
         return value;
     }
@@ -37,7 +39,9 @@ public class ProviderUtilities {
             _cursor.getLong(_cursor.getColumnIndex(MemonimoContract.GameEntry._ID)),
             DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FINISHED))),
             _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FIRST_POSITION_CHOOSEN)),
-            _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN))
+            _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_SECOND_POSITION_CHOOSEN)),
+            _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_NUM_ATTEMPT)),
+            _cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_DIFFICULTY))
         );
 
         return game;

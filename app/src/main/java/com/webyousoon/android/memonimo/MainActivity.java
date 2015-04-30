@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.webyousoon.android.memonimo.model.Game;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -49,10 +51,10 @@ public class MainActivity extends ActionBarActivity {
     /*
         Pour arriver sur la vue d'une nouvelle partie
      */
-    public void startGame(View _view, int _numFamily) {
+    public void startGame(View _view, String _mode) {
         Intent intent = new Intent(this, GameActivity.class)
                 // Envoi du nombre de familles via l'Intent
-                .putExtra(MemonimoUtilities.INTENT_EXTRA_NUM_FAMILY, _numFamily);
+                .putExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME, _mode);
         startActivity(intent);
     }
     public void startEasyGame(View _view) {
@@ -60,21 +62,21 @@ public class MainActivity extends ActionBarActivity {
         String numFamily = preferences.getString(
                 getString(R.string.pref_num_family_easy_key),
                 getString(R.string.pref_num_family_easy_default));
-        startGame(_view, Integer.parseInt(numFamily));
+        startGame(_view, Game.Mode.EASY.toString());
     }
     public void startNormalGame(View _view) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String numFamily = preferences.getString(
                 getString(R.string.pref_num_family_normal_key),
                 getString(R.string.pref_num_family_normal_default));
-        startGame(_view, Integer.parseInt(numFamily));
+        startGame(_view, Game.Mode.NORMAL.toString());
     }
     public void startHardGame(View _view) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String numFamily = preferences.getString(
                 getString(R.string.pref_num_family_hard_key),
                 getString(R.string.pref_num_family_hard_default));
-        startGame(_view, Integer.parseInt(numFamily));
+        startGame(_view, Game.Mode.HARD.toString());
     }
 
     /*

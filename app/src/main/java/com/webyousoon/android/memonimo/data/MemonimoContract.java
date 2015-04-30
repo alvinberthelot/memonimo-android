@@ -47,6 +47,8 @@ public class MemonimoContract {
         public static final String COLUMN_FINISHED = "finished";
         public static final String COLUMN_FIRST_POSITION_CHOOSEN = "first_position_choosen";
         public static final String COLUMN_SECOND_POSITION_CHOOSEN = "second_position_choosen";
+        public static final String COLUMN_NUM_ATTEMPT = "num_attempt";
+        public static final String COLUMN_DIFFICULTY = "difficulty";
 
         public static Uri buildGameUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
