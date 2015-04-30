@@ -35,6 +35,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/action_start_custom_game"
+        android:id="@+id/btn_new_custom_game"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="startCustomGame"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/action_find_game"
         android:id="@+id/btn_game_unfinished"
         android:layout_centerVertical="true"

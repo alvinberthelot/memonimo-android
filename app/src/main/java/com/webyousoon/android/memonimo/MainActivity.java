@@ -58,26 +58,13 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
     public void startEasyGame(View _view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String numFamily = preferences.getString(
-                getString(R.string.pref_num_family_easy_key),
-                getString(R.string.pref_num_family_easy_default));
         startGame(_view, Game.Mode.EASY.toString());
     }
     public void startNormalGame(View _view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String numFamily = preferences.getString(
-                getString(R.string.pref_num_family_normal_key),
-                getString(R.string.pref_num_family_normal_default));
         startGame(_view, Game.Mode.NORMAL.toString());
     }
-    public void startHardGame(View _view) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String numFamily = preferences.getString(
-                getString(R.string.pref_num_family_hard_key),
-                getString(R.string.pref_num_family_hard_default));
-        startGame(_view, Game.Mode.HARD.toString());
-    }
+    public void startHardGame(View _view) { startGame(_view, Game.Mode.HARD.toString()); }
+    public void startCustomGame(View _view) { startGame(_view, Game.Mode.CUSTOM.toString()); }
 
     /*
         Pour arriver sur la vue listant les parties non terminées

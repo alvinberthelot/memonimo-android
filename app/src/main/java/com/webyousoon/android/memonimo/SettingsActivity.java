@@ -22,9 +22,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         addPreferencesFromResource(R.xml.preferences);
 
         // Chaque préférence est liée à OnPreferenceChangeListener
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_family_easy_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_family_normal_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_family_hard_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_family_custom_key)));
     }
 
     /**

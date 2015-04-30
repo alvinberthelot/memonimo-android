@@ -1,7 +1,9 @@
 package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -155,8 +157,14 @@ public class GameActivity extends ActionBarActivity
     }
 
     private Game createGame(String _mode) {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String numFamilyCustom = preferences.getString(
+                getString(R.string.pref_num_family_custom_key),
+                getString(R.string.pref_num_family_custom_default));
+
         // Initialisation d'une nouvelle partie d'un point de vue du modèle
-        Game game = new Game(Game.Mode.valueOf(_mode));
+        Game game = new Game(Game.Mode.valueOf(_mode), Integer.parseInt(numFamilyCustom));
         // Persistance de la partie
         long idGame = MemonimoProvider.saveGame(this.getContentResolver(), game);
         game.setId(idGame);
@@ -194,7 +202,6 @@ public class GameActivity extends ActionBarActivity
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment, String _mode) {
-
         Game game = createGame(_mode);
         //
         Bundle bundle = prepareGame(game.getId());

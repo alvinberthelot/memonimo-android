@@ -35,7 +35,6 @@ public class GameCard implements Cloneable {
         }
     }
 
-//    int mId;
     private AnimalGame mAnimalGame;
     private boolean mCardFound = false;
     private boolean mFoundPlayer1 = false;
@@ -57,8 +56,6 @@ public class GameCard implements Cloneable {
 
     private static GameCard getRandomCardOnce(List<AnimalGame> _list) {
         Random random = new Random();
-//        List<AnimalGame> list = AnimalGame.getModifiableList();
-
         int selection = random.nextInt(_list.size());
         AnimalGame animalSelected = (AnimalGame) _list.get(selection);
         _list.remove(selection);

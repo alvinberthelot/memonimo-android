@@ -1,22 +1,14 @@
 package com.webyousoon.android.memonimo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.webyousoon.android.memonimo.MemonimoUtilities;
-import com.webyousoon.android.memonimo.data.MemonimoContract;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by hackorder on 17/04/2015.
- */
 public class Game implements Cloneable {
 
+
+    private static final int NUM_FAMILY_MODE_EASY = 4;
+    private static final int NUM_FAMILY_MODE_NORMAL = 9;
+    private static final int NUM_FAMILY_MODE_HARD = 15;
 
     private static final int CARD_NO_CHOSEN = -1;
 
@@ -46,28 +38,23 @@ public class Game implements Cloneable {
         this.mMode = Mode.valueOf(_difficulty);
     }
 
-    public Game (Mode _mode) {
+    public Game (Mode _mode, int _numFamilyCustom) {
         this.mId = CARD_NO_CHOSEN;
         this.mMode = _mode;
         switch (_mode) {
             case EASY:
-                this.mGameCardList = GameCard.getRandomList(4);
+                this.mGameCardList = GameCard.getRandomList(NUM_FAMILY_MODE_EASY);
                 break;
             case NORMAL:
-                this.mGameCardList = GameCard.getRandomList(9);
+                this.mGameCardList = GameCard.getRandomList(NUM_FAMILY_MODE_NORMAL);
                 break;
             case HARD:
-                this.mGameCardList = GameCard.getRandomList(14);
+                this.mGameCardList = GameCard.getRandomList(NUM_FAMILY_MODE_HARD);
                 break;
             default:
-                this.mGameCardList = GameCard.getRandomList(3);
+                this.mGameCardList = GameCard.getRandomList(_numFamilyCustom);
         }
     }
-
-//    public Game (int _numFamily) {
-//        this.mId = CARD_NO_CHOSEN;
-//        this.mGameCardList = GameCard.getRandomList(_numFamily);
-//    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

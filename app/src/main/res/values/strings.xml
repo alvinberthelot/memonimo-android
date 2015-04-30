@@ -3,7 +3,7 @@
 
     <string name="content_authority">com.webyousoon.android.memonimo.app</string>
 
-    <string name="action_start_test_game">Partie TEST</string>
+    <string name="action_start_custom_game">Partie personnalisée</string>
     <string name="action_start_easy_game">Partie facile</string>
     <string name="action_start_normal_game">Partie normale</string>
     <string name="action_start_hard_game">Partie difficile</string>
@@ -23,17 +23,12 @@
     <!-- SETTINGS -->
     <string name="settings_label_num_player">Nombre de joueurs</string>
     <string name="settings_annex_num_player">(Par défaut)</string>
-    <string name="settings_label_difficulty_easy">Niveau facile</string>
-    <string name="settings_label_difficulty_normal">Niveau normal</string>
-    <string name="settings_label_difficulty_hard">Niveau difficile</string>
+    <string name="settings_label_difficulty_custom">Nombre de familles</string>
     <string name="settings_label_num_family">Nombre de familles</string>
 
     <!-- PREFERENCES -->
-    <string name="pref_num_family_easy_key" translatable="false">pref_num_family_easy_key</string>
-    <string name="pref_num_family_easy_default" translatable="false">4</string>
-    <string name="pref_num_family_normal_key" translatable="false">pref_num_family_normal_key</string>
-    <string name="pref_num_family_normal_default" translatable="false">10</string>
-    <string name="pref_num_family_hard_key" translatable="false">pref_num_family_hard_key</string>
-    <string name="pref_num_family_hard_default" translatable="false">16</string>
+    <string name="pref_num_family_custom_key" translatable="false">pref_num_family_custom_key</string>
+    <string name="pref_num_family_custom_default" translatable="false">12</string>
+
 
 </resources>
