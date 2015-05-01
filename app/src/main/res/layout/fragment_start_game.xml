@@ -6,46 +6,55 @@
     android:gravity="center">
 
     <Button
+        android:id="@+id/btn_new_easy_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_start_easy_game"
-        android:id="@+id/btn_new_easy_game"
+        android:textSize="@dimen/font_size_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/icon_easy"
         android:onClick="startEasyGame"/>
 
     <Button
+        android:id="@+id/btn_new_normal_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_start_normal_game"
-        android:id="@+id/btn_new_normal_game"
+        android:textSize="@dimen/font_size_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/icon_normal"
         android:onClick="startNormalGame"/>
 
     <Button
+        android:id="@+id/btn_new_hard_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_start_hard_game"
-        android:id="@+id/btn_new_hard_game"
+        android:textSize="@dimen/font_size_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/icon_hard"
         android:onClick="startHardGame"/>
 
     <Button
+        android:id="@+id/btn_new_custom_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_start_custom_game"
-        android:id="@+id/btn_new_custom_game"
+        android:textSize="@dimen/font_size_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/icon_custom"
         android:onClick="startCustomGame"/>
 
     <Button
+        android:id="@+id/btn_game_unfinished"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_find_game"
-        android:id="@+id/btn_game_unfinished"
+        android:textSize="@dimen/font_size_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:onClick="findGame"/>
@@ -57,6 +66,7 @@
         android:id="@+id/btn_overview_settings"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/icon_settings"
         android:onClick="goToSettings"/>
 
 </LinearLayout>
