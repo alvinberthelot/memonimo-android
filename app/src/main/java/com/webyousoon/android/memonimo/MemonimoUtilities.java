@@ -1,10 +1,14 @@
 package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.util.Base64;
+import android.view.View;
+import android.widget.Button;
 
 public class MemonimoUtilities {
 
@@ -13,11 +17,11 @@ public class MemonimoUtilities {
 
     /**
      * Fonction retournant un Bitmap à partir d'une image encodée en Base64
+     *
      * @param _input image en codée en Base64
      * @return
      */
-    public static Bitmap decodeBase64(String _input)
-    {
+    public static Bitmap decodeBase64(String _input) {
         byte[] decodedByte = Base64.decode(_input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
@@ -31,4 +35,10 @@ public class MemonimoUtilities {
         return shareIntent;
     }
 
+    public static Button buildButtonWithFont(View _rootView, int _idResource ,AssetManager _assetManager) {
+        Button button = (Button) _rootView.findViewById(_idResource);
+        Typeface typeface = Typeface.createFromAsset(_assetManager, "fonts/dimbo_regular.ttf");
+        button.setTypeface(typeface);
+        return button;
+    }
 }
