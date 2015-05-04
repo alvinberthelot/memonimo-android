@@ -7,12 +7,12 @@
 
     <ImageView
         android:id="@+id/gi_front_card"
-        android:layout_width="80dp"
-        android:layout_height="120dp" />
+        android:layout_width="120dp"
+        android:layout_height="180dp" />
 
     <ImageView
         android:id="@+id/gi_back_card"
-        android:layout_width="80dp"
-        android:layout_height="120dp" />
+        android:layout_width="120dp"
+        android:layout_height="180dp" />
 
 </FrameLayout>

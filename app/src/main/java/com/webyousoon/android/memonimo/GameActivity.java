@@ -2,6 +2,9 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -9,12 +12,19 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.webyousoon.android.memonimo.data.MemonimoProvider;
+import com.webyousoon.android.memonimo.model.BackgroundPattern;
 import com.webyousoon.android.memonimo.model.Game;
+
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.util.List;
+import java.util.Random;
 
 public class GameActivity extends ActionBarActivity
         implements GameFragment.OnGameListener, RestartDialogFragment.RestartDialogListener {
@@ -29,7 +39,9 @@ public class GameActivity extends ActionBarActivity
 
     private ShareActionProvider mShareActionProvider;
 
-//    private Game mGame;
+    private List<BackgroundPattern> mBackgroundPatternList;
+
+    private long mIdGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +49,14 @@ public class GameActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        // Obtention de l'identifiant de la partie
-        long idGame = getIdGame();
 
-        Bundle bundle = prepareGame(idGame);
+        // Récupération de la liste des patterns
+        mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getContentResolver());
+
+        // Récupération de l'identifiant de la partie avec création en base si nécessaire
+        mIdGame = getIdGame(savedInstanceState);
+
+        Bundle bundle = prepareGame(mIdGame);
 
         launchGameFragment(bundle);
 
@@ -63,33 +79,34 @@ public class GameActivity extends ActionBarActivity
         }
 
 
+
+
+
     }
 
-    private long getIdGame() {
+    private long getIdGame(Bundle _savedInstanceState) {
         long idGame = -1;
         // Initialisation à défaut
         String mode = null;
 
         Game game = null;
 
-//        // Récupération de l'id de la partie si celui-ci a été sauvé dans l'état
-//        if (savedInstanceState != null) {
-//            idGame = savedInstanceState.getLong(INSTANCE_STATE_ID_GAME);
-//        }
-
-        // Récupération des informations liées à l'Intent
-        Intent intent  = this.getIntent();
-        if (intent != null) {
-            // Récupération de l'id de la partie si celui-ci a été passé par Intent
-            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
-                idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
-            }
-            // Récupération de l'id de la partie si celui-ci a été passé par Intent
-            if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME)) {
-                mode = intent.getStringExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME);
+        if (_savedInstanceState != null) {
+            idGame = _savedInstanceState.getLong(INSTANCE_STATE_ID_GAME);
+        } else {
+            // Récupération des informations liées à l'Intent
+            Intent intent  = this.getIntent();
+            if (intent != null) {
+                // Récupération de l'id de la partie si celui-ci a été passé par Intent
+                if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
+                    idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
+                }
+                // Récupération de l'id de la partie si celui-ci a été passé par Intent
+                if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME)) {
+                    mode = intent.getStringExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME);
+                }
             }
         }
-
 
         if (idGame == -1) {
             // Création de la partie
@@ -100,6 +117,14 @@ public class GameActivity extends ActionBarActivity
         }
 
         return game.getId();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Sauvegarde de l'identifiant de la partie dans l'état
+        savedInstanceState.putLong(INSTANCE_STATE_ID_GAME, mIdGame);
+        Log.d(LOG_TAG, ".onSaveInstanceState() : id --> " + mIdGame + " saved");
     }
 
     @Override
@@ -175,8 +200,24 @@ public class GameActivity extends ActionBarActivity
                 getString(R.string.pref_num_family_custom_key),
                 getString(R.string.pref_num_family_custom_default));
 
+        BackgroundPattern backgroundPattern = null;
+
+        if (mBackgroundPatternList != null || mBackgroundPatternList.size() > 0) {
+//            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.card_hidden);
+//            Bitmap bitmap = drawable.getBitmap();
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//            backgroundPattern = new BackgroundPattern(baos.toByteArray());
+            backgroundPattern = chooseBackground();
+        }
+
+
+
         // Initialisation d'une nouvelle partie d'un point de vue du modèle
-        Game game = new Game(Game.Mode.valueOf(_mode), Integer.parseInt(numFamilyCustom));
+        Game game = new Game(
+                Game.Mode.valueOf(_mode),
+                Integer.parseInt(numFamilyCustom),
+                backgroundPattern != null ? backgroundPattern.getImgEncoded() : null);
         // Persistance de la partie
         long idGame = MemonimoProvider.saveGame(this.getContentResolver(), game);
         game.setId(idGame);
@@ -221,5 +262,23 @@ public class GameActivity extends ActionBarActivity
 //        dismissDialog();
 
         launchGameFragment(bundle);
+    }
+
+    private BackgroundPattern chooseBackground() {
+
+        BackgroundPattern backgroundPattern = null;
+
+        // Vérification qu'une image peut être récupérée
+        if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
+            // Récupération d'une image encodée au hasard
+            int random = new Random().nextInt(mBackgroundPatternList.size());
+            backgroundPattern = mBackgroundPatternList.get(random);
+            // Affectation du background
+//            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+//
+//            mGame.setBackgroundPattern(backgroundPattern);
+        }
+
+        return backgroundPattern;
     }
 }

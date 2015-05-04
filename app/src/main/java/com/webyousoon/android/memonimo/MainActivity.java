@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.webyousoon.android.memonimo.model.Game;
+import com.webyousoon.android.memonimo.service.BackgroungPatternService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -21,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private ShareActionProvider mShareActionProvider;
+    private Intent mBackgroundPatternService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,20 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container_start, new StartFragment())
                     .commit();
         }
+
+
+        // Initialisation du service pour récupérer les patterns
+        mBackgroundPatternService = new Intent(this, BackgroungPatternService.class);
+        // lancement du service pour récupérer les patterns
+        startService(mBackgroundPatternService);
+
+
+
+
+
+
+
+
     }
 
     @Override

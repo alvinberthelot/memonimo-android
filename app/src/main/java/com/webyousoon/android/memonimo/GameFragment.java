@@ -65,7 +65,7 @@ public class GameFragment extends Fragment {
 
     private Game mGame;
 
-    private List<BackgroundPattern> mBackgroundPatternList;
+//    private List<BackgroundPattern> mBackgroundPatternList;
 
     // Views
     private View mRootView;
@@ -111,14 +111,14 @@ public class GameFragment extends Fragment {
 
         if (backgroundPattern == null) {
             // Récupération des patterns stockés en base
-            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
-
-            if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
-                RandomPatternTask randomPatternTask = new RandomPatternTask();
-                randomPatternTask.execute();
-            } else {
-                chooseBackground();
-            }
+//            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+//
+//            if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
+////                RandomPatternTask randomPatternTask = new RandomPatternTask();
+////                randomPatternTask.execute();
+//            } else {
+////                chooseBackground();
+//            }
 
         } else {
             // Affectation du background
@@ -131,7 +131,7 @@ public class GameFragment extends Fragment {
 
         final GridGameAdapter gridGameAdapter = new GridGameAdapter(
                 getActivity(),
-                mGame.getGameCardList()
+                mGame
         );
 
         gridGameView.setAdapter(gridGameAdapter);
@@ -195,14 +195,13 @@ public class GameFragment extends Fragment {
                             restartDialogFragment.show(getActivity().getSupportFragmentManager(), "restartDialogFragment");
 
                         }
-
-                        finishChoice();
-
                         // Notification du changement d'état pour la vue
                         gridGameAdapter.notifyDataSetChanged();
 
                     }
                 }
+
+                finishChoice();
 
             }
         });
@@ -232,14 +231,6 @@ public class GameFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        // Sauvegarde de l'identifiant de la partie dans l'état
-        savedInstanceState.putLong(INSTANCE_STATE_ID_GAME, mGame.getId());
-        Log.d(LOG_TAG, ".onSaveInstanceState() : id --> " + mGame.getId() + " saved");
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
 //        Log.d(LOG_TAG, ".onPause()");
@@ -249,140 +240,6 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 //        Log.d(LOG_TAG, ".onResume()");
-    }
-
-    private BackgroundPattern chooseBackground() {
-
-        BackgroundPattern backgroundPattern = null;
-
-        // Vérification qu'une image peut être récupérée
-        if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
-            // Récupération d'une image encodée au hasard
-            int random = new Random().nextInt(mBackgroundPatternList.size());
-            backgroundPattern = mBackgroundPatternList.get(random);
-            // Affectation du background
-            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-
-            mGame.setBackgroundPattern(backgroundPattern);
-        }
-
-        return backgroundPattern;
-    }
-
-
-
-    public class RandomPatternTask extends AsyncTask<Void, Void, Void> {
-
-        private final String LOG_TAG = RandomPatternTask.class.getSimpleName();
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-            String result = null;
-
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            String randomPatternJsonStr = null;
-
-            String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json";
-//            String urlColorLovers = "http://www.colourlovers.com/api/patterns/random?format=json";
-
-            try {
-                URL url = new URL(urlColorLovers);
-
-                // Ouverture de la connexion
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer stringBuffer = new StringBuffer();
-                if (inputStream == null) {
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuffer.append(line + "\n");
-                }
-
-                if (stringBuffer.length() == 0) {
-                    return null;
-                }
-
-                randomPatternJsonStr = stringBuffer.toString();
-
-
-            } catch (IOException e) {
-
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        Log.e(LOG_TAG, "Error closing stream", e);
-                    }
-                }
-            }
-
-            try {
-                storePatternDataFromJson(randomPatternJsonStr);
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, e.getMessage(), e);
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Void _void) {
-            BackgroundPattern backgroundPattern = chooseBackground();
-
-        }
-
-        private Void storePatternDataFromJson(String _randomPatternJsonStr) throws JSONException {
-
-            // Déclaration des propriétés Json
-            final String PATTERN_IMAGE_URL = "imageUrl";
-
-            JSONArray patternArray = new JSONArray(_randomPatternJsonStr);
-
-
-            if (patternArray != null && patternArray.length() > 0) {
-                // Initialisation du tableau d'images encodées
-                mBackgroundPatternList = new ArrayList<BackgroundPattern>();
-                // Alimentation du tableau
-                for (int i = 0; i < patternArray.length() ; i++) {
-                    JSONObject patternObject = patternArray.getJSONObject(i);
-                    String imageUrl = patternObject.getString(PATTERN_IMAGE_URL);
-                    try {
-                        Bitmap bm = BitmapFactory.decodeStream(new URL(imageUrl).openStream());
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        BackgroundPattern backgroundPattern = new BackgroundPattern(baos.toByteArray());
-                        mBackgroundPatternList.add(backgroundPattern);
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                MemonimoProvider.savePatternList(getActivity().getContentResolver(), mBackgroundPatternList);
-            }
-
-
-
-            return null;
-        }
     }
 
 }

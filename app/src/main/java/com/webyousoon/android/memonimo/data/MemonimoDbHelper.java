@@ -35,7 +35,8 @@ public class MemonimoDbHelper extends SQLiteOpenHelper {
                 GameEntry.COLUMN_FIRST_POSITION_CHOOSEN + " INTEGER NOT NULL, " +
                 GameEntry.COLUMN_SECOND_POSITION_CHOOSEN + " INTEGER NOT NULL, " +
                 GameEntry.COLUMN_NUM_ATTEMPT + " INTEGER NOT NULL, " +
-                GameEntry.COLUMN_DIFFICULTY + " INTEGER NOT NULL " +
+                GameEntry.COLUMN_DIFFICULTY + " INTEGER NOT NULL, " +
+                GameEntry.COLUMN_PATTERN + " TEXT " +
                 " );";
 
         final String SQL_CREATE_PATTERN_TABLE = "CREATE TABLE " + PatternEntry.TABLE_NAME + " (" +

@@ -177,6 +177,8 @@ public class MemonimoProvider extends ContentProvider {
             backgroundPatternList.add(ProviderUtilities.convertBackgroundPatternCursorToBackgroundPatternModel(cursor));
         }
 
+        Log.v(LOG_TAG, ".restorePatternList() :: " + backgroundPatternList.size());
+
         return backgroundPatternList;
     }
 

@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.LayoutInflater;
@@ -12,17 +14,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.webyousoon.android.memonimo.MemonimoUtilities;
+import com.webyousoon.android.memonimo.model.BackgroundPattern;
+import com.webyousoon.android.memonimo.model.Game;
 import com.webyousoon.android.memonimo.model.GameCard;
 import com.webyousoon.android.memonimo.R;
 
 import java.util.List;
+import java.util.Random;
 
 public class GridGameAdapter extends BaseAdapter {
 
     private static final int FLIP_DURATION = 150;
 
     private Context mContext;
-    private List<GameCard> mGameCardList;
+//    private List<GameCard> mGameCardList;
+    private Game mGame;
+    private LayerDrawable mBackCardDrawable;
 
     private static class CardGameViewHolder {
         public final ImageView mFrontCardView;
@@ -34,19 +42,25 @@ public class GridGameAdapter extends BaseAdapter {
         }
     }
 
-    public GridGameAdapter(Context context, List<GameCard> _gameCardList) {
+    public GridGameAdapter(Context context, Game _game) {
         this.mContext = context;
-        this.mGameCardList = _gameCardList;
+        this.mGame = _game;
     }
+
+
+//    public GridGameAdapter(Context context, List<GameCard> _gameCardList) {
+//        this.mContext = context;
+//        this.mGameCardList = _gameCardList;
+//    }
 
     @Override
     public int getCount() {
-        return mGameCardList.size();
+        return mGame.getGameCardList().size();
     }
 
     @Override
     public GameCard getItem(int _position) {
-        return mGameCardList.get(_position);
+        return mGame.getGameCardList().get(_position);
     }
 
     @Override
@@ -113,10 +127,31 @@ public class GridGameAdapter extends BaseAdapter {
         return new LayerDrawable(layers);
     }
 
-    public static LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
+
+
+    public LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
+
+        LayerDrawable backCardDrawable;
+
+        if (mBackCardDrawable == null) {
+            mBackCardDrawable = generateBackCardDrawable(_cardGame, _resources);
+        }
+
+        return mBackCardDrawable;
+    }
+
+    public LayerDrawable generateBackCardDrawable(GameCard _cardGame, Resources _resources ) {
 
         Drawable[] layers = new Drawable[2];
-        layers[0] = _resources.getDrawable(R.drawable.card_hidden);
+        //
+        if (mGame.getBackgroundPattern() != null) {
+            BitmapDrawable backCard = new BitmapDrawable(MemonimoUtilities.decodeBase64(mGame.getBackgroundPattern()));
+            backCard.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            layers[0] = backCard;
+        } else {
+            layers[0] = _resources.getDrawable(R.drawable.card_hidden);
+        }
+        //
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }

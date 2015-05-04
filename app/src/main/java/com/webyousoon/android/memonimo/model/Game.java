@@ -18,7 +18,8 @@ public class Game implements Cloneable {
     private int mSecondPositionChosen = CARD_NO_CHOSEN;
     private List<GameCard> mGameCardList = new ArrayList<GameCard>();
     private Mode mMode;
-    private BackgroundPattern mBackgroundPattern;
+    private String mBackgroundPattern;
+//    private BackgroundPattern mBackgroundPattern;
     private int mNumAttempt = 0;
 
     public enum Mode {
@@ -29,16 +30,17 @@ public class Game implements Cloneable {
     }
 
     public Game(long _id, boolean _finished, int _firstPositionChosen, int _secondPositionChosen,
-                int _numAttempt, String _difficulty) {
+                int _numAttempt, String _difficulty, String _backgroundPattern) {
         this.mId = _id;
         this.mFinished = _finished;
         this.mFirstPositionChosen = _firstPositionChosen;
         this.mSecondPositionChosen = _secondPositionChosen;
         this.mNumAttempt = _numAttempt;
         this.mMode = Mode.valueOf(_difficulty);
+        this.mBackgroundPattern = _backgroundPattern;
     }
 
-    public Game (Mode _mode, int _numFamilyCustom) {
+    public Game (Mode _mode, int _numFamilyCustom, String _backgroundPattern) {
         this.mId = CARD_NO_CHOSEN;
         this.mMode = _mode;
         switch (_mode) {
@@ -54,6 +56,7 @@ public class Game implements Cloneable {
             default:
                 this.mGameCardList = GameCard.getRandomList(_numFamilyCustom);
         }
+        this.mBackgroundPattern = _backgroundPattern;
     }
 
     @Override
@@ -210,11 +213,11 @@ public class Game implements Cloneable {
         return cardFound / 2;
     }
 
-    public BackgroundPattern getBackgroundPattern() {
+    public String getBackgroundPattern() {
         return mBackgroundPattern;
     }
 
-    public void setBackgroundPattern(BackgroundPattern _backgroundPattern) {
+    public void setBackgroundPattern(String _backgroundPattern) {
         this.mBackgroundPattern = _backgroundPattern;
     }
 

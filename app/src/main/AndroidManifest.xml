@@ -43,6 +43,11 @@
                 android:value="com.webyousoon.android.memonimo.MainActivity" />
         </activity>
 
+        <service
+            android:name=".service.BackgroungPatternService"
+            android:exported="false">
+        </service>
+
         <provider
             android:name="com.webyousoon.android.memonimo.data.MemonimoProvider"
             android:authorities="@string/content_authority"
