@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by hackorder on 13/04/2015.
- */
 public class GameCard implements Cloneable {
 
     public enum AnimalGame {
@@ -39,15 +36,18 @@ public class GameCard implements Cloneable {
     private boolean mCardFound = false;
     private boolean mFoundPlayer1 = false;
     private boolean mFoundPlayer2 = false;
-    private boolean mAttempt = false;
+    private boolean mIsAttempt = false;
+    private boolean mIsToReturn = false;
 
     public GameCard(int _codeAnimal, boolean _cardFound,
-                    boolean _foundPlayer1, boolean _foundPlayer2, boolean _attempt) {
+                    boolean _foundPlayer1, boolean _foundPlayer2,
+                    boolean _isFirstAttempt, boolean _isToReturn) {
         this.mAnimalGame = AnimalGame.values()[_codeAnimal];
         this.mCardFound = _cardFound;
         this.mFoundPlayer1 = _foundPlayer1;
         this.mFoundPlayer2 = _foundPlayer2;
-        this.mAttempt = _attempt;
+        this.mIsAttempt = _isFirstAttempt;
+        this.mIsToReturn = _isToReturn;
     }
 
     private GameCard(AnimalGame _animalGame) {
@@ -107,11 +107,23 @@ public class GameCard implements Cloneable {
     }
 
     public boolean isAttempt() {
-        return mAttempt;
+        return mIsAttempt;
     }
 
     public void setAttempt(boolean _attempt) {
-        this.mAttempt = _attempt;
+        this.mIsAttempt = _attempt;
+    }
+
+    public boolean isToReturn() {
+        return mIsToReturn;
+    }
+
+    public void setToReturn(boolean _toReturn) {
+        this.mIsToReturn = _toReturn;
+    }
+
+    public boolean isReturned() {
+        return mIsAttempt || mCardFound;
     }
 
     public boolean isFoundPlayer1() {

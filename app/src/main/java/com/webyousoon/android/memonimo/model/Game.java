@@ -111,10 +111,13 @@ public class Game implements Cloneable {
 
     public void setAttemptFirstPositionChosen() {
         getFirstCardChosen().setAttempt(true);
+        getFirstCardChosen().setToReturn(true);
     }
 
     public void setAttemptSecondPositionChosen() {
         getSecondCardChosen().setAttempt(true);
+        getSecondCardChosen().setToReturn(true);
+        getFirstCardChosen().setToReturn(false);
     }
 
     public void chooseFirstCard(int _position) {
@@ -183,7 +186,9 @@ public class Game implements Cloneable {
     public void initNewTurn() {
         //
         getFirstCardChosen().setAttempt(false);
+        getFirstCardChosen().setToReturn(false);
         getSecondCardChosen().setAttempt(false);
+        getSecondCardChosen().setToReturn(false);
         //
         mFirstPositionChosen = -1;
         mSecondPositionChosen = -1;

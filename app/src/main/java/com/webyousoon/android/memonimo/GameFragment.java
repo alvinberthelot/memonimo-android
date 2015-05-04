@@ -1,6 +1,8 @@
 package com.webyousoon.android.memonimo;
 
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -155,6 +157,11 @@ public class GameFragment extends Fragment {
                     } else {
                         // on affecte la position sélectionnée
                         mGame.chooseFirstCard(position);
+
+                        finishChoice();
+
+                        // Notification du changement d'état pour la vue
+                        gridGameAdapter.notifyDataSetChanged();
                     }
                 }
                 // deuxième coup du tour de jeu
@@ -177,31 +184,37 @@ public class GameFragment extends Fragment {
 
                         mGame.checkFamilyFound();
 
+                        if (mGame.isAllCardsFound()) {
+                            //
+                            mGame.setFinished(true);
+
+                            // Affichage d'une fenêtre pour recommencer une partie ou retourner à l'accueil
+                            RestartDialogFragment restartDialogFragment = RestartDialogFragment.newInstance(
+                                    mGame.getId(),
+                                    mGame.getMode().toString());
+                            restartDialogFragment.show(getActivity().getSupportFragmentManager(), "restartDialogFragment");
+
+                        }
+
+                        finishChoice();
+
+                        // Notification du changement d'état pour la vue
+                        gridGameAdapter.notifyDataSetChanged();
+
                     }
                 }
 
-                if (mGame.isAllCardsFound()) {
-                    //
-                    mGame.setFinished(true);
-
-                    // Affichage d'une fenêtre pour recommencer une partie ou retourner à l'accueil
-                    RestartDialogFragment restartDialogFragment = RestartDialogFragment.newInstance(
-                            mGame.getId(),
-                            mGame.getMode().toString());
-                    restartDialogFragment.show(getActivity().getSupportFragmentManager(), "restartDialogFragment");
-
-                }
-
-                long idGame = MemonimoProvider.saveGame(getActivity().getContentResolver(), mGame);
-                mGame.setId(idGame);
-
-                // Notification du changement d'état de la partie à l'activité pour les autres fragments
-                mGameCallback.onGameChanged(mGame);
-                // Notification du changement d'état pour la vue
-                gridGameAdapter.notifyDataSetChanged();
             }
         });
 
+    }
+
+    private void finishChoice() {
+        // Enregistrement de la partie en base via le Provider
+        long idGame = MemonimoProvider.saveGame(getActivity().getContentResolver(), mGame);
+        mGame.setId(idGame);
+        // Notification du changement d'état de la partie à l'activité pour les autres fragments
+        mGameCallback.onGameChanged(mGame);
     }
 
     @Override

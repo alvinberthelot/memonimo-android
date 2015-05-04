@@ -1,41 +1,38 @@
 package com.webyousoon.android.memonimo.adapters;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.webyousoon.android.memonimo.data.ProviderUtilities;
 import com.webyousoon.android.memonimo.model.GameCard;
 import com.webyousoon.android.memonimo.R;
-import com.webyousoon.android.memonimo.data.MemonimoContract;
 
 import java.util.List;
 
-/**
- * Created by hackorder on 17/04/2015.
- */
 public class GridGameAdapter extends BaseAdapter {
+
+    private static final int FLIP_DURATION = 150;
 
     private Context mContext;
     private List<GameCard> mGameCardList;
 
     private static class CardGameViewHolder {
-        public final ImageView animalView;
+        public final ImageView mFrontCardView;
+        public final ImageView mBackCardView;
 
         public CardGameViewHolder(View _view) {
-            animalView = (ImageView) _view.findViewById(R.id.gi_game_animal);
+            mFrontCardView = (ImageView) _view.findViewById(R.id.gi_front_card);
+            mBackCardView = (ImageView) _view.findViewById(R.id.gi_back_card);
         }
     }
-
 
     public GridGameAdapter(Context context, List<GameCard> _gameCardList) {
         this.mContext = context;
@@ -54,7 +51,6 @@ public class GridGameAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int _position) {
-//        ((GameCard) getItem(_position)).
         return 0;
     }
 
@@ -64,97 +60,63 @@ public class GridGameAdapter extends BaseAdapter {
         // Récupération du layout approprié
         View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item_game, _parent, false);
 
-        CardGameViewHolder viewHolder = new CardGameViewHolder(view);
+        final CardGameViewHolder viewHolder = new CardGameViewHolder(view);
         view.setTag(viewHolder);
 
         GameCard gameCard = getItem(_position);
 
-//        String idAnimal = "" + gameCard.getAnimalGame().getCode();
-//        viewHolder.animalidView.setText(idAnimal);
+        viewHolder.mFrontCardView.setImageDrawable(getFrontCardDrawable(gameCard, mContext.getResources()));
+        viewHolder.mBackCardView.setImageDrawable(getBackCardDrawable(gameCard, mContext.getResources()));
 
-        viewHolder.animalView.setImageDrawable(getCardDrawable(gameCard, mContext.getResources()));
+        // Par défaut la carte représentant la valeur est cachée
+        viewHolder.mFrontCardView.setVisibility(View.GONE);
+
+        // On vérifie si la carte est retournée
+        if (gameCard.isReturned()) {
+            // On vérifie si la carte va être retournée (pour l'animation)
+            if (gameCard.isToReturn()) {
+                ObjectAnimator flipOut = ObjectAnimator.ofFloat(viewHolder.mBackCardView, "rotationY", 0f, 90f);
+                flipOut.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) { }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        viewHolder.mBackCardView.setVisibility(View.GONE);
+                        ObjectAnimator flipIn = ObjectAnimator.ofFloat(viewHolder.mFrontCardView, "rotationY", -90f, 0f);
+                        flipIn.setDuration(FLIP_DURATION);
+                        flipIn.start();
+                        viewHolder.mFrontCardView.setVisibility(View.VISIBLE);
+                    }
+                    @Override
+                    public void onAnimationCancel(Animator animation) { }
+                    @Override
+                    public void onAnimationRepeat(Animator animation) { }
+                });
+                flipOut.setDuration(FLIP_DURATION);
+                flipOut.start();
+
+            } else {
+                viewHolder.mBackCardView.setVisibility(View.GONE);
+                viewHolder.mFrontCardView.setVisibility(View.VISIBLE);
+            }
+
+        }
 
         return view;
-
-
-//        ImageView imageView;
-//
-//
-//
-//
-//
-//        if (convertView == null) {
-//            // if it's not recycled, initialize some attributes
-//            imageView = new ImageView(mContext);
-////            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
-////            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageView.setPadding(8, 8, 8, 8);
-//        } else {
-//            imageView = (ImageView) convertView;
-//        }
-//
-//
-//        Resources resources = mContext.getResources();
-//        imageView.setImageDrawable(getCardDrawable(mCardGameList.get(position), resources));
-////        imageView.setImageResource(getCardDrawable(mCardGameList.get(position)));
-//        return imageView;
     }
 
-//    @Override
-//    public void bindView(View view, Context context, Cursor cursor) {
-//
-//        //
-//        CardGameViewHolder viewHolder = (CardGameViewHolder) view.getTag();
-//
-//        String idAnimal = cursor.getString(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD));
-//
-////        viewHolder.animalidView.setText("tutu");
-//        viewHolder.animalidView.setText(idAnimal);
-//
-////        viewHolder.positionView.setText(cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_POSITION));
-////
-//
-//        GameCard gameCard = ProviderUtilities.convertGameCardCursorToGameCardModel(cursor);
-//
-//        viewHolder.animalView.setImageDrawable(getCardDrawable(gameCard, mContext.getResources()));
-//    }
-//
-//    @Override
-//    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-//
-//        // Récupération du layout approprié
-//        View view = LayoutInflater.from(context).inflate(R.layout.grid_item_game, parent, false);
-//
-//        CardGameViewHolder viewHolder = new CardGameViewHolder(view);
-//        view.setTag(viewHolder);
-//
-//        return view;
-//    }
-
-//    private ImageView getCardView() {
-//        ImageView imageView;
-//
-//        if (convertView == null) {
-//            // if it's not recycled, initialize some attributes
-//            imageView = new ImageView(mContext);
-////            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
-////            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageView.setPadding(8, 8, 8, 8);
-//        } else {
-//            imageView = (ImageView) convertView;
-//        }
-//
-//
-//        Resources resources = mContext.getResources();
-//        imageView.setImageDrawable(getCardDrawable(mCardGameList.get(position), resources));
-////        imageView.setImageResource(getCardDrawable(mCardGameList.get(position)));
-//        return imageView;
-//    }
-
-    public static LayerDrawable getCardDrawable(GameCard _cardGame, Resources _resources ) {
+    public static LayerDrawable getFrontCardDrawable(GameCard _cardGame, Resources _resources ) {
 
         Drawable[] layers = new Drawable[2];
         layers[0] = _resources.getDrawable(getInsideDrawable(_cardGame));
+        layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
+        return new LayerDrawable(layers);
+    }
+
+    public static LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
+
+        Drawable[] layers = new Drawable[2];
+        layers[0] = _resources.getDrawable(R.drawable.card_hidden);
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }
@@ -170,11 +132,7 @@ public class GridGameAdapter extends BaseAdapter {
     }
 
     public static int getInsideDrawable(GameCard _cardGame) {
-        if (_cardGame.isCardFound() || _cardGame.isAttempt()) {
-            return getAnimalDrawable(_cardGame.getAnimalGame());
-        } else {
-            return R.drawable.card_hidden;
-        }
+        return getAnimalDrawable(_cardGame.getAnimalGame());
     }
 
     private static int getAnimalDrawable(GameCard.AnimalGame _animalGame) {

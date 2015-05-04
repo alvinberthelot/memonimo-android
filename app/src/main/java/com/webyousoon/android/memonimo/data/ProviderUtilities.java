@@ -103,10 +103,8 @@ public class ProviderUtilities {
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT)))
-        );
-
-
+                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT))),
+                false);
 
         return gameCard;
     }
