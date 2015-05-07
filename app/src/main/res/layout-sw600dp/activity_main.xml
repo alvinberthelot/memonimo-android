@@ -3,19 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/container_start"
-        android:layout_width="wrap_content"
+    <fragment
+        android:id="@+id/container_main"
+        android:name="com.webyousoon.android.memonimo.StartFragment"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
-    </FrameLayout>
+    </fragment>
 
     <fragment
-        android:id="@+id/fragment_overview"
-        android:name="com.webyousoon.android.memonimo.OverviewFragment"
-        android:layout_width="wrap_content"
+        android:id="@+id/container_annex"
+        android:name="com.webyousoon.android.memonimo.GameListFragment"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+    </fragment>
 
 </LinearLayout>
 

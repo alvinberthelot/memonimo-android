@@ -2,6 +2,7 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -23,30 +24,23 @@ public class MainActivity extends ActionBarActivity {
 
     private ShareActionProvider mShareActionProvider;
     private Intent mBackgroundPatternService;
+//    private boolean mIsTabletLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_start, new StartFragment())
+                    .add(R.id.container_main, new StartFragment())
                     .commit();
         }
-
 
         // Initialisation du service pour récupérer les patterns
         mBackgroundPatternService = new Intent(this, BackgroungPatternService.class);
         // lancement du service pour récupérer les patterns
         startService(mBackgroundPatternService);
-
-
-
-
-
-
-
-
     }
 
     @Override

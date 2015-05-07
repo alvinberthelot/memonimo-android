@@ -80,8 +80,6 @@ public class GameActivity extends ActionBarActivity
 
 
 
-
-
     }
 
     private long getIdGame(Bundle _savedInstanceState) {
@@ -168,25 +166,6 @@ public class GameActivity extends ActionBarActivity
             // Si présent on met à jour le fragment
             summaryGameFragment.updateSummaryView(_game);
         }
-
-//        if (mIsTabletLayout) {
-//
-//
-//
-//
-//
-//            Bundle args = new Bundle();
-//            args.putParcelable(GameFragment.ARGUMENT_ID_GAME, _game);
-//
-//            SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
-//            summaryGameFragment.setArguments(args);
-//
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.container_summary_game,
-//                            summaryGameFragment,
-//                            FRAGMENT_TAG_SUMMARY_GAME)
-//                    .commit();
-//        }
     }
 
     private void getBackGame() {

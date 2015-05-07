@@ -20,7 +20,7 @@ public class StartFragment extends Fragment {
     Button mBtnNewHardGame;
     Button mBtnNewCustomGame;
     Button mBtnGameUnfinished;
-    Button mBtnOverviewSettings;
+//    Button mBtnOverviewSettings;
 
     public StartFragment() {
         // Required empty public constructor
@@ -35,11 +35,11 @@ public class StartFragment extends Fragment {
         mBtnNewNormalGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_normal_game, getActivity().getAssets());
         mBtnNewHardGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_hard_game, getActivity().getAssets());
         mBtnNewCustomGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_custom_game, getActivity().getAssets());
-        mBtnGameUnfinished = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_game_unfinished, getActivity().getAssets());
+//        mBtnOverviewSettings = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_overview_settings, getActivity().getAssets());
 
         // Traitement des cas smartphone et tablette (fragments différents)
-        if (rootView.findViewById(R.id.btn_overview_settings) != null) {
-            mBtnOverviewSettings = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_overview_settings, getActivity().getAssets());
+        if (rootView.findViewById(R.id.btn_game_unfinished) != null) {
+            mBtnGameUnfinished = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_game_unfinished, getActivity().getAssets());
         }
 
 

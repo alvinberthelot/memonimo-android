@@ -62,8 +62,10 @@ public class GameListFragment extends Fragment {
                 // Récupération de l'identifiant de la partie
                 long idGame = listSummaryGameAdapter.getIdItem(position);
 
-                ((Callback) getActivity())
-                        .onItemSelected(MemonimoContract.GameEntry.buildGameUri(idGame));
+                Intent intent = new Intent(getActivity(), GameActivity.class)
+                        // Envoi de l'identifiant de la partie
+                        .putExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, idGame);
+                startActivity(intent);
             }
         });
 

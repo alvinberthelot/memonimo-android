@@ -8,6 +8,7 @@
     <string name="action_start_normal_game">Partie normale</string>
     <string name="action_start_hard_game">Partie difficile</string>
     <string name="action_find_game">Finir une partie</string>
+    <string name="action_finish_game">Finir cette partie</string>
     <string name="question_new_game">Une autre partie ?</string>
     <string name="action_go_back_home">Accueil</string>
     <string name="action_new_game">Nouvelle partie</string>

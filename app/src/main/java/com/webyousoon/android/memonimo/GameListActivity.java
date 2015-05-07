@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.webyousoon.android.memonimo.model.Game;
 
 
 public class GameListActivity extends ActionBarActivity implements GameListFragment.Callback {
@@ -79,6 +82,7 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
 
     @Override
     public void onItemSelected(Uri _gameUri) {
+
         if (mIsTabletLayout) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -93,7 +97,7 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
                     .replace(R.id.container_annex, fragment, FRAGMENT_TAG_SUMMARY_GAME)
                     .commit();
         } else {
-            // Envoi de l'id via l'Intent
+            // Envoi de l'URI de la partie via l'Intent
             Intent intent = new Intent(this, GameActivity.class).setData(_gameUri);
             startActivity(intent);
         }

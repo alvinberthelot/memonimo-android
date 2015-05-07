@@ -50,14 +50,4 @@
         android:drawableLeft="@drawable/icon_custom"
         android:onClick="startCustomGame"/>
 
-    <Button
-        android:id="@+id/btn_game_unfinished"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_find_game"
-        android:textSize="@dimen/font_size_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="findGame"/>
-
 </LinearLayout>
