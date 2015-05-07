@@ -140,4 +140,11 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
         boolean isFinished = DbUtilities.getBooleanValue(_cursor.getString(COL_GAME_FINISHED));
         mTextDifficulty.setText("FINIE : " + isFinished);
     }
+
+    public void updateSummaryView(Game _game) {
+        mGame = _game;
+        mTextDifficulty.setText("Difficulté : " + mGame.getMode().toString());
+        mTextNumGame.setText("Familles trouvées : " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
+        mTextNumAttempt.setText("Tentatives : " + mGame.getNumAttempt());
+    }
 }
