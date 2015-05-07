@@ -63,6 +63,7 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
     private TextView mTextNumAttempt;
     private TextView mTextDifficulty;
     private ImageView mImgDifficulty;
+    private ImageView mImgPattern;
 
 
     private Game mGame;

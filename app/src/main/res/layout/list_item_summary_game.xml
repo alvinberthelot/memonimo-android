@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent">
+
+    <com.webyousoon.android.memonimo.view.CircularImageView
+        android:id="@+id/li_summary_game_pattern"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        custom:border="true"
+        custom:border_width="2dp"
+        custom:border_color="@color/mn_brown" />
 
     <ImageView
         android:id="@+id/li_summary_game_difficulty"
@@ -24,10 +34,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right">
 
-
+    </FrameLayout>
 
 </LinearLayout>

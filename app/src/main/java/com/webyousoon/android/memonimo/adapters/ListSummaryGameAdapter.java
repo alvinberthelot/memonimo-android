@@ -3,6 +3,10 @@ package com.webyousoon.android.memonimo.adapters;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +15,21 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.webyousoon.android.memonimo.MemonimoUtilities;
 import com.webyousoon.android.memonimo.R;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
 
-/**
- * Created by hackorder on 17/04/2015.
- */
 public class ListSummaryGameAdapter extends CursorAdapter {
 
 
     private static class SummaryGameViewHolder {
+        public final ImageView mPatternView;
         public final ImageView difficultyView;
         public final TextView titleView;
         public final TextView finishedView;
 
         public SummaryGameViewHolder(View view) {
+            mPatternView = (ImageView) view.findViewById(R.id.li_summary_game_pattern);
             difficultyView = (ImageView) view.findViewById(R.id.li_summary_game_difficulty);
             titleView = (TextView) view.findViewById(R.id.li_summary_game_title);
             finishedView = (TextView) view.findViewById(R.id.li_summary_game_finished);
@@ -42,6 +46,12 @@ public class ListSummaryGameAdapter extends CursorAdapter {
 
         //
         SummaryGameViewHolder viewHolder = (SummaryGameViewHolder) view.getTag();
+
+        String imgEncoded = cursor.getString(cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_PATTERN));
+        Bitmap bitmap = MemonimoUtilities.decodeBase64(imgEncoded);
+        BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
+        backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        viewHolder.mPatternView.setImageDrawable(backgroundDrawable);
 
         String title = "Partie #" + cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
         viewHolder.titleView.setText(title);
