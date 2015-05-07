@@ -28,9 +28,7 @@ public class GridGameAdapter extends BaseAdapter {
     private static final int FLIP_DURATION = 150;
 
     private Context mContext;
-//    private List<GameCard> mGameCardList;
     private Game mGame;
-    private LayerDrawable mBackCardDrawable;
 
     private static class CardGameViewHolder {
         public final ImageView mFrontCardView;
@@ -46,12 +44,6 @@ public class GridGameAdapter extends BaseAdapter {
         this.mContext = context;
         this.mGame = _game;
     }
-
-
-//    public GridGameAdapter(Context context, List<GameCard> _gameCardList) {
-//        this.mContext = context;
-//        this.mGameCardList = _gameCardList;
-//    }
 
     @Override
     public int getCount() {
@@ -120,38 +112,15 @@ public class GridGameAdapter extends BaseAdapter {
     }
 
     public static LayerDrawable getFrontCardDrawable(GameCard _cardGame, Resources _resources ) {
-
         Drawable[] layers = new Drawable[2];
         layers[0] = _resources.getDrawable(getInsideDrawable(_cardGame));
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }
 
-
-
-    public LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
-
-        LayerDrawable backCardDrawable;
-
-        if (mBackCardDrawable == null) {
-            mBackCardDrawable = generateBackCardDrawable(_cardGame, _resources);
-        }
-
-        return mBackCardDrawable;
-    }
-
-    public LayerDrawable generateBackCardDrawable(GameCard _cardGame, Resources _resources ) {
-
+    public static LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
         Drawable[] layers = new Drawable[2];
-        //
-        if (mGame.getBackgroundPattern() != null) {
-            BitmapDrawable backCard = new BitmapDrawable(MemonimoUtilities.decodeBase64(mGame.getBackgroundPattern()));
-            backCard.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-            layers[0] = backCard;
-        } else {
-            layers[0] = _resources.getDrawable(R.drawable.card_hidden);
-        }
-        //
+        layers[0] = _resources.getDrawable(R.drawable.card_hidden);
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }
