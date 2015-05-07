@@ -39,7 +39,7 @@ public class BackgroungPatternService extends IntentService {
         BufferedReader reader = null;
         String randomPatternJsonStr = null;
 
-        String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json";
+        String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json&numResults=4";
 //            String urlColorLovers = "http://www.colourlovers.com/api/patterns/random?format=json";
 
         try {

@@ -65,7 +65,7 @@ public class GameFragment extends Fragment {
 
     private Game mGame;
 
-//    private List<BackgroundPattern> mBackgroundPatternList;
+    private List<BackgroundPattern> mBackgroundPatternList;
 
     // Views
     private View mRootView;
@@ -104,21 +104,18 @@ public class GameFragment extends Fragment {
         // Récupération de la partie via le Provider
         mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
 
-
-
         BackgroundPattern backgroundPattern = MemonimoProvider.restoreBackgroundPatternByIdGame(
                 getActivity().getContentResolver(), idGame);
 
         if (backgroundPattern == null) {
             // Récupération des patterns stockés en base
-//            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
-//
-//            if (mBackgroundPatternList == null || mBackgroundPatternList.size() == 0) {
-////                RandomPatternTask randomPatternTask = new RandomPatternTask();
-////                randomPatternTask.execute();
-//            } else {
-////                chooseBackground();
-//            }
+            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+
+            if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
+                int random = new Random().nextInt(mBackgroundPatternList.size());
+                backgroundPattern = mBackgroundPatternList.get(random);
+                mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+            }
 
         } else {
             // Affectation du background
