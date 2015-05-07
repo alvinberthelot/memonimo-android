@@ -40,7 +40,6 @@ public class BackgroungPatternService extends IntentService {
         String randomPatternJsonStr = null;
 
         String urlColorLovers = "http://www.colourlovers.com/api/patterns?format=json&numResults=4";
-//            String urlColorLovers = "http://www.colourlovers.com/api/patterns/random?format=json";
 
         try {
             URL url = new URL(urlColorLovers);

@@ -79,8 +79,6 @@ public class GameFragment extends Fragment {
         public void onGameChanged(Game game);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -92,10 +90,6 @@ public class GameFragment extends Fragment {
 
 
         return mRootView;
-    }
-
-    private void createGame() {
-
     }
 
     private void startGame() {
@@ -225,18 +219,6 @@ public class GameFragment extends Fragment {
             throw new ClassCastException(_activity.toString()
                     + " must implement OnGameListener");
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        Log.d(LOG_TAG, ".onPause()");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        Log.d(LOG_TAG, ".onResume()");
     }
 
 }

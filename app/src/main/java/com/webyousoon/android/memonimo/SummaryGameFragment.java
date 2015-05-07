@@ -102,15 +102,6 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
         return rootView;
     }
 
-    public void updateSummaryView(Game _game) {
-        mGame = _game;
-
-        mTextDifficulty.setText("Difficulté : " + mGame.getMode().toString());
-        mTextNumGame.setText("Familles trouvées : " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
-        mTextNumAttempt.setText("Tentatives : " + mGame.getNumAttempt());
-
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(LOADER, null, this);
@@ -135,15 +126,18 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor _cursor) {
         if (_cursor != null && _cursor.moveToFirst()) {
-
-            mTextNumGame.setText("PARTIE #" + _cursor.getLong(COL_GAME_ID));
-
-            boolean isFinished = DbUtilities.getBooleanValue(_cursor.getString(COL_GAME_FINISHED));
-            mTextDifficulty.setText("FINIE : " + isFinished);
-
+            updateFragment(_cursor);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) { }
+
+    private void updateFragment(Cursor _cursor) {
+
+        mTextNumGame.setText("PARTIE #" + _cursor.getLong(COL_GAME_ID));
+
+        boolean isFinished = DbUtilities.getBooleanValue(_cursor.getString(COL_GAME_FINISHED));
+        mTextDifficulty.setText("FINIE : " + isFinished);
+    }
 }
