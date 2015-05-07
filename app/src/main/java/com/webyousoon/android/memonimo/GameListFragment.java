@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.webyousoon.android.memonimo.adapters.ListSummaryGameAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
@@ -19,6 +20,7 @@ public class GameListFragment extends Fragment {
 
     private final String LOG_TAG = GameListFragment.class.getSimpleName();
 
+    private TextView mTextViewTitle;
 
     /**
      * Interface pour indiquer à l'activité parente qu'un nouvel item a été sélectionné
@@ -35,6 +37,13 @@ public class GameListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_game_list, container, false);
+
+
+        mTextViewTitle = (TextView) rootView.findViewById(R.id.tv_title);
+        mTextViewTitle.setTypeface(MemonimoUtilities.getCustomFont(getActivity().getAssets()));
+
+
+
         ListView summaryGameListView = (ListView) rootView.findViewById(R.id.lv_summary_game);
 
         // Récupération des données via le Content Provider

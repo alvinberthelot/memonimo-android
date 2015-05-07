@@ -26,13 +26,11 @@ public class ListSummaryGameAdapter extends CursorAdapter {
         public final ImageView mPatternView;
         public final ImageView difficultyView;
         public final TextView titleView;
-        public final TextView finishedView;
 
         public SummaryGameViewHolder(View view) {
             mPatternView = (ImageView) view.findViewById(R.id.li_summary_game_pattern);
             difficultyView = (ImageView) view.findViewById(R.id.li_summary_game_difficulty);
             titleView = (TextView) view.findViewById(R.id.li_summary_game_title);
-            finishedView = (TextView) view.findViewById(R.id.li_summary_game_finished);
         }
     }
 
@@ -54,10 +52,8 @@ public class ListSummaryGameAdapter extends CursorAdapter {
         viewHolder.mPatternView.setImageDrawable(backgroundDrawable);
 
         String title = "Partie #" + cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
+        viewHolder.titleView.setTypeface(MemonimoUtilities.getCustomFont(context.getAssets()));
         viewHolder.titleView.setText(title);
-
-        String finished = cursor.getString(cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_FINISHED));
-        viewHolder.finishedView.setText(finished);
     }
 
     @Override
@@ -76,53 +72,4 @@ public class ListSummaryGameAdapter extends CursorAdapter {
         Cursor cursor = (Cursor) getItem(_position);
         return cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
     }
-
-    //    @Override
-//    public int getCount() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return null;
-//    }
-//
-//    @Override
-//    public long getItemId(int position) {
-//        return 0;
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        return null;
-//    }
-//
-//    // create a new ImageView for each item referenced by the Adapter
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        View view = LayoutInflater.from(context).
-//
-//
-//        ImageView imageView;
-//
-//
-//
-//
-//
-//        if (convertView == null) {
-//            // if it's not recycled, initialize some attributes
-//            imageView = new ImageView(mContext);
-////            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
-////            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageView.setPadding(8, 8, 8, 8);
-//        } else {
-//            imageView = (ImageView) convertView;
-//        }
-//
-//
-//        Resources resources = mContext.getResources();
-//        imageView.setImageDrawable(getCardDrawable(mCardGameList.get(position), resources));
-////        imageView.setImageResource(getCardDrawable(mCardGameList.get(position)));
-//        return imageView;
-//    }
 }

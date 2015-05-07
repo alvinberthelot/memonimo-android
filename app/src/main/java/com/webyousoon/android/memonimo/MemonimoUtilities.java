@@ -35,10 +35,15 @@ public class MemonimoUtilities {
         return shareIntent;
     }
 
-    public static Button buildButtonWithFont(View _rootView, int _idResource ,AssetManager _assetManager) {
+    public static Button buildButtonWithFont(View _rootView, int _idResource , AssetManager _assetManager) {
         Button button = (Button) _rootView.findViewById(_idResource);
         Typeface typeface = Typeface.createFromAsset(_assetManager, "fonts/dimbo_regular.ttf");
         button.setTypeface(typeface);
         return button;
+    }
+
+    public static Typeface getCustomFont(AssetManager _assetManager) {
+        Typeface typeface = Typeface.createFromAsset(_assetManager, "fonts/dimbo_regular.ttf");
+        return typeface;
     }
 }

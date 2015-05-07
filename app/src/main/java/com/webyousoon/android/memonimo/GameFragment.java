@@ -1,50 +1,25 @@
 package com.webyousoon.android.memonimo;
 
-
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.webyousoon.android.memonimo.adapters.GridGameAdapter;
+import com.webyousoon.android.memonimo.data.MemonimoContract;
 import com.webyousoon.android.memonimo.data.MemonimoProvider;
 import com.webyousoon.android.memonimo.model.BackgroundPattern;
 import com.webyousoon.android.memonimo.model.Game;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -98,23 +73,31 @@ public class GameFragment extends Fragment {
         // Récupération de la partie via le Provider
         mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
 
-        BackgroundPattern backgroundPattern = MemonimoProvider.restoreBackgroundPatternByIdGame(
-                getActivity().getContentResolver(), idGame);
 
-        if (backgroundPattern == null) {
-            // Récupération des patterns stockés en base
-            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+        Bitmap bitmap = MemonimoUtilities.decodeBase64(mGame.getBackgroundPattern());
+        BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
+        backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        mRootView.setBackgroundDrawable(backgroundDrawable);
 
-            if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
-                int random = new Random().nextInt(mBackgroundPatternList.size());
-                backgroundPattern = mBackgroundPatternList.get(random);
-                mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-            }
 
-        } else {
-            // Affectation du background
-            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-        }
+
+//        BackgroundPattern backgroundPattern = MemonimoProvider.restoreBackgroundPatternByIdGame(
+//                getActivity().getContentResolver(), idGame);
+//
+//        if (backgroundPattern == null) {
+//            // Récupération des patterns stockés en base
+//            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
+//
+//            if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
+//                int random = new Random().nextInt(mBackgroundPatternList.size());
+//                backgroundPattern = mBackgroundPatternList.get(random);
+//                mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+//            }
+//
+//        } else {
+//            // Affectation du background
+//            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
+//        }
 
 
         GridView gridGameView = (GridView) mRootView.findViewById(R.id.gridMemory);

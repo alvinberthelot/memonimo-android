@@ -1,6 +1,5 @@
 package com.webyousoon.android.memonimo;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,12 +14,11 @@ public class StartFragment extends Fragment {
 
     private final String LOG_TAG = StartFragment.class.getSimpleName();
 
-    Button mBtnNewEasyGame;
-    Button mBtnNewNormalGame;
-    Button mBtnNewHardGame;
-    Button mBtnNewCustomGame;
-    Button mBtnGameUnfinished;
-//    Button mBtnOverviewSettings;
+    private Button mBtnNewEasyGame;
+    private Button mBtnNewNormalGame;
+    private Button mBtnNewHardGame;
+    private Button mBtnNewCustomGame;
+    private Button mBtnGameUnfinished;
 
     public StartFragment() {
         // Required empty public constructor
@@ -35,13 +33,11 @@ public class StartFragment extends Fragment {
         mBtnNewNormalGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_normal_game, getActivity().getAssets());
         mBtnNewHardGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_hard_game, getActivity().getAssets());
         mBtnNewCustomGame = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_new_custom_game, getActivity().getAssets());
-//        mBtnOverviewSettings = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_overview_settings, getActivity().getAssets());
 
         // Traitement des cas smartphone et tablette (fragments différents)
         if (rootView.findViewById(R.id.btn_game_unfinished) != null) {
             mBtnGameUnfinished = MemonimoUtilities.buildButtonWithFont(rootView, R.id.btn_game_unfinished, getActivity().getAssets());
         }
-
 
         return rootView;
     }

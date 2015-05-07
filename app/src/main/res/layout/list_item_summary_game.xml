@@ -4,7 +4,8 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="64dp" >
 
     <com.webyousoon.android.memonimo.view.CircularImageView
         android:id="@+id/li_summary_game_pattern"
@@ -12,7 +13,8 @@
         android:layout_height="64dp"
         custom:border="true"
         custom:border_width="2dp"
-        custom:border_color="@color/mn_brown" />
+        custom:border_color="@color/mn_brown"
+        android:layout_marginRight="16dp" />
 
     <ImageView
         android:id="@+id/li_summary_game_difficulty"
@@ -27,12 +29,14 @@
         <TextView
             android:id="@+id/li_summary_game_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_large_material" />
 
         <TextView
             android:id="@+id/li_summary_game_finished"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_text_size_large_material" />
 
     </LinearLayout>
 

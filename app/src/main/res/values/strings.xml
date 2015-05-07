@@ -20,7 +20,7 @@
     <string name="activity_settings_title">Configuration</string>
 
     <!-- GAME -->
-    <string name="game_list_label">Liste des parties non terminées</string>
+    <string name="game_list_label">Parties non terminées</string>
 
     <!-- SETTINGS -->
     <string name="settings_label_num_player">Nombre de joueurs</string>
