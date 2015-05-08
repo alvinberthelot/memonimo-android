@@ -46,10 +46,12 @@ public class ListSummaryGameAdapter extends CursorAdapter {
         SummaryGameViewHolder viewHolder = (SummaryGameViewHolder) view.getTag();
 
         String imgEncoded = cursor.getString(cursor.getColumnIndex(MemonimoContract.GameEntry.COLUMN_PATTERN));
-        Bitmap bitmap = MemonimoUtilities.decodeBase64(imgEncoded);
-        BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
-        backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        viewHolder.mPatternView.setImageDrawable(backgroundDrawable);
+        if (null != imgEncoded) {
+            Bitmap bitmap = MemonimoUtilities.decodeBase64(imgEncoded);
+            BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
+            backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            viewHolder.mPatternView.setImageDrawable(backgroundDrawable);
+        }
 
         String title = "Partie #" + cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
         viewHolder.titleView.setTypeface(MemonimoUtilities.getCustomFont(context.getAssets()));

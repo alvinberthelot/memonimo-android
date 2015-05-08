@@ -59,10 +59,7 @@ public class GameFragment extends Fragment {
 
         mRootView = inflater.inflate(R.layout.fragment_game, container, false);
 
-
-
         startGame();
-
 
         return mRootView;
     }
@@ -73,11 +70,12 @@ public class GameFragment extends Fragment {
         // Récupération de la partie via le Provider
         mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
 
-
-        Bitmap bitmap = MemonimoUtilities.decodeBase64(mGame.getBackgroundPattern());
-        BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
-        backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        mRootView.setBackgroundDrawable(backgroundDrawable);
+        if (null != mGame.getBackgroundPattern()) {
+            Bitmap bitmap = MemonimoUtilities.decodeBase64(mGame.getBackgroundPattern());
+            BitmapDrawable backgroundDrawable = new BitmapDrawable(bitmap);
+            backgroundDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            mRootView.setBackgroundDrawable(backgroundDrawable);
+        }
 
 
 

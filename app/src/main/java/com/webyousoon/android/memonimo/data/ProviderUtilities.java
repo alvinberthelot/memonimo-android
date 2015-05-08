@@ -59,7 +59,7 @@ public class ProviderUtilities {
             ContentValues value = new ContentValues();
             value.put(MemonimoContract.GameCardEntry.COLUMN_POSITION, index);
             value.put(MemonimoContract.GameCardEntry.COLUMN_ID_GAME, _game.getId());
-            value.put(MemonimoContract.GameCardEntry.COLUMN_ID_CARD, cardGame.getAnimalGame().getCode());
+            value.put(MemonimoContract.GameCardEntry.COLUMN_CODE_ANIMAL, cardGame.getAnimalGame().getCode());
             value.put(MemonimoContract.GameCardEntry.COLUMN_FOUND, cardGame.isCardFound());
             value.put(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT, cardGame.isAttempt());
 
@@ -101,7 +101,7 @@ public class ProviderUtilities {
     public static GameCard convertGameCardCursorToGameCardModel(Cursor _cursor) {
 
         GameCard gameCard = new GameCard(
-                _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD)),
+                _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_CODE_ANIMAL)),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT))),
                 false);

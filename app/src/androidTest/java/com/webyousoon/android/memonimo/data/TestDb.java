@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
@@ -32,17 +30,9 @@ public class TestDb extends AndroidTestCase {
     public void testCreateDb() throws Throwable {
         createDb();
     }
-    // Tests sur l'insertion des données dans la table "card"
-    public void testCardTable() throws Throwable {
-        insertIntoCardTable();
-    }
     // Tests sur l'insertion des données dans la table "game"
     public void testGameTable() throws Throwable {
         insertIntoGameTable();
-    }
-    // Tests sur l'insertion des données dans la table "turn"
-    public void testTurnTable() throws Throwable {
-        insertIntoTurnTable();
     }
     // Tests sur l'insertion des données dans la table "game_card"
     public void testGameCardTable() throws Throwable {
@@ -59,8 +49,6 @@ public class TestDb extends AndroidTestCase {
         // Android metadata (db version information)
         final HashSet<String> tableNameHashSet = new HashSet<String>();
         tableNameHashSet.add(GameEntry.TABLE_NAME);
-        tableNameHashSet.add(CardEntry.TABLE_NAME);
-        tableNameHashSet.add(TurnEntry.TABLE_NAME);
         tableNameHashSet.add(GameCardEntry.TABLE_NAME);
         tableNameHashSet.add(PatternEntry.TABLE_NAME);
 
@@ -106,44 +94,6 @@ public class TestDb extends AndroidTestCase {
         assertTrue("Error: The database doesn't contain all of the required columns",
                 locationColumnHashSet.isEmpty());
         db.close();
-    }
-
-    public long insertIntoCardTable() {
-        // Récupération de la base SQLite
-        SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
-        // Récupération d'un jeu de données pour le test
-        ContentValues testValues = TestUtilities.createCardValues();
-
-        // Vérification de l'insertion
-        long idGenerated;
-        idGenerated = db.insert(CardEntry.TABLE_NAME, null, testValues);
-        assertTrue(idGenerated != -1);
-
-        // Requête de récupération de données via la table
-        Cursor cursor = db.query(
-                CardEntry.TABLE_NAME, // Table
-                null, // Colonnes interogées
-                null, // Colonnes pour la condition WHERE
-                null, // Valeurs pour la condition WHERE
-                null, // Colonnes pour le GROUP BY
-                null, // Colonnes pour le filtre
-                null // Tri
-        );
-        // Vérification de la présence de données
-        assertTrue("Error: No records returned", cursor.moveToFirst());
-        // Vérification de l'exactitude des données
-        TestUtilities.validateCurrentRecord("Error: Values from record not expected",
-                cursor,
-                testValues
-        );
-        // Vérification de la présence d'une seule ligne dans la table
-        assertFalse("Error: More than one record returned", cursor.moveToNext());
-
-        // Fermeture du curseur et de la base
-        cursor.close();
-        db.close();
-
-        return idGenerated;
     }
 
     public long insertIntoGameTable() {
@@ -224,47 +174,6 @@ public class TestDb extends AndroidTestCase {
         return idGenerated;
     }
 
-    public long insertIntoTurnTable() {
-
-        long idGame = insertIntoGameTable();
-
-        // Récupération de la base SQLite
-        SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
-        // Récupération d'un jeu de données pour le test
-        ContentValues testValues = TestUtilities.createTurnValues(idGame);
-
-        // Vérification de l'insertion
-        long idGenerated;
-        idGenerated = db.insert(TurnEntry.TABLE_NAME, null, testValues);
-        assertTrue(idGenerated != -1);
-
-        // Requête de récupération de données via la table
-        Cursor cursor = db.query(
-                TurnEntry.TABLE_NAME, // Table
-                null, // Colonnes interogées
-                null, // Colonnes pour la condition WHERE
-                null, // Valeurs pour la condition WHERE
-                null, // Colonnes pour le GROUP BY
-                null, // Colonnes pour le filtre
-                null // Tri
-        );
-        // Vérification de la présence de données
-        assertTrue("Error: No records returned", cursor.moveToFirst());
-        // Vérification de l'exactitude des données
-        TestUtilities.validateCurrentRecord("Error: Values from record not expected",
-                cursor,
-                testValues
-        );
-        // Vérification de la présence d'une seule ligne dans la table
-        assertFalse("Error: More than one record returned", cursor.moveToNext());
-
-        // Fermeture du curseur et de la base
-        cursor.close();
-        db.close();
-
-        return idGenerated;
-    }
-
 
     /*
         Tests sur l'insertion des données dans la table "game_card"
@@ -272,12 +181,11 @@ public class TestDb extends AndroidTestCase {
     public long insertIntoGameCardTable() {
 
         long idGame = insertIntoGameTable();
-        long idCard = insertIntoCardTable();
 
         // Récupération de la base SQLite
         SQLiteDatabase db = new MemonimoDbHelper(this.mContext).getWritableDatabase();
         // Récupération d'un jeu de données pour le test
-        ContentValues testValues = TestUtilities.createGameCardValues(idGame, idCard);
+        ContentValues testValues = TestUtilities.createGameCardValues(idGame);
 
         // Vérification de l'insertion
         long idGenerated;

@@ -12,8 +12,6 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
@@ -48,38 +46,6 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         assertEquals("Error: Records not deleted from game_card table", 0, cursor.getCount());
-        cursor.close();
-
-        // Suppression et vérification de la suppression dans la table "turn"
-        mContext.getContentResolver().delete(
-                TurnEntry.CONTENT_URI,
-                null,
-                null
-        );
-        cursor = mContext.getContentResolver().query(
-                TurnEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-        assertEquals("Error: Records not deleted from game turn", 0, cursor.getCount());
-        cursor.close();
-
-        // Suppression et vérification de la suppression dans la table "card"
-        mContext.getContentResolver().delete(
-                CardEntry.CONTENT_URI,
-                null,
-                null
-        );
-        cursor = mContext.getContentResolver().query(
-                CardEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-        assertEquals("Error: Records not deleted from card table", 0, cursor.getCount());
         cursor.close();
 
         // Suppression et vérification de la suppression dans la table "pattern"
@@ -152,16 +118,6 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(GameEntry.CONTENT_URI);
         assertEquals("Error: the GameEntry CONTENT_URI should return GameEntry.CONTENT_TYPE",
                 GameEntry.CONTENT_TYPE, type);
-
-        //
-        type = mContext.getContentResolver().getType(CardEntry.CONTENT_URI);
-        assertEquals("Error: the CardEntry CONTENT_URI should return CardEntry.CONTENT_TYPE",
-                CardEntry.CONTENT_TYPE, type);
-
-        //
-        type = mContext.getContentResolver().getType(TurnEntry.CONTENT_URI);
-        assertEquals("Error: the TurnEntry CONTENT_URI should return CardEntry.CONTENT_TYPE",
-                TurnEntry.CONTENT_TYPE, type);
 
         //
         type = mContext.getContentResolver().getType(GameCardEntry.CONTENT_URI);
@@ -291,54 +247,6 @@ public class TestProvider extends AndroidTestCase {
 //                cursor, updatedValues);
 //
 //        cursor.close();
-//    }
-
-    /*
-        Vérification du Provider pour un accès basique sur la table "card"
-     */
-    public void testBasicCardQuery() {
-
-        // Récupération d'un jeu de données pour le test
-        ContentValues testValues = TestUtilities.createCardValues();
-
-        // Insertion des données directement en base
-        long idGame = TestUtilities.insertCardValuesToDb(mContext, testValues);
-
-        // Récupération des données via le Content Provider
-        Cursor cursor = mContext.getContentResolver().query(
-                CardEntry.CONTENT_URI, // URI
-                null, // Colonnes interogées
-                null, // Colonnes pour la condition WHERE
-                null, // Valeurs pour la condition WHERE
-                null // Tri
-        );
-
-        // Vérification en comparant les données
-        TestUtilities.validateCursor("Error: the cursor from CardEntry should return the same values", cursor, testValues);
-    }
-
-//    /*
-//        Vérification du Provider pour un accès basique sur la table "turn"
-//     */
-//    public void testBasicTurnQuery() {
-//
-//        // Récupération d'un jeu de données pour le test
-//        ContentValues testValues = TestUtilities.createCardValues();
-//
-//        // Insertion des données directement en base
-//        long idGame = TestUtilities.insertTurnValuesToDb(mContext, testValues);
-//
-//        // Récupération des données via le Content Provider
-//        Cursor cursor = mContext.getContentResolver().query(
-//                CardEntry.CONTENT_URI, // URI
-//                null, // Colonnes interogées
-//                null, // Colonnes pour la condition WHERE
-//                null, // Valeurs pour la condition WHERE
-//                null // Tri
-//        );
-//
-//        // Vérification en comparant les données
-//        TestUtilities.validateCursor("Error: the cursor from TurnEntry should return the same values", cursor, testValues);
 //    }
 
 }

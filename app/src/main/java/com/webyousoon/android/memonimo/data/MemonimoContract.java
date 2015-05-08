@@ -80,47 +80,6 @@ public class MemonimoContract {
         }
     }
 
-    public static final class CardEntry implements BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CARD).build();
-
-        public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CARD;
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CARD;
-
-        // Nom de la table
-        public static final String TABLE_NAME = "card";
-        // Colonnes de la table
-        public static final String COLUMN_LABEL = "label";
-
-        public static Uri buildCardUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-    }
-
-    public static final class TurnEntry implements BaseColumns {
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TURN).build();
-
-        public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TURN;
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TURN;
-
-        // Nom de la table
-        public static final String TABLE_NAME = "turn";
-        // Colonnes de la table
-        public static final String COLUMN_INDEX_TURN = "index_turn";
-        public static final String COLUMN_FIRST_POSITION_CHOOSEN = "first_position_choosen";
-        public static final String COLUMN_SECOND_POSITION_CHOOSEN = "second_position_choosen";
-        public static final String COLUMN_ID_GAME = "id_game";
-
-        public static Uri buildTurnUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-    }
-
     public static final class GameCardEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_GAME_CARD).build();
@@ -135,7 +94,7 @@ public class MemonimoContract {
         // Colonnes de la table
         public static final String COLUMN_POSITION = "position";
         public static final String COLUMN_ID_GAME = "id_game";
-        public static final String COLUMN_ID_CARD = "id_card";
+        public static final String COLUMN_CODE_ANIMAL = "animal";
         public static final String COLUMN_FOUND = "found";
         public static final String COLUMN_ATTEMPT = "attempt";
 

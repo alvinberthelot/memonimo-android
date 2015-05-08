@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 import com.webyousoon.android.memonimo.model.BackgroundPattern;
@@ -21,10 +19,6 @@ import com.webyousoon.android.memonimo.model.Game;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by hackorder on 14/04/2015.
- */
 public class MemonimoProvider extends ContentProvider {
 
     private static final String LOG_TAG = MemonimoProvider.class.getSimpleName();
@@ -34,12 +28,8 @@ public class MemonimoProvider extends ContentProvider {
 
     static final int CODE_GAME = 100;
     static final int CODE_GAME_ID = 101;
-//    static final int WEATHER_WITH_LOCATION = 101;
-//    static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
-    static final int CODE_CARD = 200;
-    static final int CODE_TURN = 300;
-    static final int CODE_GAME_CARD = 400;
-    static final int CODE_PATTERN = 500;
+    static final int CODE_GAME_CARD = 200;
+    static final int CODE_PATTERN = 300;
 
 
     @Override
@@ -241,10 +231,6 @@ public class MemonimoProvider extends ContentProvider {
         switch (match) {
             case CODE_GAME:
                 return GameEntry.CONTENT_TYPE;
-            case CODE_CARD:
-                return CardEntry.CONTENT_TYPE;
-            case CODE_TURN:
-                return TurnEntry.CONTENT_TYPE;
             case CODE_GAME_CARD:
                 return GameCardEntry.CONTENT_TYPE;
             case CODE_PATTERN:
@@ -273,42 +259,6 @@ public class MemonimoProvider extends ContentProvider {
                     for (ContentValues value : values) {
 //                        normalizeDate(value);
                         long _id = db.insert(GameEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-                getContext().getContentResolver().notifyChange(uri, null);
-
-                return returnCount;
-
-            case CODE_CARD:
-                db.beginTransaction();
-                try {
-                    for (ContentValues value : values) {
-//                        normalizeDate(value);
-                        long _id = db.insert(CardEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-                getContext().getContentResolver().notifyChange(uri, null);
-
-                return returnCount;
-
-            case CODE_TURN:
-                db.beginTransaction();
-                try {
-                    for (ContentValues value : values) {
-//                        normalizeDate(value);
-                        long _id = db.insert(TurnEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }
@@ -381,24 +331,6 @@ public class MemonimoProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case CODE_CARD: {
-//                normalizeDate(values);
-                long _id = db.insert(CardEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
-                    returnUri = CardEntry.buildCardUri(_id);
-                else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
-                break;
-            }
-            case CODE_TURN: {
-//                normalizeDate(values);
-                long _id = db.insert(TurnEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
-                    returnUri = TurnEntry.buildTurnUri(_id);
-                else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
-                break;
-            }
             case CODE_GAME_CARD: {
 //                normalizeDate(values);
                 long _id = db.insert(GameCardEntry.TABLE_NAME, null, values);
@@ -455,32 +387,6 @@ public class MemonimoProvider extends ContentProvider {
             case CODE_GAME_ID: {
                 // Requête de récupération de données via la table
                 cursor = getGameById(uri);
-                break;
-            }
-            case CODE_CARD: {
-                // Requête de récupération de données via la table
-                cursor = db.query(
-                        CardEntry.TABLE_NAME, // Table
-                        projection, // Colonnes interogées
-                        selection, // Colonnes pour la condition WHERE
-                        selectionArgs, // Valeurs pour la condition WHERE
-                        null, // Colonnes pour le GROUP BY
-                        null, // Colonnes pour le filtre
-                        sortOrder // Tri
-                );
-                break;
-            }
-            case CODE_TURN: {
-                // Requête de récupération de données via la table
-                cursor = db.query(
-                        TurnEntry.TABLE_NAME, // Table
-                        projection, // Colonnes interogées
-                        selection, // Colonnes pour la condition WHERE
-                        selectionArgs, // Valeurs pour la condition WHERE
-                        null, // Colonnes pour le GROUP BY
-                        null, // Colonnes pour le filtre
-                        sortOrder // Tri
-                );
                 break;
             }
             case CODE_GAME_CARD: {
@@ -587,22 +493,6 @@ public class MemonimoProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
-            case CODE_CARD:
-//                normalizeDate(values);
-                rowsUpdated = db.update(
-                        CardEntry.TABLE_NAME,
-                        values,
-                        selection,
-                        selectionArgs);
-                break;
-            case CODE_TURN:
-//                normalizeDate(values);
-                rowsUpdated = db.update(
-                        TurnEntry.TABLE_NAME,
-                        values,
-                        selection,
-                        selectionArgs);
-                break;
             case CODE_GAME_CARD:
 //                normalizeDate(values);
                 rowsUpdated = db.update(
@@ -643,12 +533,6 @@ public class MemonimoProvider extends ContentProvider {
             case CODE_GAME:
                 rowsDeleted = db.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case CODE_CARD:
-                rowsDeleted = db.delete(CardEntry.TABLE_NAME, selection, selectionArgs);
-                break;
-            case CODE_TURN:
-                rowsDeleted = db.delete(TurnEntry.TABLE_NAME, selection, selectionArgs);
-                break;
             case CODE_GAME_CARD:
                 rowsDeleted = db.delete(GameCardEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -673,8 +557,6 @@ public class MemonimoProvider extends ContentProvider {
         // Liaison entre les URI et les codes d'identification
         matcher.addURI(authority, MemonimoContract.PATH_GAME, CODE_GAME);
         matcher.addURI(authority, MemonimoContract.PATH_GAME + "/#", CODE_GAME_ID);
-        matcher.addURI(authority, MemonimoContract.PATH_CARD, CODE_CARD);
-        matcher.addURI(authority, MemonimoContract.PATH_TURN, CODE_TURN);
         matcher.addURI(authority, MemonimoContract.PATH_GAME_CARD, CODE_GAME_CARD);
         matcher.addURI(authority, MemonimoContract.PATH_PATTERN, CODE_PATTERN);
 

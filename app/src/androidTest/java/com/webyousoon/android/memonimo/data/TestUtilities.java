@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.CardEntry;
-import com.webyousoon.android.memonimo.data.MemonimoContract.TurnEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
@@ -29,17 +27,11 @@ public class TestUtilities extends AndroidTestCase {
     private static final String TEST_GAME_NUM_ATTEMPT = "9";
     private static final String TEST_GAME_DIFFICULTY = "1";
 
-    private static final String TEST_CARD_DOG = "Dog";
-
     private static final String TEST_PATTERN_IMG_ENCODED = "jygrfjfhgvjdfhgvje";
-
-    private static final String TEST_TURN_INDEX_TURN = "4";
-    private static final String TEST_TURN_FIRST_POSITION_CHOOSEN = "3";
-    private static final String TEST_TURN_SECOND_POSITION_CHOOSEN = "5";
 
     private static final String TEST_GAME_CARD_POSITION = "7";
     private static final String TEST_GAME_CARD_FOUND = BOOLEAN_FALSE;
-    private static final String TEST_GAME_CARD_PLAYER = "3";
+    private static final String TEST_GAME_CARD_CODE_ANIMAL = "3";
     private static final String TEST_GAME_CARD_ATTEMPT = BOOLEAN_FALSE;
 
     /*
@@ -81,15 +73,6 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     /*
-        Création d'un jeu de données pour tester la table "card"
-     */
-    static ContentValues createCardValues() {
-        ContentValues testValues = new ContentValues();
-        testValues.put(CardEntry.COLUMN_LABEL, TEST_CARD_DOG);
-        return testValues;
-    }
-
-    /*
         Création d'un jeu de données pour tester la table "pattern"
      */
     static ContentValues createPatternValues() {
@@ -99,27 +82,14 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     /*
-        Création d'un jeu de données pour tester la table "turn"
-     */
-    static ContentValues createTurnValues(long _idGame) {
-        ContentValues testValues = new ContentValues();
-        testValues.put(TurnEntry.COLUMN_INDEX_TURN, TEST_TURN_INDEX_TURN);
-        testValues.put(TurnEntry.COLUMN_FIRST_POSITION_CHOOSEN, TEST_TURN_FIRST_POSITION_CHOOSEN);
-        testValues.put(TurnEntry.COLUMN_SECOND_POSITION_CHOOSEN, TEST_TURN_SECOND_POSITION_CHOOSEN);
-        testValues.put(TurnEntry.COLUMN_ID_GAME, _idGame);
-        return testValues;
-    }
-
-    /*
         Création d'un jeu de données pour tester la table "game_card"
      */
-    static ContentValues createGameCardValues(long _idGame, long _idCard) {
+    static ContentValues createGameCardValues(long _idGame) {
         ContentValues testValues = new ContentValues();
         testValues.put(GameCardEntry.COLUMN_POSITION, TEST_GAME_CARD_POSITION);
         testValues.put(GameCardEntry.COLUMN_ID_GAME, _idGame);
-        testValues.put(GameCardEntry.COLUMN_ID_CARD, _idCard);
+        testValues.put(GameCardEntry.COLUMN_CODE_ANIMAL, TEST_GAME_CARD_CODE_ANIMAL);
         testValues.put(GameCardEntry.COLUMN_FOUND, TEST_GAME_CARD_FOUND);
-        testValues.put(GameCardEntry.COLUMN_PLAYER, TEST_GAME_CARD_PLAYER);
         testValues.put(GameCardEntry.COLUMN_ATTEMPT, TEST_GAME_CARD_ATTEMPT);
         return testValues;
     }
@@ -141,22 +111,6 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     /*
-        Insertion d'un jeu de données pour tester la table "card"
-     */
-    static long insertCardValuesToDb(Context _context, ContentValues _testValues) {
-
-        // Récupération de la base SQLite
-        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
-
-        // Vérification de l'insertion
-        long idGenerated;
-        idGenerated = db.insert(CardEntry.TABLE_NAME, null, _testValues);
-        assertTrue("Error: Failure to insert card values", idGenerated != -1);
-
-        return idGenerated;
-    }
-
-    /*
         Insertion d'un jeu de données pour tester la table "pattern"
      */
     static long insertPatternValuesToDb(Context _context, ContentValues _testValues) {
@@ -171,36 +125,4 @@ public class TestUtilities extends AndroidTestCase {
 
         return idGenerated;
     }
-
-//    /*
-//        Insertion d'un jeu de données pour tester la table "turn"
-//     */
-//    static long insertTurnValuesToDb(Context _context, ContentValues _testValues) {
-//
-//        // Récupération de la base SQLite
-//        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
-//
-//        // Vérification de l'insertion
-//        long idGenerated;
-//        idGenerated = db.insert(TurnEntry.TABLE_NAME, null, _testValues);
-//        assertTrue("Error: Failure to insert turn values", idGenerated != -1);
-//
-//        return idGenerated;
-//    }
-//
-//    /*
-//        Insertion d'un jeu de données pour tester la table "turn"
-//     */
-//    static long insertGameCardValuesToDb(Context _context, ContentValues _testValues) {
-//
-//        // Récupération de la base SQLite
-//        SQLiteDatabase db = new MemonimoDbHelper(_context).getWritableDatabase();
-//
-//        // Vérification de l'insertion
-//        long idGenerated;
-//        idGenerated = db.insert(GameCardEntry.TABLE_NAME, null, _testValues);
-//        assertTrue("Error: Failure to insert game card values", idGenerated != -1);
-//
-//        return idGenerated;
-//    }
 }
