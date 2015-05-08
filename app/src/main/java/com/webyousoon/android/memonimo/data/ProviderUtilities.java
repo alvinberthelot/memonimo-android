@@ -103,8 +103,6 @@ public class ProviderUtilities {
         GameCard gameCard = new GameCard(
                 _cursor.getInt(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ID_CARD)),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_FOUND))),
-                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
-                DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_PLAYER))),
                 DbUtilities.getBooleanValue(_cursor.getString(_cursor.getColumnIndex(MemonimoContract.GameCardEntry.COLUMN_ATTEMPT))),
                 false);
 

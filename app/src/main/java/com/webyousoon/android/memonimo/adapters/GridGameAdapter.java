@@ -126,10 +126,8 @@ public class GridGameAdapter extends BaseAdapter {
     }
 
     public static int getBorderDrawable(GameCard _cardGame) {
-        if (_cardGame.isFoundPlayer1()) {
-            return R.drawable.card_player1;
-        } else if (_cardGame.isFoundPlayer2()) {
-            return R.drawable.card_player2;
+        if (_cardGame.isCardFound()) {
+            return R.drawable.card_found;
         } else {
             return R.drawable.card_neutral;
         }

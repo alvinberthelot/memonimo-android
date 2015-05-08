@@ -34,20 +34,15 @@ public class GameCard implements Cloneable {
 
     private AnimalGame mAnimalGame;
     private boolean mCardFound = false;
-    private boolean mFoundPlayer1 = false;
-    private boolean mFoundPlayer2 = false;
-    private boolean mIsAttempt = false;
-    private boolean mIsToReturn = false;
+    private boolean mAttempt = false;
+    private boolean mToReturn = false;
 
     public GameCard(int _codeAnimal, boolean _cardFound,
-                    boolean _foundPlayer1, boolean _foundPlayer2,
-                    boolean _isFirstAttempt, boolean _isToReturn) {
+                    boolean _firstAttempt, boolean _toReturn) {
         this.mAnimalGame = AnimalGame.values()[_codeAnimal];
         this.mCardFound = _cardFound;
-        this.mFoundPlayer1 = _foundPlayer1;
-        this.mFoundPlayer2 = _foundPlayer2;
-        this.mIsAttempt = _isFirstAttempt;
-        this.mIsToReturn = _isToReturn;
+        this.mAttempt = _firstAttempt;
+        this.mToReturn = _toReturn;
     }
 
     private GameCard(AnimalGame _animalGame) {
@@ -94,10 +89,6 @@ public class GameCard implements Cloneable {
         return mAnimalGame;
     }
 
-    public void setAnimalGame(AnimalGame _animalGame) {
-        this.mAnimalGame = _animalGame;
-    }
-
     public boolean isCardFound() {
         return mCardFound;
     }
@@ -107,38 +98,22 @@ public class GameCard implements Cloneable {
     }
 
     public boolean isAttempt() {
-        return mIsAttempt;
+        return mAttempt;
     }
 
     public void setAttempt(boolean _attempt) {
-        this.mIsAttempt = _attempt;
+        this.mAttempt = _attempt;
     }
 
     public boolean isToReturn() {
-        return mIsToReturn;
+        return mToReturn;
     }
 
     public void setToReturn(boolean _toReturn) {
-        this.mIsToReturn = _toReturn;
+        this.mToReturn = _toReturn;
     }
 
     public boolean isReturned() {
-        return mIsAttempt || mCardFound;
-    }
-
-    public boolean isFoundPlayer1() {
-        return mFoundPlayer1;
-    }
-
-    public void setFoundPlayer1(boolean _foundPlayer1) {
-        this.mFoundPlayer1 = _foundPlayer1;
-    }
-
-    public boolean isFoundPlayer2() {
-        return mFoundPlayer2;
-    }
-
-    public void setFoundPlayer2(boolean _foundPlayer2) {
-        this.mFoundPlayer2 = _foundPlayer2;
+        return mAttempt || mCardFound;
     }
 }

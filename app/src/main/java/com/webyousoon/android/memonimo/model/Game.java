@@ -151,8 +151,6 @@ public class Game implements Cloneable {
         if (isFamilyFound()) {
             getFirstCardChosen().setCardFound(true);
             getSecondCardChosen().setCardFound(true);
-            getFirstCardChosen().setFoundPlayer1(true);
-            getSecondCardChosen().setFoundPlayer1(true);
         }
     }
 

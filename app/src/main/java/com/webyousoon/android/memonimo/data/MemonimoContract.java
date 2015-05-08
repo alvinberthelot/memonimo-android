@@ -137,7 +137,6 @@ public class MemonimoContract {
         public static final String COLUMN_ID_GAME = "id_game";
         public static final String COLUMN_ID_CARD = "id_card";
         public static final String COLUMN_FOUND = "found";
-        public static final String COLUMN_PLAYER = "player";
         public static final String COLUMN_ATTEMPT = "attempt";
 
         public static Uri buildGameCardUri(long id) {
