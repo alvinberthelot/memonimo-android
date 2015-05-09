@@ -15,10 +15,11 @@ import android.widget.TextView;
 
 import com.webyousoon.android.memonimo.data.DbUtilities;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
+import com.webyousoon.android.memonimo.data.MemonimoProvider;
 import com.webyousoon.android.memonimo.model.Game;
 
 
-public class SummaryGameFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SummaryGameFragment extends Fragment {
 
     private final String LOG_TAG = SummaryGameFragment.class.getSimpleName();
 
@@ -89,57 +90,14 @@ public class SummaryGameFragment extends Fragment implements LoaderManager.Loade
 
 
 
-//        // Récupération de l'identifiant de la partie envoyée par l'activitée
-//        long idGame = getArguments().getLong(GameActivity.BUNDLE_GAME_ID);
-//        // Récupération de la partie via le Provider
-//        mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
-//
-//        TextView idGameView = (TextView) rootView.findViewById(R.id.idGame);
-//        idGameView.setText("PARTIE #" + mGame.getId());
-//
-//        mTextNumGame = (TextView) rootView.findViewById(R.id.numFamily);
-//        mTextNumGame.setText("Familles trouvées : " + mGame.getNumFamilyFound() + " / " + mGame.getNumFamily());
+        // Récupération de l'identifiant de la partie envoyée par l'activitée
+        long idGame = getArguments().getLong(GameActivity.BUNDLE_GAME_ID);
+        // Récupération de la partie via le Provider
+        mGame = MemonimoProvider.restoreGame(getActivity().getContentResolver(), idGame);
+
+        updateSummaryView(mGame);
 
         return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(LOADER, null, this);
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if ( null != mUri ) {
-            return new CursorLoader(
-                    getActivity(),
-                    mUri,
-                    null,
-                    null,
-                    null,
-                    null
-            );
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor _cursor) {
-        if (_cursor != null && _cursor.moveToFirst()) {
-            updateFragment(_cursor);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) { }
-
-    private void updateFragment(Cursor _cursor) {
-
-        mTextNumGame.setText("PARTIE #" + _cursor.getLong(COL_GAME_ID));
-
-        boolean isFinished = DbUtilities.getBooleanValue(_cursor.getString(COL_GAME_FINISHED));
-        mTextDifficulty.setText("FINIE : " + isFinished);
     }
 
     public void updateSummaryView(Game _game) {
