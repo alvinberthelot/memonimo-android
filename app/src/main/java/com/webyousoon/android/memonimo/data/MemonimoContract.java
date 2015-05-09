@@ -6,9 +6,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
-/**
- * Created by hackorder on 14/04/2015.
- */
 public class MemonimoContract {
 
     // "Content authority" permet de s'adresser au Content Provider
@@ -20,9 +17,7 @@ public class MemonimoContract {
     // Chemin d'accès aux données
     public static final String PATH_GAME = "game";
     public static final String PATH_PATTERN = "pattern";
-    public static final String PATH_TURN = "turn";
     public static final String PATH_GAME_CARD = "game_card";
-    public static final String PATH_CARD = "card";
 
     public static long normalizeDate(long startDate) {
         // normalize the start date to the beginning of the (UTC) day

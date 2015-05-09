@@ -111,21 +111,21 @@ public class GridGameAdapter extends BaseAdapter {
         return view;
     }
 
-    public static LayerDrawable getFrontCardDrawable(GameCard _cardGame, Resources _resources ) {
+    private static LayerDrawable getFrontCardDrawable(GameCard _cardGame, Resources _resources ) {
         Drawable[] layers = new Drawable[2];
         layers[0] = _resources.getDrawable(getInsideDrawable(_cardGame));
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }
 
-    public static LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
+    private static LayerDrawable getBackCardDrawable(GameCard _cardGame, Resources _resources ) {
         Drawable[] layers = new Drawable[2];
         layers[0] = _resources.getDrawable(R.drawable.card_hidden);
         layers[1] = _resources.getDrawable(getBorderDrawable(_cardGame));
         return new LayerDrawable(layers);
     }
 
-    public static int getBorderDrawable(GameCard _cardGame) {
+    private static int getBorderDrawable(GameCard _cardGame) {
         if (_cardGame.isCardFound()) {
             return R.drawable.card_found;
         } else {
@@ -133,7 +133,7 @@ public class GridGameAdapter extends BaseAdapter {
         }
     }
 
-    public static int getInsideDrawable(GameCard _cardGame) {
+    private static int getInsideDrawable(GameCard _cardGame) {
         return getAnimalDrawable(_cardGame.getAnimalGame());
     }
 

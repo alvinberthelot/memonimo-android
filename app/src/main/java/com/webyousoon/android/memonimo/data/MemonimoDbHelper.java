@@ -8,10 +8,6 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.GameEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.GameCardEntry;
 import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 
-
-/**
- * Created by hackorder on 14/04/2015.
- */
 public class MemonimoDbHelper extends SQLiteOpenHelper {
 
     // Version de la base de données

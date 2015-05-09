@@ -19,7 +19,6 @@ public class Game implements Cloneable {
     private List<GameCard> mGameCardList = new ArrayList<GameCard>();
     private Mode mMode;
     private String mBackgroundPattern;
-//    private BackgroundPattern mBackgroundPattern;
     private int mNumAttempt = 0;
 
     public enum Mode {
@@ -98,10 +97,6 @@ public class Game implements Cloneable {
 
     public List<GameCard> getGameCardList() {
         return mGameCardList;
-    }
-
-    public void setmGameCardList(List<GameCard> _gameCardList) {
-        this.mGameCardList = _gameCardList;
     }
 
     public void addGameCard(GameCard _gamGameCard) {
@@ -215,23 +210,11 @@ public class Game implements Cloneable {
         return mBackgroundPattern;
     }
 
-    public void setBackgroundPattern(String _backgroundPattern) {
-        this.mBackgroundPattern = _backgroundPattern;
-    }
-
     public int getNumAttempt() {
         return mNumAttempt;
-    }
-
-    public void setNumAttempt(int _numAttempt) {
-        this.mNumAttempt = _numAttempt;
     }
 
     public Mode getMode() {
         return mMode;
     }
-
-//    public String getStringMode() {
-//        return mMode.toString();
-//    }
 }
