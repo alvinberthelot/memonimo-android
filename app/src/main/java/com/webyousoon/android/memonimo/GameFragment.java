@@ -77,27 +77,6 @@ public class GameFragment extends Fragment {
             mRootView.setBackgroundDrawable(backgroundDrawable);
         }
 
-
-
-//        BackgroundPattern backgroundPattern = MemonimoProvider.restoreBackgroundPatternByIdGame(
-//                getActivity().getContentResolver(), idGame);
-//
-//        if (backgroundPattern == null) {
-//            // Récupération des patterns stockés en base
-//            mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getActivity().getContentResolver());
-//
-//            if (mBackgroundPatternList != null && mBackgroundPatternList.size() > 0) {
-//                int random = new Random().nextInt(mBackgroundPatternList.size());
-//                backgroundPattern = mBackgroundPatternList.get(random);
-//                mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-//            }
-//
-//        } else {
-//            // Affectation du background
-//            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-//        }
-
-
         GridView gridGameView = (GridView) mRootView.findViewById(R.id.gridMemory);
 
 
