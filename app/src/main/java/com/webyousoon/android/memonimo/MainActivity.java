@@ -24,18 +24,11 @@ public class MainActivity extends ActionBarActivity {
 
     private ShareActionProvider mShareActionProvider;
     private Intent mBackgroundPatternService;
-//    private boolean mIsTabletLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_main, new StartFragment())
-                    .commit();
-        }
 
         // Initialisation du service pour récupérer les patterns
         mBackgroundPatternService = new Intent(this, BackgroungPatternService.class);

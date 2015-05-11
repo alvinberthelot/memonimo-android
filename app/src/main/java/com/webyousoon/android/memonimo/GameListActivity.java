@@ -40,8 +40,6 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
             if (savedInstanceState == null) {
 
                 SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
-//                summaryGameFragment.setArguments(bundle);
-
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_annex,
