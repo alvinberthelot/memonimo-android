@@ -35,8 +35,6 @@ public class GameActivity extends ActionBarActivity
 
     public static final String BUNDLE_GAME_ID = "bundle_game_id";
 
-    private boolean mIsTabletLayout;
-
     private ShareActionProvider mShareActionProvider;
 
     private List<BackgroundPattern> mBackgroundPatternList;
@@ -49,7 +47,6 @@ public class GameActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-
         // Récupération de la liste des patterns
         mBackgroundPatternList = MemonimoProvider.restoreAllPatternList(getContentResolver());
 
@@ -60,16 +57,11 @@ public class GameActivity extends ActionBarActivity
 
         launchGameFragment(bundle);
 
-
         // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
         if (findViewById(R.id.container_annex) != null) {
-            mIsTabletLayout = true;
             if (savedInstanceState == null) {
-
                 SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
                 summaryGameFragment.setArguments(bundle);
-
-
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_annex,
                                 summaryGameFragment,
@@ -77,9 +69,6 @@ public class GameActivity extends ActionBarActivity
                         .commit();
             }
         }
-
-
-
     }
 
     private long getIdGame(Bundle _savedInstanceState) {
@@ -99,7 +88,7 @@ public class GameActivity extends ActionBarActivity
                 if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME)) {
                     idGame = intent.getLongExtra(MemonimoUtilities.INTENT_EXTRA_ID_GAME, -1);
                 }
-                // Récupération de l'id de la partie si celui-ci a été passé par Intent
+                // Récupération de la difficulté de la partie si celle-ci a été passée par Intent
                 if (intent.hasExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME)) {
                     mode = intent.getStringExtra(MemonimoUtilities.INTENT_EXTRA_MODE_GAME);
                 }
@@ -168,10 +157,6 @@ public class GameActivity extends ActionBarActivity
         }
     }
 
-    private void getBackGame() {
-
-    }
-
     private Game createGame(String _mode) {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -182,15 +167,8 @@ public class GameActivity extends ActionBarActivity
         BackgroundPattern backgroundPattern = null;
 
         if (mBackgroundPatternList != null || mBackgroundPatternList.size() > 0) {
-//            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.card_hidden);
-//            Bitmap bitmap = drawable.getBitmap();
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//            backgroundPattern = new BackgroundPattern(baos.toByteArray());
             backgroundPattern = chooseBackground();
         }
-
-
 
         // Initialisation d'une nouvelle partie d'un point de vue du modèle
         Game game = new Game(
@@ -235,11 +213,7 @@ public class GameActivity extends ActionBarActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment, String _mode) {
         Game game = createGame(_mode);
-        //
         Bundle bundle = prepareGame(game.getId());
-
-//        dismissDialog();
-
         launchGameFragment(bundle);
     }
 
@@ -252,10 +226,6 @@ public class GameActivity extends ActionBarActivity
             // Récupération d'une image encodée au hasard
             int random = new Random().nextInt(mBackgroundPatternList.size());
             backgroundPattern = mBackgroundPatternList.get(random);
-            // Affectation du background
-//            mRootView.setBackgroundDrawable(backgroundPattern.getBackgroundDrawable());
-//
-//            mGame.setBackgroundPattern(backgroundPattern);
         }
 
         return backgroundPattern;

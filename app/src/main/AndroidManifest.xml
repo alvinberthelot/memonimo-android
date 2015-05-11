@@ -27,7 +27,7 @@
                 android:value="com.webyousoon.android.memonimo.MainActivity" />
         </activity>
         <activity
-            android:name=".GameListActivity"
+            android:name="com.webyousoon.android.memonimo.GameListActivity"
             android:label="@string/activity_game_list_title"
             android:parentActivityName="com.webyousoon.android.memonimo.MainActivity" >
             <meta-data
@@ -35,7 +35,7 @@
                 android:value="com.webyousoon.android.memonimo.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.webyousoon.android.memonimo.SettingsActivity"
             android:label="@string/activity_settings_title"
             android:parentActivityName="com.webyousoon.android.memonimo.MainActivity" >
             <meta-data

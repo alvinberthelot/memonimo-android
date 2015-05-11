@@ -12,9 +12,6 @@ import com.webyousoon.android.memonimo.data.MemonimoContract.PatternEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by hackorder on 17/04/2015.
- */
 public class ProviderUtilities {
 
     private static final String LOG_TAG = ProviderUtilities.class.getSimpleName();
