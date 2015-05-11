@@ -94,6 +94,7 @@ public class GameActivity extends ActionBarActivity
             game = createGame(mode);
         } else {
             // Restauration de la partie
+            Log.d(LOG_TAG, ".getIdGame() : restoreGame, id --> " + idGame);
             game = MemonimoProvider.restoreGame(this.getContentResolver(), idGame);
         }
 
@@ -186,17 +187,13 @@ public class GameActivity extends ActionBarActivity
     }
 
     private void launchSummaryGameFragment(Bundle bundle) {
-        // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
-        if (findViewById(R.id.container_annex) != null) {
-            launchSummaryGameFragment(bundle);
-            SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
-            summaryGameFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_annex,
-                            summaryGameFragment,
-                            FRAGMENT_TAG_SUMMARY_GAME)
-                    .commit();
-        }
+        SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
+        summaryGameFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_annex,
+                        summaryGameFragment,
+                        FRAGMENT_TAG_SUMMARY_GAME)
+                .commit();
     }
 
     /**
@@ -223,7 +220,10 @@ public class GameActivity extends ActionBarActivity
         Game game = createGame(_mode);
         Bundle bundle = prepareGame(game.getId());
         launchGameFragment(bundle);
-        launchSummaryGameFragment(bundle);
+        // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
+        if (findViewById(R.id.container_annex) != null) {
+            launchSummaryGameFragment(bundle);
+        }
     }
 
     private BackgroundPattern chooseBackground() {
