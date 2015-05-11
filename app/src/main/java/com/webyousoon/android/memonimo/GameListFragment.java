@@ -2,7 +2,6 @@ package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.webyousoon.android.memonimo.adapters.ListSummaryGameAdapter;
+import com.webyousoon.android.memonimo.adapters.ListGameAdapter;
 import com.webyousoon.android.memonimo.data.MemonimoContract;
 
 
@@ -21,32 +20,32 @@ public class GameListFragment extends Fragment {
     private final String LOG_TAG = GameListFragment.class.getSimpleName();
 
     private TextView mTextViewTitle;
-
-    /**
-     * Interface pour indiquer à l'activité parente qu'un nouvel item a été sélectionné
-     */
-    public interface Callback {
-        public void onItemSelected(Uri gameUri);
-    }
-
-    public GameListFragment() {
-
-    }
+    private ListView mListViewGame;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-
         mTextViewTitle = (TextView) rootView.findViewById(R.id.tv_title);
         mTextViewTitle.setTypeface(MemonimoUtilities.getCustomFont(getActivity().getAssets()));
 
+        mListViewGame = (ListView) rootView.findViewById(R.id.lv_game);
 
+        showGameList();
 
-        ListView summaryGameListView = (ListView) rootView.findViewById(R.id.lv_summary_game);
+        return rootView;
+    }
 
-        // Récupération des données via le Content Provider
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        showGameList();
+    }
+
+    private void showGameList() {
+        // Récupération des données
         Cursor cursor = getActivity().getContentResolver().query(
                 MemonimoContract.GameEntry.CONTENT_URI, // URI
                 null, // Colonnes interogées
@@ -56,16 +55,16 @@ public class GameListFragment extends Fragment {
         );
 
         // Initialisation de l'Adapter avec le curseur
-        final ListSummaryGameAdapter listSummaryGameAdapter = new ListSummaryGameAdapter(
+        final ListGameAdapter listSummaryGameAdapter = new ListGameAdapter(
                 getActivity(),
                 cursor,
                 0
         );
         // Affectation de l'Adapter à la ListView
-        summaryGameListView.setAdapter(listSummaryGameAdapter);
+        mListViewGame.setAdapter(listSummaryGameAdapter);
 
 
-        summaryGameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListViewGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 // Récupération de l'identifiant de la partie
@@ -78,6 +77,5 @@ public class GameListFragment extends Fragment {
             }
         });
 
-        return rootView;
     }
 }

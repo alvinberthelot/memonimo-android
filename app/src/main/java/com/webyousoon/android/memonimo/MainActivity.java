@@ -40,10 +40,10 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_general, menu);
 
-        // Retrieve the share menu item
+        // Récupération de l'item de partage pour le menu
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
-        // Get the provider and hold onto it to set/change the share intent.
+        // Récupération du Provider de partage et association à l'item
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         mShareActionProvider.setShareIntent(MemonimoUtilities.createShareIntent(getResources()));
 

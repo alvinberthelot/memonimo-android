@@ -13,7 +13,7 @@ import android.view.View;
 import com.webyousoon.android.memonimo.model.Game;
 
 
-public class GameListActivity extends ActionBarActivity implements GameListFragment.Callback {
+public class GameListActivity extends ActionBarActivity {
 
     private final String LOG_TAG = GameListActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_SUMMARY_GAME = "FRA_TAG_SUM_GAM";
@@ -76,28 +76,5 @@ public class GameListActivity extends ActionBarActivity implements GameListFragm
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected(Uri _gameUri) {
-
-        if (mIsTabletLayout) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle args = new Bundle();
-            args.putParcelable(SummaryGameFragment.BUNDLE_ARG_URI_GAME, _gameUri);
-
-            SummaryGameFragment fragment = new SummaryGameFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_annex, fragment, FRAGMENT_TAG_SUMMARY_GAME)
-                    .commit();
-        } else {
-            // Envoi de l'URI de la partie via l'Intent
-            Intent intent = new Intent(this, GameActivity.class).setData(_gameUri);
-            startActivity(intent);
-        }
     }
 }
