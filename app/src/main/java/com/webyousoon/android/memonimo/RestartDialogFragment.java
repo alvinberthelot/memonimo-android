@@ -95,26 +95,7 @@ public class RestartDialogFragment extends DialogFragment {
             }
         });
 
-//        Button btnShare = (Button) view.findViewById(R.id.btn_share);
-//        btnShare.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                shareScoreIntent();
-//                // Disparition de la fenêtre de dialogue
-//                dismiss();
-//            }
-//        });
-
         builder.setView(view);
         return builder.create();
     }
-
-//    private void shareScoreIntent() {
-//
-//        Intent sendIntent = new Intent();
-//        sendIntent.setAction(Intent.ACTION_SEND);
-//        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-//        sendIntent.setType("text/plain");
-//        startActivity(sendIntent);
-//
-//    }
 }

@@ -60,13 +60,7 @@ public class GameActivity extends ActionBarActivity
         // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
         if (findViewById(R.id.container_annex) != null) {
             if (savedInstanceState == null) {
-                SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
-                summaryGameFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_annex,
-                                summaryGameFragment,
-                                FRAGMENT_TAG_SUMMARY_GAME)
-                        .commit();
+                launchSummaryGameFragment(bundle);
             }
         }
     }
@@ -191,6 +185,16 @@ public class GameActivity extends ActionBarActivity
                 .commit();
     }
 
+    private void launchSummaryGameFragment(Bundle bundle) {
+        SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
+        summaryGameFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_annex,
+                        summaryGameFragment,
+                        FRAGMENT_TAG_SUMMARY_GAME)
+                .commit();
+    }
+
     /**
      * Obtention de l'identifiant d'une partie, soit par récupération de celui-ci,
      * soit par création d'une nouvelle partie. Puis mémorisation de l'identifiant qui sera transmis
@@ -215,6 +219,7 @@ public class GameActivity extends ActionBarActivity
         Game game = createGame(_mode);
         Bundle bundle = prepareGame(game.getId());
         launchGameFragment(bundle);
+        launchSummaryGameFragment(bundle);
     }
 
     private BackgroundPattern chooseBackground() {
