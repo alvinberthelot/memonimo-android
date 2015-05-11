@@ -186,13 +186,17 @@ public class GameActivity extends ActionBarActivity
     }
 
     private void launchSummaryGameFragment(Bundle bundle) {
-        SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
-        summaryGameFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_annex,
-                        summaryGameFragment,
-                        FRAGMENT_TAG_SUMMARY_GAME)
-                .commit();
+        // On vérifie la présence ou non du fragment affichant le résumé en mode tablette
+        if (findViewById(R.id.container_annex) != null) {
+            launchSummaryGameFragment(bundle);
+            SummaryGameFragment summaryGameFragment = new SummaryGameFragment();
+            summaryGameFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_annex,
+                            summaryGameFragment,
+                            FRAGMENT_TAG_SUMMARY_GAME)
+                    .commit();
+        }
     }
 
     /**
