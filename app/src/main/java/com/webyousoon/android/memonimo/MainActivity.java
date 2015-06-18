@@ -1,21 +1,16 @@
 package com.webyousoon.android.memonimo;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.webyousoon.android.memonimo.model.Game;
-import com.webyousoon.android.memonimo.service.BackgroungPatternService;
+import com.webyousoon.android.memonimo.service.BackgroundPatternService;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -31,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // Initialisation du service pour récupérer les patterns
-        mBackgroundPatternService = new Intent(this, BackgroungPatternService.class);
+        mBackgroundPatternService = new Intent(this, BackgroundPatternService.class);
         // lancement du service pour récupérer les patterns
         startService(mBackgroundPatternService);
     }

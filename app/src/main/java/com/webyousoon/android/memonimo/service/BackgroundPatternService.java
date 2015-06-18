@@ -24,12 +24,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackgroungPatternService extends IntentService {
+public class BackgroundPatternService extends IntentService {
 
-    private final String LOG_TAG = BackgroungPatternService.class.getSimpleName();
+    private final String LOG_TAG = BackgroundPatternService.class.getSimpleName();
 
-    public BackgroungPatternService() {
-        super(BackgroungPatternService.class.getSimpleName());
+    public BackgroundPatternService() {
+        super(BackgroundPatternService.class.getSimpleName());
     }
 
     @Override
@@ -60,9 +60,10 @@ public class BackgroungPatternService extends IntentService {
 
             randomPatternJsonStr = stringBuffer.toString();
 
-
         } catch (IOException e) {
-
+            Log.e(LOG_TAG, e.getMessage(), e);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -80,7 +81,8 @@ public class BackgroungPatternService extends IntentService {
             storePatternDataFromJson(randomPatternJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
         }
 
     }
@@ -108,9 +110,9 @@ public class BackgroungPatternService extends IntentService {
                     backgroundPatternList.add(backgroundPattern);
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Log.e(LOG_TAG, e.getMessage(), e);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(LOG_TAG, e.getMessage(), e);
                 }
             }
 

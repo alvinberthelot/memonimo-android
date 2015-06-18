@@ -44,7 +44,7 @@
         </activity>
 
         <service
-            android:name=".service.BackgroungPatternService"
+            android:name=".service.BackgroundPatternService"
             android:exported="false">
         </service>
 
