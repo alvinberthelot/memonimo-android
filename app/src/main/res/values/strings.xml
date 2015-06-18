@@ -21,6 +21,7 @@
 
     <!-- GAME -->
     <string name="game_list_label">Parties non terminées</string>
+    <string name="game_label">Partie #%1$d</string>
 
     <!-- SETTINGS -->
     <string name="settings_label_num_player">Nombre de joueurs</string>

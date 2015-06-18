@@ -50,8 +50,10 @@ public class ListGameAdapter extends CursorAdapter {
             viewHolder.mImageViewPattern.setImageDrawable(backgroundDrawable);
         }
 
-        String title = "Partie #" + cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID));
         viewHolder.mTextViewTitle.setTypeface(MemonimoUtilities.getCustomFont(context.getAssets()));
+        String title = String.format(
+                context.getResources().getString(R.string.game_label),
+                cursor.getLong(cursor.getColumnIndex(MemonimoContract.GameEntry._ID)));
         viewHolder.mTextViewTitle.setText(title);
     }
 
