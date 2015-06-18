@@ -30,16 +30,6 @@ public class GridGameAdapter extends BaseAdapter {
     private Context mContext;
     private Game mGame;
 
-    private static class CardGameViewHolder {
-        public final ImageView mFrontCardView;
-        public final ImageView mBackCardView;
-
-        public CardGameViewHolder(View _view) {
-            mFrontCardView = (ImageView) _view.findViewById(R.id.gi_front_card);
-            mBackCardView = (ImageView) _view.findViewById(R.id.gi_back_card);
-        }
-    }
-
     public GridGameAdapter(Context context, Game _game) {
         this.mContext = context;
         this.mGame = _game;
@@ -65,33 +55,32 @@ public class GridGameAdapter extends BaseAdapter {
 
         // Récupération du layout approprié
         View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item_game, _parent, false);
-
-        final CardGameViewHolder viewHolder = new CardGameViewHolder(view);
-        view.setTag(viewHolder);
+        final ImageView frontCardView = (ImageView) view.findViewById(R.id.gi_front_card);
+        final ImageView backCardView = (ImageView) view.findViewById(R.id.gi_back_card);
 
         GameCard gameCard = getItem(_position);
 
-        viewHolder.mFrontCardView.setImageDrawable(getFrontCardDrawable(gameCard, mContext.getResources()));
-        viewHolder.mBackCardView.setImageDrawable(getBackCardDrawable(gameCard, mContext.getResources()));
+        frontCardView.setImageDrawable(getFrontCardDrawable(gameCard, mContext.getResources()));
+        backCardView.setImageDrawable(getBackCardDrawable(gameCard, mContext.getResources()));
 
         // Par défaut la carte représentant la valeur est cachée
-        viewHolder.mFrontCardView.setVisibility(View.GONE);
+        frontCardView.setVisibility(View.GONE);
 
         // On vérifie si la carte est retournée
         if (gameCard.isReturned()) {
             // On vérifie si la carte va être retournée (pour l'animation)
             if (gameCard.isToReturn()) {
-                ObjectAnimator flipOut = ObjectAnimator.ofFloat(viewHolder.mBackCardView, "rotationY", 0f, 90f);
+                ObjectAnimator flipOut = ObjectAnimator.ofFloat(backCardView, "rotationY", 0f, 90f);
                 flipOut.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) { }
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        viewHolder.mBackCardView.setVisibility(View.GONE);
-                        ObjectAnimator flipIn = ObjectAnimator.ofFloat(viewHolder.mFrontCardView, "rotationY", -90f, 0f);
+                        backCardView.setVisibility(View.GONE);
+                        ObjectAnimator flipIn = ObjectAnimator.ofFloat(frontCardView, "rotationY", -90f, 0f);
                         flipIn.setDuration(FLIP_DURATION);
                         flipIn.start();
-                        viewHolder.mFrontCardView.setVisibility(View.VISIBLE);
+                        frontCardView.setVisibility(View.VISIBLE);
                     }
                     @Override
                     public void onAnimationCancel(Animator animation) { }
@@ -102,8 +91,8 @@ public class GridGameAdapter extends BaseAdapter {
                 flipOut.start();
 
             } else {
-                viewHolder.mBackCardView.setVisibility(View.GONE);
-                viewHolder.mFrontCardView.setVisibility(View.VISIBLE);
+                backCardView.setVisibility(View.GONE);
+                frontCardView.setVisibility(View.VISIBLE);
             }
 
         }
