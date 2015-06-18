@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_start_custom_game">Personnalisée</string>
+    <string name="action_start_easy_game">Facile</string>
+    <string name="action_start_normal_game">Normale</string>
+    <string name="action_start_hard_game">Difficile</string>
+    <string name="action_find_game">Finir une partie</string>
+    <string name="action_finish_game">Finir cette partie</string>
+    <string name="question_new_game">Une autre partie ?</string>
+    <string name="action_go_back_home">Accueil</string>
+    <string name="action_new_game">Nouvelle partie</string>
+    <string name="action_share">Partager</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="activity_game_title">Partie</string>
+    <string name="activity_game_list_title">Liste des parties</string>
+    <string name="activity_settings_title">Configuration</string>
+
+    <!-- GAME -->
+    <string name="game_list_label">Parties non terminées</string>
+    <string name="game_label">Partie #%1$d</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_label_num_player">Nombre de joueurs</string>
+    <string name="settings_annex_num_player">(Par défaut)</string>
+    <string name="settings_label_difficulty_custom">Nombre de familles</string>
+    <string name="settings_label_num_family">Nombre de familles</string>
+
+    <!-- PREFERENCES -->
+    <string name="pref_num_family_custom_key" translatable="false">pref_num_family_custom_key</string>
+    <string name="pref_num_family_custom_default" translatable="false">12</string>
+
+
+    <string name="share_message" translatable="false">Memonimo est un jeu Android très sympa, tu devrais l\'essayer !</string>
+</resources>
