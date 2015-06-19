@@ -26,10 +26,6 @@
     <string name="settings_label_difficulty_custom">Nombre de familles</string>
     <string name="settings_label_num_family">Nombre de familles</string>
 
-    <!-- PREFERENCES -->
-    <string name="pref_num_family_custom_key" translatable="false">pref_num_family_custom_key</string>
-    <string name="pref_num_family_custom_default" translatable="false">12</string>
 
-
-    <string name="share_message" translatable="false">Memonimo est un jeu Android très sympa, tu devrais l\'essayer !</string>
+    <string name="share_message">Memonimo est un jeu Android très sympa, tu devrais l\'essayer !</string>
 </resources>

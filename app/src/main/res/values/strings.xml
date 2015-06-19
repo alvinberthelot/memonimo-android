@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Memonimo</string>
+    <string name="app_name" translatable="false">Memonimo</string>
 
-    <string name="content_authority">com.webyousoon.android.memonimo.app</string>
+    <string name="content_authority" translatable="false">com.webyousoon.android.memonimo.app</string>
 
     <string name="action_start_custom_game">Custom</string>
     <string name="action_start_easy_game">Easy</string>
@@ -35,7 +35,7 @@
     <string name="pref_num_family_custom_default" translatable="false">12</string>
 
 
-    <string name="share_message" translatable="false">Memonimo is a lovely game, you should try it !</string>
+    <string name="share_message">Memonimo is a lovely game, you should try it !</string>
 
 
 </resources>
