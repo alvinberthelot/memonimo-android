@@ -9,8 +9,12 @@
 
     <Button
         android:id="@+id/btn_game_unfinished"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:text="@string/action_find_game"
         android:textSize="@dimen/text_button_size"
         android:layout_centerVertical="true"
